@@ -54,6 +54,17 @@ namespace SimpleX.Collision2D.Engine
             y = y / m;
         }
 
+        public static Vector Normalize(Vector v)
+        {
+            return v.normalized;
+        }
+
+        public static Vector Normalize(float x, float y)
+        {
+            var v = new Vector(x, y);
+            return v.normalized;
+        }
+
         // 两点间的距离
         public float Distance(ref Vector v)
         {

@@ -6,5 +6,7 @@ namespace SimpleX.Collision2D.App
     {
         public CollisionComponent collisionComponent { get; } = new CollisionComponent();
         public ColorComponent colorComponent { get; } = new ColorComponent();
+        public MovementComponent movementComponent { get; } = new MovementComponent();
+        public RotationComponent rotationComponent { get; } = new RotationComponent();
     }
 }

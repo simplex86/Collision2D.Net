@@ -9,8 +9,7 @@ namespace SimpleX.Collision2D.App
 
     public partial class MainForm : Form
     {
-        private World world = new World();
-        private Random random = new Random();
+        private Task task = null;
 
         public MainForm()
         {
@@ -20,11 +19,8 @@ namespace SimpleX.Collision2D.App
         // 窗体加载完后，初始化数据
         private void OnLoadHandler(object sender, EventArgs e)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                var entity = CreateEntity();
-                world.AddEntity(entity);
-            }
+            task = new Task(canvas);
+            task.Start();
         }
 
         // 绘制
@@ -33,94 +29,10 @@ namespace SimpleX.Collision2D.App
             var grap = e.Graphics;
             grap.SmoothingMode = SmoothingMode.HighQuality;
 
-            foreach (var entity in world.entities)
+            task.world.Each((entity) =>
             {
                 DrawEntity(grap, entity);
-            }
-        }
-
-        // 创建实体
-        private Entity CreateEntity()
-        {
-            var entity = new Entity();
-
-            var type = random.Next(0, 10) % 2;
-            switch (type)
-            {
-                case 0:
-                    entity.collisionComponent.collision = CreateCircleCollision();
-                    entity.colorComponent.color = Color.Red;
-                    break;
-                case 1:
-                    entity.collisionComponent.collision = CreateRectangleCollision();
-                    entity.colorComponent.color = Color.Green;
-                    break;
-                default:
-                    break;
-            }
-
-            return entity;
-        }
-
-        // 创建圆形碰撞体
-        private BaseCollision CreateCircleCollision()
-        {
-            BaseCollision collision = null;
-
-            while (true)
-            {
-                var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
-                var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
-                var position = new Vector(x, y);
-                var radius = random.Next(20, 50);
-
-                collision = CollisionFactory.CreateCircleCollision(ref position, radius);
-                foreach (var entity in world.entities)
-                {
-                    var collided = entity.collisionComponent.collision.Collides(collision);
-                    if (collided)
-                    {
-                        collision = null;
-                        break;
-                    }
-                }
-
-                if (collision != null) break;
-            }
-
-            return collision;
-        }
-
-        // 创建矩形碰撞体
-        private BaseCollision CreateRectangleCollision()
-        {
-            BaseCollision collision = null;
-
-            while (true)
-            {
-                var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
-                var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
-                var position = new Vector(x, y);
-
-                var width = random.Next(20, 60);
-                var height = random.Next(20, 60);
-                var angle = random.Next(0, 360);
-
-                collision = CollisionFactory.CreateRectangleCollision(ref position, width, height, angle);
-                foreach (var entity in world.entities)
-                {
-                    var collided = entity.collisionComponent.collision.Collides(collision);
-                    if (collided)
-                    {
-                        collision = null;
-                        break;
-                    }
-                }
-
-                if (collision != null) break;
-            }
-
-            return collision;
+            });
         }
 
         // 绘制实体
@@ -190,6 +102,15 @@ namespace SimpleX.Collision2D.App
             };
 
             grap.FillPolygon(brush, points);
+        }
+
+        private void OnClosingHandler(object sender, FormClosingEventArgs e)
+        {
+            if (task != null)
+            {
+                task.Destroy();
+                task = null;
+            }
         }
     }
 }

@@ -25,8 +25,11 @@ namespace SimpleX.Collision2D.App
                 {
                     var rectangle = collision as RectangleCollision;
 
-                    var rotation = rectangle.angle + 0.1f;
-                    rectangle.angle = rotation;
+                    var angle = rectangle.angle;
+                    var speed = entity.rotationComponent.speed;
+                    var delta = speed * dt;
+
+                    rectangle.angle = angle + delta;
                 }
             });
         }
