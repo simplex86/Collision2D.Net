@@ -3,16 +3,15 @@ using System.Collections.Generic;
 
 namespace SimpleX.Collision2D.App
 {
-    class PositionSystem
+    class PositionSystem : BaseSystem
     {
-        private World world = null;
-
         public PositionSystem(World world)
+            : base(world)
         {
-            this.world = world;
+
         }
 
-        public void Tick(float dt)
+        public override void Tick(float dt)
         {
             world.Each((entity) =>
             {
@@ -25,7 +24,7 @@ namespace SimpleX.Collision2D.App
                 var position = collisionComponent.collision.position;
                 var delta = direction * speed * dt;
 
-                collisionComponent.collision.position = position + delta; 
+                collisionComponent.collision.position = position + delta;
             });
         }
     }

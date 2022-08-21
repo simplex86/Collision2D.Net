@@ -5,18 +5,19 @@ namespace SimpleX.Collision2D.App
 {
     class World
     {
-        private PositionSystem positionSystem = null;
-        private RotationSystem rotationSystem = null;
-        private CollisionSystem collisionSystem = null;
-        
+        private List<BaseSystem> systems = new List<BaseSystem>();
+        private List<BaseSystem> lateSystems = new List<BaseSystem>();
+
         private List<Entity> entities = new List<Entity>(20);
         private object mutex = new object();
 
         public World()
         {
-            positionSystem = new PositionSystem(this);
-            rotationSystem = new RotationSystem(this);
-            collisionSystem = new CollisionSystem(this);
+            systems.Add(new PositionSystem(this));
+            systems.Add(new RotationSystem(this));
+            systems.Add(new BoundingBoxSystem(this));
+
+            lateSystems.Add(new CollisionSystem(this));
         }
 
         public void AddEntity(Entity entity)
@@ -29,13 +30,18 @@ namespace SimpleX.Collision2D.App
 
         public void Update(float dt)
         {
-            positionSystem.Tick(dt);
-            rotationSystem.Tick(dt);
+            foreach (var system in systems)
+            {
+                system.Tick(dt);
+            }
         }
 
         public void LateUpdate(float dt)
         {
-            collisionSystem.Tick(dt);
+            foreach (var system in lateSystems)
+            {
+                system.Tick(dt);
+            }
         }
 
         public void Each(Action<Entity> callback)

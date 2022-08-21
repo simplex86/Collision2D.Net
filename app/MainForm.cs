@@ -53,6 +53,9 @@ namespace SimpleX.Collision2D.App
                 var rectangle = collision as RectangleCollision;
                 DrawRectangleCollision(grap, rectangle, ref color);
             }
+
+            var box = collision.boundingBox;
+            DrawBoundingBox(grap, ref box, ref color);
         }
 
         // 绘制圆形实体
@@ -102,6 +105,21 @@ namespace SimpleX.Collision2D.App
             };
 
             grap.FillPolygon(brush, points);
+        }
+
+        private void DrawBoundingBox(Graphics grap, ref AABB box, ref Color color)
+        {
+            var pen = new Pen(color)
+            {
+                DashStyle = DashStyle.Dash
+            };
+
+            var x = box.minx;
+            var y = box.miny;
+            var w = box.maxx - box.minx;
+            var h = box.maxy - box.miny;
+
+            grap.DrawRectangle(pen, x, y, w, h);
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)

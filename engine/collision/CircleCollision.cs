@@ -12,6 +12,14 @@ namespace SimpleX.Collision2D.Engine
             this.radius = radius;
         }
 
+        public override void RefreshBoundingBox()
+        {
+            boundingBox.minx = position.x - radius;
+            boundingBox.maxx = position.x + radius;
+            boundingBox.miny = position.y - radius;
+            boundingBox.maxy = position.y + radius;
+        }
+
         public override bool Contains(ref Vector pt)
         {
             return CollisionHelper.Contains(this, ref pt);

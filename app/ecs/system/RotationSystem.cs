@@ -5,16 +5,15 @@ namespace SimpleX.Collision2D.App
 {
     using SimpleX.Collision2D.Engine;
 
-    class RotationSystem
+    class RotationSystem : BaseSystem
     {
-        private World world = null;
-
         public RotationSystem(World world)
+            : base(world)
         {
-            this.world = world;
+            
         }
 
-        public void Tick(float dt)
+        public override void Tick(float dt)
         {
             world.Each((entity) =>
             {

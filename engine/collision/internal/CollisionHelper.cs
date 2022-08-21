@@ -20,6 +20,8 @@ namespace SimpleX.Collision2D.Engine
         // 两个圆是否碰撞
         public static bool Collides(CircleCollision a, CircleCollision b)
         {
+            if (!IsAABBOverlays(a, b)) return false;
+
             var dist = a.position.Distance(ref b.position);
             return dist <= a.radius + b.radius;
         }
@@ -27,6 +29,7 @@ namespace SimpleX.Collision2D.Engine
         // 两个矩形是否碰撞
         public static bool Collides(RectangleCollision a, RectangleCollision b)
         {
+            if (!IsAABBOverlays(a, b)) return false;
             if (!IsRectangleProjectionOverlays(a, b)) return false;
             if (!IsRectangleProjectionOverlays(b, a)) return false;
 
@@ -36,7 +39,9 @@ namespace SimpleX.Collision2D.Engine
         // 圆和矩形是否碰撞
         public static bool Collides(CircleCollision c, RectangleCollision r)
         {
-            var m = Matrix.CreateRotationMatrix(-r.angle);
+            if (!IsAABBOverlays(c, r)) return false;
+
+            var m = Matrix.CreateRotationMatrix(-r.angle * MathX.DEG2RAD);
             var p = c.position - r.position;
 
             p = Matrix.Transform(ref p, ref m);
@@ -58,6 +63,19 @@ namespace SimpleX.Collision2D.Engine
             return Collides(c, r);
         }
 
+        // AABB是否重叠
+        private static bool IsAABBOverlays(BaseCollision a, BaseCollision b)
+        {
+            var abb = a.boundingBox;
+            var bbb = b.boundingBox;
+
+            if (abb.minx > bbb.maxx || abb.maxx < bbb.minx) return false;
+            if (abb.miny > bbb.maxy || abb.maxy < bbb.miny) return false;
+
+            return true;
+        }
+
+        // 矩形在坐标轴的投影是否重叠
         private static bool IsRectangleProjectionOverlays(RectangleCollision a, RectangleCollision b)
         {
             var w = a.width * 0.5f;
@@ -74,7 +92,7 @@ namespace SimpleX.Collision2D.Engine
             var p7 = new Vector( w,  h);
             var p8 = new Vector(-w,  h);
 
-            var m1 = Matrix.CreateRotationMatrix(b.angle);
+            var m1 = Matrix.CreateRotationMatrix(b.angle * MathX.DEG2RAD);
             var dp = b.position - a.position;
 
             p5 = Matrix.Transform(ref p5, ref m1) + dp;
@@ -82,7 +100,7 @@ namespace SimpleX.Collision2D.Engine
             p7 = Matrix.Transform(ref p7, ref m1) + dp;
             p8 = Matrix.Transform(ref p8, ref m1) + dp;
 
-            var m2 = Matrix.CreateRotationMatrix(-a.angle);
+            var m2 = Matrix.CreateRotationMatrix(-a.angle * MathX.DEG2RAD);
 
             p5 = Matrix.Transform(ref p5, ref m2);
             p6 = Matrix.Transform(ref p6, ref m2);
@@ -91,11 +109,11 @@ namespace SimpleX.Collision2D.Engine
 
             var x1 = MathX.Min(p5.x, p6.x, p7.x, p8.x);
             var x2 = MathX.Max(p5.x, p6.x, p7.x, p8.x);
-            var z1 = MathX.Min(p5.y, p6.y, p7.y, p8.y);
-            var z2 = MathX.Max(p5.y, p6.y, p7.y, p8.y);
+            var y1 = MathX.Min(p5.y, p6.y, p7.y, p8.y);
+            var y2 = MathX.Max(p5.y, p6.y, p7.y, p8.y);
 
             if (x2 < p1.x || x1 > p3.x) return false;
-            if (z2 < p1.y || z1 > p3.y) return false;
+            if (y2 < p1.y || y1 > p3.y) return false;
 
             return true;
         }

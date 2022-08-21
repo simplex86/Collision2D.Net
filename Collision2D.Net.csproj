@@ -51,6 +51,8 @@
     <Compile Include="app\ecs\component\MovementComponent.cs" />
     <Compile Include="app\ecs\component\RotationComponent.cs" />
     <Compile Include="app\ecs\Entity.cs" />
+    <Compile Include="app\ecs\system\BaseSystem.cs" />
+    <Compile Include="app\ecs\system\BoundingBoxSystem.cs" />
     <Compile Include="app\ecs\system\CollisionSystem.cs" />
     <Compile Include="app\ecs\system\PositionSystem.cs" />
     <Compile Include="app\ecs\system\RotationSystem.cs" />
@@ -63,6 +65,7 @@
     </Compile>
     <Compile Include="app\Program.cs" />
     <Compile Include="app\Task.cs" />
+    <Compile Include="engine\collision\AABB.cs" />
     <Compile Include="engine\collision\BaseCollision.cs" />
     <Compile Include="engine\collision\CircleCollision.cs" />
     <Compile Include="engine\collision\CollisionFactory.cs" />
