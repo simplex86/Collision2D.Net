@@ -24,7 +24,33 @@ namespace SimpleX.Collision2D.App
 
         public Task(Control canvas)
         {
-            this.world = new World();
+            this.world = new World()
+            {
+                left = new Boundary()
+                {
+                    x = canvas.Location.X,
+                    y = canvas.Location.Y,
+                    normal = Vector.right
+                },
+                right = new Boundary()
+                {
+                    x = canvas.Location.X + canvas.Width,
+                    y = canvas.Location.Y,
+                    normal = Vector.left
+                },
+                top = new Boundary()
+                {
+                    x = canvas.Location.X,
+                    y = canvas.Location.Y,
+                    normal = Vector.down
+                },
+                bottom = new Boundary()
+                {
+                    x = canvas.Location.X,
+                    y = canvas.Location.Y + canvas.Height,
+                    normal = Vector.up
+                },
+            };
             this.canvas = canvas;
 
             OnRefreshCanvasHandler = () => canvas.Refresh();

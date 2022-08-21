@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace SimpleX.Collision2D.App
 {
+    using SimpleX.Collision2D.Engine;
+
     class PositionSystem : BaseSystem
     {
         public PositionSystem(World world)
@@ -22,7 +24,7 @@ namespace SimpleX.Collision2D.App
                 var speed = movementComponent.speed;
 
                 var position = collisionComponent.collision.position;
-                var delta = direction * speed * dt;
+                var delta = direction * (speed * dt);
 
                 collisionComponent.collision.position = position + delta;
             });

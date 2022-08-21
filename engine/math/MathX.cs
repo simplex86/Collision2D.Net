@@ -102,5 +102,10 @@ namespace SimpleX.Collision2D.Engine
         {
             return Abs(a - b) <= float.Epsilon;
         }
+
+        public static float Clamp(float num, float min, float max)
+        {
+            return Min(max, Max(num, min));
+        }
     }
 }

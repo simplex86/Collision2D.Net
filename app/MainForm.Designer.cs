@@ -47,7 +47,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.canvas);
             this.splitContainer1.Size = new System.Drawing.Size(800, 450);
-            this.splitContainer1.SplitterDistance = 266;
+            this.splitContainer1.SplitterDistance = 304;
             this.splitContainer1.TabIndex = 0;
             // 
             // canvas
@@ -55,7 +55,7 @@
             this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(530, 450);
+            this.canvas.Size = new System.Drawing.Size(492, 450);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintHandler);
@@ -69,7 +69,7 @@
             this.DoubleBuffered = true;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "挤出形状（2D）碰撞检测";
+            this.Text = "碰撞检测（2D)";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosingHandler);
             this.Load += new System.EventHandler(this.OnLoadHandler);

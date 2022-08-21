@@ -46,12 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app\ecs\Boundary.cs" />
     <Compile Include="app\ecs\component\CollisionComponent.cs" />
     <Compile Include="app\ecs\component\ColorComponent.cs" />
     <Compile Include="app\ecs\component\MovementComponent.cs" />
     <Compile Include="app\ecs\component\RotationComponent.cs" />
     <Compile Include="app\ecs\Entity.cs" />
     <Compile Include="app\ecs\system\BaseSystem.cs" />
+    <Compile Include="app\ecs\system\BoundarySystem.cs" />
     <Compile Include="app\ecs\system\BoundingBoxSystem.cs" />
     <Compile Include="app\ecs\system\CollisionSystem.cs" />
     <Compile Include="app\ecs\system\PositionSystem.cs" />

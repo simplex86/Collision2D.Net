@@ -11,6 +11,11 @@ namespace SimpleX.Collision2D.App
         private List<Entity> entities = new List<Entity>(20);
         private object mutex = new object();
 
+        public Boundary left;
+        public Boundary right;
+        public Boundary top;
+        public Boundary bottom;
+
         public World()
         {
             systems.Add(new PositionSystem(this));
@@ -18,6 +23,7 @@ namespace SimpleX.Collision2D.App
             systems.Add(new BoundingBoxSystem(this));
 
             lateSystems.Add(new CollisionSystem(this));
+            lateSystems.Add(new BoundarySystem(this));
         }
 
         public void AddEntity(Entity entity)

@@ -29,10 +29,13 @@ namespace SimpleX.Collision2D.App
             var grap = e.Graphics;
             grap.SmoothingMode = SmoothingMode.HighQuality;
 
-            task.world.Each((entity) =>
+            var world = task.world;
+            world.Each((entity) =>
             {
                 DrawEntity(grap, entity);
             });
+
+            DrawBorder(grap, ref world.left, ref world.right, ref world.top, ref world.bottom);
         }
 
         // 绘制实体
@@ -120,6 +123,16 @@ namespace SimpleX.Collision2D.App
             var h = box.maxy - box.miny;
 
             grap.DrawRectangle(pen, x, y, w, h);
+        }
+
+        private void DrawBorder(Graphics grap, ref Boundary L, ref Boundary R, ref Boundary T, ref Boundary B)
+        {
+            var pen = new Pen(Color.Black);
+
+            grap.DrawLine(pen, new PointF(L.x,     L.y),     new PointF(L.x,                    L.y + canvas.Height - 2));
+            grap.DrawLine(pen, new PointF(R.x - 1, R.y),     new PointF(R.x - 1,                R.y + canvas.Height - 2));
+            grap.DrawLine(pen, new PointF(T.x,     T.y),     new PointF(T.x + canvas.Width - 1, T.y));
+            grap.DrawLine(pen, new PointF(B.x,     B.y - 1), new PointF(B.x + canvas.Width - 1, B.y - 1));
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)

@@ -12,8 +12,8 @@ namespace SimpleX.Collision2D.Engine
         public readonly static Vector one   = new Vector( 1,  1);
         public readonly static Vector left  = new Vector(-1,  0);
         public readonly static Vector right = new Vector( 1,  0);
-        public readonly static Vector up    = new Vector( 0,  1);
-        public readonly static Vector down  = new Vector( 0, -1);
+        public readonly static Vector up    = new Vector( 0, -1);
+        public readonly static Vector down  = new Vector( 0,  1);
 
         public Vector(float x, float y)
         {
@@ -132,6 +132,16 @@ namespace SimpleX.Collision2D.Engine
             var d = Dot(ref u, ref v);
 
             return MathX.ACos(d);
+        }
+
+        // 反射向量
+        public static Vector Reflect(ref Vector input, ref Vector normal)
+        {
+            var I = input;
+            var N = normal.normalized;
+            var R = I - 2 * Vector.Dot(ref I, ref N) * N;
+
+            return R.normalized;
         }
 
         public static Vector operator +(Vector a, Vector b)
