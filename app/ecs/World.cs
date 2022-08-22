@@ -24,6 +24,8 @@ namespace SimpleX.Collision2D.App
 
             lateSystems.Add(new CollisionSystem(this));
             lateSystems.Add(new BoundarySystem(this));
+            // 最后执行的一个LateSystem
+            lateSystems.Add(new LatePostSystem(this));
         }
 
         public void AddEntity(Entity entity)

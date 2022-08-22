@@ -59,7 +59,7 @@ namespace SimpleX.Collision2D.App
         // 开始
         public void Start()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 30; i++)
             {
                 var entity = CreateEntity();
                 world.AddEntity(entity);
@@ -144,10 +144,10 @@ namespace SimpleX.Collision2D.App
                 y = random.Next(-99, 100);
             }
             entity.movementComponent.direction = Vector.Normalize(x, y);
-            entity.movementComponent.speed = random.Next(10, 30);
+            entity.movementComponent.speed = random.Next(10, 50);
 
-            var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(10, 50) 
-                                                      : random.Next(-50, -10);
+            var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(10, 80) 
+                                                      : random.Next(-80, -10);
             entity.rotationComponent.speed = speed;
 
             return entity;
