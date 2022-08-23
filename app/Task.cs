@@ -228,16 +228,29 @@ namespace SimpleX.Collision2D.App
         {
             BaseCollision collision = null;
 
-            var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
-            var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
-            var position = new Vector(x, y);
+            while (true)
+            {
+                var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
+                var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
+                var position = new Vector(x, y);
 
-            var length = random.Next(25, 50);
-            var radius = random.Next(10, length / 2);
-            var angle = random.Next(0, 360);
+                var length = random.Next(25, 50);
+                var radius = random.Next(10, length / 2);
+                var angle = random.Next(0, 360);
 
-            collision = CollisionFactory.CreateCapsuleCollision(ref position, length, radius, angle);
+                collision = CollisionFactory.CreateCapsuleCollision(ref position, length, radius, angle);
+                world.Each((entity) =>
+                {
+                    var overlay = entity.collisionComponent.collision.Collides(collision);
+                    if (overlay)
+                    {
+                        collision = null;
+                    }
+                    return !overlay;
+                });
 
+                if (collision != null) break;
+            }
             return collision;
         }
 
