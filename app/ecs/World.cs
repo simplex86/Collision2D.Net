@@ -52,7 +52,7 @@ namespace SimpleX.Collision2D.App
             }
         }
 
-        public void Each(Action<Entity> callback)
+        public void Each(Func<Entity, bool> callback)
         {
             if (callback == null) return;
 
@@ -60,7 +60,7 @@ namespace SimpleX.Collision2D.App
             {
                 foreach (var entity in entities)
                 {
-                    callback(entity);
+                    if (!callback(entity)) break;
                 }
             }
         }

@@ -18,19 +18,40 @@ namespace SimpleX.Collision2D.App
             world.Each((entity) =>
             {
                 var collision = entity.collisionComponent.collision;
-                if (collision == null || collision is CircleCollision) return;
+                if (collision.type == CollisionType.Circle) return true; ;
 
-                if (collision is RectangleCollision)
+                switch (collision.type)
                 {
-                    var rectangle = collision as RectangleCollision;
-
-                    var angle = rectangle.angle;
-                    var speed = entity.rotationComponent.speed;
-                    var delta = speed * dt;
-
-                    rectangle.angle = angle + delta;
+                    case CollisionType.Rectangle:
+                        RotateRectangle(entity, collision as RectangleCollision, dt);
+                        break;
+                    case CollisionType.Capsule:
+                        RotateCapsule(entity, collision as CapsuleCollision, dt);
+                        break;
+                    default:
+                        break;
                 }
+
+                return true;
             });
+        }
+
+        private void RotateRectangle(Entity entity, RectangleCollision rectangle, float dt)
+        {
+            var angle = rectangle.angle;
+            var speed = entity.rotationComponent.speed;
+            var delta = speed * dt;
+
+            rectangle.angle = angle + delta;
+        }
+
+        private void RotateCapsule(Entity entity, CapsuleCollision capsule, float dt)
+        {
+            var angle = capsule.angle;
+            var speed = entity.rotationComponent.speed;
+            var delta = speed * dt;
+
+            capsule.angle = angle + delta;
         }
     }
 }

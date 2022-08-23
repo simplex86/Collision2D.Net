@@ -68,6 +68,8 @@
     </Compile>
     <Compile Include="app\Program.cs" />
     <Compile Include="app\Task.cs" />
+    <Compile Include="engine\collision\Const.cs" />
+    <Compile Include="engine\collision\internal\GeometryHelper.cs" />
     <Compile Include="engine\math\AABB.cs" />
     <Compile Include="engine\collision\BaseCollision.cs" />
     <Compile Include="engine\collision\CapsuleCollision.cs" />

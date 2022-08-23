@@ -9,7 +9,7 @@ namespace SimpleX.Collision2D.Engine
         public float angle;
 
         public RectangleCollision(ref Vector position, float width, float height, float angle)
-            : base(position)
+            : base(CollisionType.Rectangle, position)
         {
             this.width = width;
             this.height = height;
@@ -18,20 +18,12 @@ namespace SimpleX.Collision2D.Engine
 
         public override void RefreshBoundingBox()
         {
-            var w = width * 0.5f;
-            var h = height * 0.5f;
+            var points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
 
-            var p1 = new Vector(-w, -h);
-            var p2 = new Vector( w, -h);
-            var p3 = new Vector( w, h);
-            var p4 = new Vector(-w, h);
-
-            var mt = Matrix.CreateRotationMatrix(angle * MathX.DEG2RAD);
-
-            p1 = Matrix.Transform(ref p1, ref mt) + position;
-            p2 = Matrix.Transform(ref p2, ref mt) + position;
-            p3 = Matrix.Transform(ref p3, ref mt) + position;
-            p4 = Matrix.Transform(ref p4, ref mt) + position;
+            var p1 = points[0];
+            var p2 = points[1];
+            var p3 = points[2];
+            var p4 = points[3];
 
             boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
             boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
@@ -46,16 +38,16 @@ namespace SimpleX.Collision2D.Engine
 
         public override bool Collides(BaseCollision collision)
         {
-            if (collision is CircleCollision)
+            switch (collision.type)
             {
-                var other = collision as CircleCollision;
-                return CollisionHelper.Collides(this, other);
-            }
-
-            if (collision is RectangleCollision)
-            {
-                var other = collision as RectangleCollision;
-                return CollisionHelper.Collides(this, other);
+                case CollisionType.Circle:
+                    return CollisionHelper.Collides(this, collision as CircleCollision);
+                case CollisionType.Rectangle:
+                    return CollisionHelper.Collides(this, collision as RectangleCollision);
+                case CollisionType.Capsule:
+                    return CollisionHelper.Collides(this, collision as CapsuleCollision);
+                default:
+                    break;
             }
 
             return false;

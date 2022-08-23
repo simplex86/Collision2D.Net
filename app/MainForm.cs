@@ -33,6 +33,7 @@ namespace SimpleX.Collision2D.App
             world.Each((entity) =>
             {
                 DrawEntity(grap, entity);
+                return true;
             });
 
             DrawBorder(grap, ref world.left, ref world.right, ref world.top, ref world.bottom);
@@ -46,15 +47,22 @@ namespace SimpleX.Collision2D.App
 
             var color = entity.colorComponent.color;
 
-            if (collision is CircleCollision)
+            switch (collision.type)
             {
-                var circle = collision as CircleCollision;
-                DrawCircleCollision(grap, circle, ref color);
-            }
-            else if (collision is RectangleCollision)
-            {
-                var rectangle = collision as RectangleCollision;
-                DrawRectangleCollision(grap, rectangle, ref color);
+                case CollisionType.Circle:
+                    var circle = collision as CircleCollision;
+                    DrawCircleCollision(grap, circle, ref color);
+                    break;
+                case CollisionType.Rectangle:
+                    var rectangle = collision as RectangleCollision;
+                    DrawRectangleCollision(grap, rectangle, ref color);
+                    break;
+                case CollisionType.Capsule:
+                    var capsule = collision as CapsuleCollision;
+                    DrawCapsuleCollision(grap, capsule, ref color);
+                    break;
+                default:
+                    break;
             }
 
             var box = collision.boundingBox;
@@ -81,33 +89,48 @@ namespace SimpleX.Collision2D.App
 
             var x = collision.position.x;
             var y = collision.position.y;
-            var w = collision.width * 0.5f;
-            var h = collision.height * 0.5f;
+            var width = collision.width;
+            var height = collision.height;
+            var angle = collision.angle;
 
-            var p1 = new Vector(-w, -h);
-            var p2 = new Vector( w, -h);
-            var p3 = new Vector( w,  h);
-            var p4 = new Vector(-w,  h);
+            DrawRectangle(grap, x, y, width, height, angle, brush);
+        }
 
-            var m1 = Matrix.CreateRotationMatrix(collision.angle * MathX.DEG2RAD);
-            var m2 = Matrix.CreateTranslationMatrix(x, y);
-            var mt = m1 * m2; // 先旋转，再平移
+        private void DrawCapsuleCollision(Graphics grap, CapsuleCollision collision, ref Color color)
+        {
+            var brush = new SolidBrush(color);
 
-            p1 = Matrix.Transform(ref p1, ref mt);
-            p2 = Matrix.Transform(ref p2, ref mt);
-            p3 = Matrix.Transform(ref p3, ref mt);
-            p4 = Matrix.Transform(ref p4, ref mt);
+            var x = collision.position.x;
+            var y = collision.position.y;
+            var length = collision.length;
+            var radius = collision.radius;
+            var angle = collision.angle;
+            var points = GeometryHelper.GetCapsulePoints(x, y, length, angle);
+
+            DrawRectangle(grap, x, y, length, radius * 2, angle, brush);
+            DrawSemicircle(grap, points[0].x, points[0].y, radius, angle - 90, brush);
+            DrawSemicircle(grap, points[1].x, points[1].y, radius, angle + 90, brush);
+        }
+
+        private void DrawRectangle(Graphics grap, float x, float y, float width, float height, float angle, Brush brush)
+        {
+            var verts = GeometryHelper.GetRectanglePoints(x, y, width, height, angle);
 
             var points = new PointF[]
             {
-                new PointF(p1.x, p1.y),
-                new PointF(p2.x, p2.y),
-                new PointF(p3.x, p3.y),
-                new PointF(p4.x, p4.y),
-                new PointF(p1.x, p1.y),
+                new PointF(verts[0].x, verts[0].y),
+                new PointF(verts[1].x, verts[1].y),
+                new PointF(verts[2].x, verts[2].y),
+                new PointF(verts[3].x, verts[3].y),
+                new PointF(verts[0].x, verts[0].y),
             };
 
             grap.FillPolygon(brush, points);
+        }
+
+        private void DrawSemicircle(Graphics grap, float x, float y, float radius, float angle, Brush brush)
+        {
+            grap.FillPie(brush, x - radius, y - radius, radius * 2, radius * 2, angle, 180.0f);
         }
 
         private void DrawBoundingBox(Graphics grap, ref AABB box, ref Color color)

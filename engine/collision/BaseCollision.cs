@@ -4,6 +4,8 @@ namespace SimpleX.Collision2D.Engine
 {
     public abstract class BaseCollision
     {
+        // 类型
+        public CollisionType type { get; private set; }
         // 位置
         public Vector position;
         // 包围盒
@@ -19,8 +21,9 @@ namespace SimpleX.Collision2D.Engine
         public abstract bool Collides(BaseCollision collision);
 
         //
-        protected BaseCollision(Vector position)
+        protected BaseCollision(CollisionType type, Vector position)
         {
+            this.type = type;
             this.position = position;
         }
     }

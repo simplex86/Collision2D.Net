@@ -27,6 +27,8 @@ namespace SimpleX.Collision2D.App
                 var delta = direction * (speed * dt);
 
                 collisionComponent.collision.position = position + delta;
+
+                return true;
             });
         }
     }

@@ -38,6 +38,8 @@ namespace SimpleX.Collision2D.App
                 {
                     movementComponent.direction = Vector.Reflect(ref direction, ref world.bottom.normal);
                 }
+
+                return true;
             });
         }
     }

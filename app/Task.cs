@@ -121,36 +121,45 @@ namespace SimpleX.Collision2D.App
         {
             var entity = new Entity();
 
-            var type = random.Next(0, 2);
+            var type = GetRandomCollisionType();
             switch (type)
             {
-                case 0:
+                case CollisionType.Circle:
                     entity.collisionComponent.collision = CreateCircleCollision();
                     entity.colorComponent.color = Color.Red;
                     break;
-                case 1:
+                case CollisionType.Rectangle:
                     entity.collisionComponent.collision = CreateRectangleCollision();
                     entity.colorComponent.color = Color.Green;
+                    break;
+                case CollisionType.Capsule:
+                    entity.collisionComponent.collision = CreateCapsuleCollision();
+                    entity.colorComponent.color = Color.Blue;
                     break;
                 default:
                     break;
             }
 
-            var x = 0; 
-            var y = 0; 
+            var x = 0;
+            var y = 0;
             while (x * y == 0)
             {
                 x = random.Next(-99, 100);
                 y = random.Next(-99, 100);
             }
             entity.movementComponent.direction = Vector.Normalize(x, y);
-            entity.movementComponent.speed = random.Next(10, 50);
+            entity.movementComponent.speed = random.Next(30, 60);
 
-            var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(10, 80) 
-                                                      : random.Next(-80, -10);
+            var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(20, 80)
+                                                      : random.Next(-80, -20);
             entity.rotationComponent.speed = speed;
 
             return entity;
+        }
+
+        public CollisionType GetRandomCollisionType()
+        {
+            return (CollisionType)random.Next(0, 3);
         }
 
         // 创建圆形碰撞体
@@ -168,11 +177,12 @@ namespace SimpleX.Collision2D.App
                 collision = CollisionFactory.CreateCircleCollision(ref position, radius);
                 world.Each((entity) =>
                 {
-                    var collided = entity.collisionComponent.collision.Collides(collision);
-                    if (collided)
+                    var overlay = entity.collisionComponent.collision.Collides(collision);
+                    if (overlay)
                     {
                         collision = null;
                     }
+                    return !overlay;
                 });
 
                 if (collision != null) break;
@@ -199,15 +209,34 @@ namespace SimpleX.Collision2D.App
                 collision = CollisionFactory.CreateRectangleCollision(ref position, width, height, angle);
                 world.Each((entity) =>
                 {
-                    var collided = entity.collisionComponent.collision.Collides(collision);
-                    if (collided)
+                    var overlay = entity.collisionComponent.collision.Collides(collision);
+                    if (overlay)
                     {
                         collision = null;
                     }
+                    return !overlay;
                 });
 
                 if (collision != null) break;
             }
+
+            return collision;
+        }
+
+        // 创建矩形碰撞体
+        private BaseCollision CreateCapsuleCollision()
+        {
+            BaseCollision collision = null;
+
+            var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
+            var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
+            var position = new Vector(x, y);
+
+            var length = random.Next(25, 50);
+            var radius = random.Next(10, length / 2);
+            var angle = random.Next(0, 360);
+
+            collision = CollisionFactory.CreateCapsuleCollision(ref position, length, radius, angle);
 
             return collision;
         }

@@ -7,7 +7,7 @@ namespace SimpleX.Collision2D.Engine
         public float radius;
 
         public CircleCollision(ref Vector position, float radius)
-            : base(position)
+            : base(CollisionType.Circle, position)
         {
             this.radius = radius;
         }
@@ -27,16 +27,16 @@ namespace SimpleX.Collision2D.Engine
 
         public override bool Collides(BaseCollision collision)
         {
-            if (collision is CircleCollision)
+            switch (collision.type)
             {
-                var other = collision as CircleCollision;
-                return CollisionHelper.Collides(this, other);
-            }
-
-            if (collision is RectangleCollision)
-            {
-                var other = collision as RectangleCollision;
-                return CollisionHelper.Collides(this, other);
+                case CollisionType.Circle:
+                    return CollisionHelper.Collides(this, collision as CircleCollision);
+                case CollisionType.Rectangle:
+                    return CollisionHelper.Collides(this, collision as RectangleCollision);
+                case CollisionType.Capsule:
+                    return CollisionHelper.Collides(this, collision as CapsuleCollision);
+                default:
+                    break;
             }
 
             return false;
