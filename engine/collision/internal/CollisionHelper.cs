@@ -75,20 +75,12 @@ namespace SimpleX.Collision2D.Engine
         // 两个矩形是否碰撞
         public static bool Collides(RectangleCollision a, RectangleCollision b)
         {
-            if (!IsAABBOverlays(a, b)) return false;
-
-            if (!GeometryHelper.IsRectangleOverlayWithRectangle(ref a.position, a.width, a.height, a.angle,
-                                                                ref b.position, b.width, b.height, b.angle))
+            if (IsAABBOverlays(a, b))
             {
-                return false;
+                return GeometryHelper.IsRectangleOverlayWithRectangle(ref a.position, a.width, a.height, a.angle,
+                                                                      ref b.position, b.width, b.height, b.angle);
             }
-            if (!GeometryHelper.IsRectangleOverlayWithRectangle(ref b.position, b.width, b.height, b.angle,
-                                                                ref a.position, a.width, a.height, a.angle))
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         // 矩形和圆是否碰撞
