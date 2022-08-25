@@ -122,7 +122,9 @@ namespace SimpleX.Collision2D.Engine
         public static bool IsCircleOverlayWidthCircle(ref Vector pa, float ra, ref Vector pb, float rb)
         {
             var dist2 = GetDistance2(ref pa, ref pb);
-            return dist2 <= ra + rb;
+            var radius2 = (ra + rb) * (ra + rb);
+
+            return dist2 <= radius2;
         }
 
         // 圆（cp，radius）是否和矩形（rp，width, height, angle)重叠
