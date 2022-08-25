@@ -19,7 +19,7 @@ namespace SimpleX.Collision2D.App
         // 窗体加载完后，初始化数据
         private void OnLoadHandler(object sender, EventArgs e)
         {
-            task = new Task(canvas);
+            task = new Task(canvas, fps);
             task.Start();
         }
 
@@ -35,8 +35,6 @@ namespace SimpleX.Collision2D.App
                 DrawEntity(grap, entity);
                 return true;
             });
-
-            DrawBorder(grap, ref world.left, ref world.right, ref world.top, ref world.bottom);
         }
 
         // 绘制实体
@@ -96,6 +94,7 @@ namespace SimpleX.Collision2D.App
             DrawRectangle(grap, x, y, width, height, angle, brush);
         }
 
+        // 绘制胶囊实体
         private void DrawCapsuleCollision(Graphics grap, CapsuleCollision collision, ref Color color)
         {
             var brush = new SolidBrush(color);
@@ -107,7 +106,7 @@ namespace SimpleX.Collision2D.App
             var angle = collision.angle;
             var points = GeometryHelper.GetCapsulePoints(x, y, length, angle);
 
-            DrawRectangle(grap, x, y, length, radius * 2, angle, brush);
+            DrawRectangle(grap, x, y, length + 2, radius * 2, angle, brush);
             DrawSemicircle(grap, points[0].x, points[0].y, radius, angle - 90, brush);
             DrawSemicircle(grap, points[1].x, points[1].y, radius, angle + 90, brush);
         }
@@ -146,16 +145,6 @@ namespace SimpleX.Collision2D.App
             var h = box.maxy - box.miny;
 
             grap.DrawRectangle(pen, x, y, w, h);
-        }
-
-        private void DrawBorder(Graphics grap, ref Boundary L, ref Boundary R, ref Boundary T, ref Boundary B)
-        {
-            var pen = new Pen(Color.Black);
-
-            grap.DrawLine(pen, new PointF(L.x,     L.y),     new PointF(L.x,                    L.y + canvas.Height - 2));
-            grap.DrawLine(pen, new PointF(R.x - 1, R.y),     new PointF(R.x - 1,                R.y + canvas.Height - 2));
-            grap.DrawLine(pen, new PointF(T.x,     T.y),     new PointF(T.x + canvas.Width - 1, T.y));
-            grap.DrawLine(pen, new PointF(B.x,     B.y - 1), new PointF(B.x + canvas.Width - 1, B.y - 1));
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)

@@ -4,6 +4,26 @@ namespace SimpleX.Collision2D.Engine
 { 
     internal static class GeometryHelper
     {
+        // 获取两点间距离的平方
+        public static float GetDistance2(ref Vector a, ref Vector b)
+        {
+            var dx = a.x - b.x;
+            var dy = a.y - b.y;
+
+            return dx * dx + dy * dy;
+        }
+
+        // 获取点（pt）到线段（pa，pb）的最小距离的平方
+        public static float GetDistance2(ref Vector pa, ref Vector pb, ref Vector pt)
+        {
+            float px = pt.x - pa.x, py = pt.y - pa.y;
+            float xx = pb.x - pa.x, yy = pb.y - pa.y;
+            float h = MathX.Max(MathX.Min((px * xx + py * yy) / (xx * xx + yy * yy), 1.0f), 0.0f);
+            float dx = px - xx * h, dy = py - yy * h;
+
+            return dx * dx + dy * dy;
+        }
+
         // 获取矩形（pos, width, height, angle）的顶点
         public static Vector[] GetRectanglePoints(float x, float y, float width, float height, float angle)
         {
@@ -94,20 +114,15 @@ namespace SimpleX.Collision2D.Engine
         // 胶囊（pa，pb，radius）是否包含点（pt）
         public static bool IsCapsuleContains(ref Vector pa, ref Vector pb, float radius, ref Vector pt)
         {
-            float px = pt.x - pa.x, py = pt.y - pa.y;
-            float xx = pb.x - pa.x, yy = pb.y - pa.y;
-            float h = MathX.Max(MathX.Min((px * xx + py * yy) / (xx * xx + yy * yy), 1.0f), 0.0f);
-            float dx = px - xx * h, dy = py - yy * h;
-
-            return dx * dx + dy * dy < radius * radius;
+            var dist2 = GetDistance2(ref pa, ref pb, ref pt);
+            return dist2 < radius * radius;
         }
 
         // 圆（pa, ra)是否和圆（pb, rb）碰撞
         public static bool IsCircleOverlayWidthCircle(ref Vector pa, float ra, ref Vector pb, float rb)
         {
-            var dx = pa.x - pb.x;
-            var dy = pa.y - pb.y;
-            return dx * dx + dy * dy <= ra + rb;
+            var dist2 = GetDistance2(ref pa, ref pb);
+            return dist2 <= ra + rb;
         }
 
         // 圆（cp，radius）是否和矩形（rp，width, height, angle)重叠
@@ -181,6 +196,18 @@ namespace SimpleX.Collision2D.Engine
 
             if (x2 < p1.x || x1 > p3.x) return false;
             if (y2 < p1.y || y1 > p3.y) return false;
+
+            return true;
+        }
+
+        // 线段（p1, p2）是否和线段（q1, q2）相交
+        public static bool IsSegmentIntersected(ref Vector p1, ref Vector p2, ref Vector q1, ref Vector q2)
+        {
+            Vector a1 = p1 - q2, b1 = p2 - p2, c1 = q1 - q2;
+            if (Vector.Cross(ref a1, ref c1).w * Vector.Cross(ref b1, ref c1).w > 0) return false;
+
+            Vector a2 = q2 - p2, b2 = q1 - p2, c2 = p1 - p2;
+            if (Vector.Cross(ref a2, ref c2).w * Vector.Cross(ref b2, ref c2).w > 0) return false;
 
             return true;
         }

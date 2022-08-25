@@ -12,17 +12,28 @@ namespace SimpleX.Collision2D.App
         private Thread thread = null;
         private bool running = false;
         private Random random = new Random();
-        private Control canvas = null;
-        private long timestamp = 0;
+        private long previousTime = 0;
 
-        // 子线程刷新控件的委托
+        private float runtimeAcc = 0;
+        private int frameCount = 0;
+
+        private Control canvas = null;
+        private Control cfps = null;
+
+        // 子线程刷新画布的委托
         private Action OnRefreshCanvasHandler;
+        // 子线程刷新FPS的委托
+        private Action OnRefreshFpsHandler;
+
         // 格林威治时间起始
         private static readonly DateTime GMT_ZERO = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        // 实体数量
+        private const int ENTITY_COUNT = 30;
 
         public World world { get; private set; } = null;
+        public int fps { get; private set; } = 0;
 
-        public Task(Control canvas)
+        public Task(Control canvas, Control cfps)
         {
             this.world = new World()
             {
@@ -51,21 +62,24 @@ namespace SimpleX.Collision2D.App
                     normal = Vector.up
                 },
             };
+
             this.canvas = canvas;
+            this.cfps = cfps;
 
             OnRefreshCanvasHandler = () => canvas.Refresh();
+            OnRefreshFpsHandler = () => cfps.Text = $"FPS: {fps}";
         }
 
         // 开始
         public void Start()
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < ENTITY_COUNT; i++)
             {
                 var entity = CreateEntity();
                 world.AddEntity(entity);
             }
 
-            timestamp = GetCurrentTime();
+            previousTime = GetCurrentTime();
             running = true;
 
             thread = new Thread(OnTick);
@@ -103,16 +117,35 @@ namespace SimpleX.Collision2D.App
             while (running)
             {
                 var currentTime = GetCurrentTime();
-                var deltaTime = (currentTime - timestamp) / 1000.0f;
+                var deltaTime = (currentTime - previousTime) / 1000.0f;
+                previousTime = currentTime;
 
-                // 刷新数据后重绘
+                // 刷新数据
                 world.Update(deltaTime);
+                // 重绘（非常耗时）
                 canvas.Invoke(OnRefreshCanvasHandler);
                 // 碰撞检测
                 world.LateUpdate(deltaTime);
-
-                timestamp = currentTime;
+                // 计算FPS并刷新UI
+                UpdateFPS(deltaTime);
+                
                 Thread.Sleep(1);
+            }
+        }
+
+        // 刷新FPS
+        private void UpdateFPS(float dt)
+        {
+            runtimeAcc += dt;
+            frameCount++;
+
+            if (runtimeAcc >= 1.0f)
+            {
+                fps = (int)(frameCount / runtimeAcc);
+                cfps.Invoke(OnRefreshFpsHandler);
+
+                runtimeAcc = 0;
+                frameCount = 0;
             }
         }
 
@@ -148,7 +181,7 @@ namespace SimpleX.Collision2D.App
                 y = random.Next(-99, 100);
             }
             entity.movementComponent.direction = Vector.Normalize(x, y);
-            entity.movementComponent.speed = random.Next(30, 60);
+            entity.movementComponent.speed = random.Next(20, 80);
 
             var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(20, 80)
                                                       : random.Next(-80, -20);

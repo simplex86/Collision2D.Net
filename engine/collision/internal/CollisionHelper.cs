@@ -111,28 +111,10 @@ namespace SimpleX.Collision2D.Engine
                 var pas = GeometryHelper.GetCapsulePoints(ref a.position, a.length, a.angle);
                 var pbs = GeometryHelper.GetCapsulePoints(ref b.position, b.length, b.angle);
 
-                if (GeometryHelper.IsCircleOverlayWidthCircle(ref pas[0], a.radius, ref pbs[0], b.radius)) return true;
-                if (GeometryHelper.IsCircleOverlayWidthCircle(ref pas[1], a.radius, ref pbs[0], b.radius)) return true;
-                
-                if (GeometryHelper.IsCircleOverlayWidthCircle(ref pas[0], a.radius, ref pbs[1], b.radius)) return true;
-                if (GeometryHelper.IsCircleOverlayWidthCircle(ref pas[1], a.radius, ref pbs[1], b.radius)) return true;
-
-                if (GeometryHelper.IsCircleOverlayWithRectangle(ref pbs[0], b.radius,
-                                                                ref a.position, a.length, a.radius * 2, a.angle))
-                {
-                    return true;
-                }
-                if (GeometryHelper.IsCircleOverlayWithRectangle(ref pbs[1], b.radius,
-                                                                ref a.position, a.length, a.radius * 2, a.angle))
-                {
-                    return true;
-                }
-
-                if (GeometryHelper.IsRectangleOverlayWithRectangle(ref a.position, a.length, a.radius * 2, a.angle,
-                                                                   ref b.position, b.length, b.radius * 2, b.angle))
-                {
-                    return true;
-                }
+                var dr = a.radius + b.radius;
+                if (GeometryHelper.GetDistance2(ref pas[0], ref pas[1], ref pbs[0]) <= dr * dr) return true;
+                if (GeometryHelper.GetDistance2(ref pas[0], ref pas[1], ref pbs[1]) <= dr * dr) return true;
+                if (GeometryHelper.IsSegmentIntersected(ref pas[0], ref pas[1], ref pbs[0], ref pbs[1])) return true;
             }
             return false;
         }

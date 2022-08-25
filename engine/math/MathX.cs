@@ -93,6 +93,7 @@ namespace SimpleX.Collision2D.Engine
             return (float)Math.Pow(v, 2);
         }
 
+        
         public static bool Equals(int a, int b)
         {
             return a == b;
