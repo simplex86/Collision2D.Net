@@ -12,7 +12,7 @@ namespace SimpleX.Collision2D.Engine
             this.radius = radius;
         }
 
-        public override void RefreshBoundingBox()
+        public override void RefreshGeometry()
         {
             boundingBox.minx = position.x - radius;
             boundingBox.maxx = position.x + radius;

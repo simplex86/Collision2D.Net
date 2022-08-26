@@ -50,11 +50,12 @@
     <Compile Include="app\ecs\component\CollisionComponent.cs" />
     <Compile Include="app\ecs\component\ColorComponent.cs" />
     <Compile Include="app\ecs\component\MovementComponent.cs" />
+    <Compile Include="app\ecs\component\RenderComponent.cs" />
     <Compile Include="app\ecs\component\RotationComponent.cs" />
     <Compile Include="app\ecs\Entity.cs" />
     <Compile Include="app\ecs\system\BaseSystem.cs" />
     <Compile Include="app\ecs\system\BoundarySystem.cs" />
-    <Compile Include="app\ecs\system\BoundingBoxSystem.cs" />
+    <Compile Include="app\ecs\system\GeometrySystem.cs" />
     <Compile Include="app\ecs\system\CollisionSystem.cs" />
     <Compile Include="app\ecs\system\LatePostSystem.cs" />
     <Compile Include="app\ecs\system\PositionSystem.cs" />
@@ -67,6 +68,10 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="app\Program.cs" />
+    <Compile Include="app\render\BaseRenderer.cs" />
+    <Compile Include="app\render\CapsuleRenderer.cs" />
+    <Compile Include="app\render\CircleRenderer.cs" />
+    <Compile Include="app\render\RectangleRenderer.cs" />
     <Compile Include="app\Task.cs" />
     <Compile Include="engine\collision\Const.cs" />
     <Compile Include="engine\collision\internal\GeometryHelper.cs" />

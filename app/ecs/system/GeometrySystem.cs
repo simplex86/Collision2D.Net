@@ -4,9 +4,9 @@ namespace SimpleX.Collision2D.App
 {
     using SimpleX.Collision2D.Engine;
 
-    class BoundingBoxSystem : BaseSystem
+    class GeometrySystem : BaseSystem
     {
-        public BoundingBoxSystem(World world)
+        public GeometrySystem(World world)
             : base(world)
         {
 
@@ -17,7 +17,7 @@ namespace SimpleX.Collision2D.App
             world.Each((entity) =>
             {
                 var collision = entity.collisionComponent.collision;
-                collision.RefreshBoundingBox();
+                collision.RefreshGeometry();
 
                 return true;
             });

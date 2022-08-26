@@ -16,7 +16,7 @@ namespace SimpleX.Collision2D.Engine
             this.angle = angle;
         }
 
-        public override void RefreshBoundingBox()
+        public override void RefreshGeometry()
         {
             var points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
 
