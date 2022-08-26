@@ -80,6 +80,7 @@
     <Compile Include="engine\math\MathX.cs" />
     <Compile Include="engine\math\Matrix.cs" />
     <Compile Include="engine\math\Vector.cs" />
+    <Compile Include="engine\Ray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="app\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
