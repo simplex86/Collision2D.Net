@@ -16,7 +16,7 @@ namespace SimpleX.Collision2D.Engine
             this.angle = angle;
         }
 
-        public override void RefreshBoundingBox()
+        public override void RefreshGeometry()
         {
             float w = length + radius * 2;
             float h = radius * 2;

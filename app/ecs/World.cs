@@ -20,7 +20,7 @@ namespace SimpleX.Collision2D.App
         {
             systems.Add(new PositionSystem(this));
             systems.Add(new RotationSystem(this));
-            systems.Add(new BoundingBoxSystem(this));
+            systems.Add(new GeometrySystem(this));
 
             lateSystems.Add(new CollisionSystem(this));
             lateSystems.Add(new BoundarySystem(this));

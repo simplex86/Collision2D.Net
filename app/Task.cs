@@ -28,7 +28,7 @@ namespace SimpleX.Collision2D.App
         // 格林威治时间起始
         private static readonly DateTime GMT_ZERO = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         // 实体数量
-        private const int ENTITY_COUNT = 30;
+        private const int ENTITY_COUNT = 150;
 
         public World world { get; private set; } = null;
         public int fps { get; private set; } = 0;
@@ -116,10 +116,7 @@ namespace SimpleX.Collision2D.App
         {
             while (running)
             {
-                var currentTime = GetCurrentTime();
-                var deltaTime = (currentTime - previousTime) / 1000.0f;
-                previousTime = currentTime;
-
+                var deltaTime = GetDeltaTime();
                 // 刷新数据
                 world.Update(deltaTime);
                 // 重绘（非常耗时）
@@ -128,8 +125,6 @@ namespace SimpleX.Collision2D.App
                 world.LateUpdate(deltaTime);
                 // 计算FPS并刷新UI
                 UpdateFPS(deltaTime);
-                
-                Thread.Sleep(1);
             }
         }
 
@@ -160,14 +155,17 @@ namespace SimpleX.Collision2D.App
                 case CollisionType.Circle:
                     entity.collisionComponent.collision = CreateCircleCollision();
                     entity.colorComponent.color = Color.Red;
+                    entity.renderComponent.renderer = new CircleRenderer();
                     break;
                 case CollisionType.Rectangle:
                     entity.collisionComponent.collision = CreateRectangleCollision();
                     entity.colorComponent.color = Color.Green;
+                    entity.renderComponent.renderer = new RectangleRenderer();
                     break;
                 case CollisionType.Capsule:
                     entity.collisionComponent.collision = CreateCapsuleCollision();
                     entity.colorComponent.color = Color.Blue;
+                    entity.renderComponent.renderer = new CapsuleRenderer();
                     break;
                 default:
                     break;
@@ -205,7 +203,7 @@ namespace SimpleX.Collision2D.App
                 var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
                 var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
                 var position = new Vector(x, y);
-                var radius = random.Next(20, 50);
+                var radius = random.Next(15, 30);
 
                 collision = CollisionFactory.CreateCircleCollision(ref position, radius);
                 world.Each((entity) =>
@@ -235,8 +233,8 @@ namespace SimpleX.Collision2D.App
                 var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
                 var position = new Vector(x, y);
 
-                var width = random.Next(20, 60);
-                var height = random.Next(20, 60);
+                var width = random.Next(20, 50);
+                var height = random.Next(20, 50);
                 var angle = random.Next(0, 360);
 
                 collision = CollisionFactory.CreateRectangleCollision(ref position, width, height, angle);
@@ -267,8 +265,8 @@ namespace SimpleX.Collision2D.App
                 var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
                 var position = new Vector(x, y);
 
-                var length = random.Next(25, 50);
-                var radius = random.Next(10, length / 2);
+                var length = random.Next(18, 36);
+                var radius = random.Next(8, Math.Min(14, length / 2));
                 var angle = random.Next(0, 360);
 
                 collision = CollisionFactory.CreateCapsuleCollision(ref position, length, radius, angle);
@@ -291,6 +289,15 @@ namespace SimpleX.Collision2D.App
         {
             var ts = DateTime.UtcNow - GMT_ZERO;
             return Convert.ToInt64(ts.TotalMilliseconds);
+        }
+
+        private float GetDeltaTime()
+        {
+            var currentTime = GetCurrentTime();
+            var deltaTime = (currentTime - previousTime) / 1000.0f;
+            previousTime = currentTime;
+
+            return deltaTime;
         }
     }
 }
