@@ -17,16 +17,16 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 是否和碰撞体相交（不限检测长度）
-        public bool Hit(BaseCollision collision)
+        public bool Cast(BaseCollision collision)
         {
             switch (collision.type)
             {
                 case CollisionType.Circle:
-                    return Hit(collision as CircleCollision);
+                    return Cast(collision as CircleCollision);
                 case CollisionType.Rectangle:
-                    return Hit(collision as RectangleCollision);
+                    return Cast(collision as RectangleCollision);
                 case CollisionType.Capsule:
-                    return Hit(collision as CapsuleCollision);
+                    return Cast(collision as CapsuleCollision);
                 default:
                     break;
             }
@@ -34,30 +34,25 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 是否和碰撞体相交（限制检测长度不大于length）
-        public bool Hit(BaseCollision collision, float length)
+        public bool Cast(BaseCollision collision, float length)
         {
             length = MathX.Max(0.001f, length);
 
             switch (collision.type)
             {
                 case CollisionType.Circle:
-                    return Hit(collision as CircleCollision, length);
+                    return Cast(collision as CircleCollision, length);
                 case CollisionType.Rectangle:
-                    return Hit(collision as RectangleCollision);
+                    return Cast(collision as RectangleCollision, length);
                 case CollisionType.Capsule:
-                    return Hit(collision as CapsuleCollision);
+                    return Cast(collision as CapsuleCollision, length);
                 default:
                     break;
             }
             return false;
         }
 
-        private bool Hit(CircleCollision collision)
-        {
-            return Hit(collision, float.MaxValue);
-        }
-
-        private bool Hit(CircleCollision collision, float length)
+        private bool Cast(CircleCollision collision, float length = float.MaxValue)
         {
             var p = collision.position;
             var r = collision.radius;
@@ -66,22 +61,23 @@ namespace SimpleX.Collision2D.Engine
             var m = position - p;
             var c = Vector.Dot(ref m, ref m) - r * r;
             var b = Vector.Dot(ref m, ref d);
+
             var disc = b * b - c;
-
-            if (disc < 0) return false;
-
-            var t = -b - MathX.Sqrt(disc);
-            if (t >= 0 && t <= length) return true;
+            if (disc >= 0)
+            {
+                var t = -b - MathX.Sqrt(disc);
+                if (t >= 0 && t <= length) return true;
+            }
 
             return false;
         }
 
-        private bool Hit(RectangleCollision collision)
+        private bool Cast(RectangleCollision collision, float length = float.MaxValue)
         {
             return false;
         }
 
-        private bool Hit(CapsuleCollision collision)
+        private bool Cast(CapsuleCollision collision, float length = float.MaxValue)
         {
             return false;
         }
