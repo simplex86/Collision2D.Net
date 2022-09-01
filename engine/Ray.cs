@@ -79,6 +79,39 @@ namespace SimpleX.Collision2D.Engine
 
         private bool Cast(CapsuleCollision collision, float length = float.MaxValue)
         {
+            var m = new Matrix();
+            return false;
+        }
+
+        private bool Cast(ref AABB box, float length)
+        {
+            if (MathX.Equals(direction.x, 0.0f))
+            {
+                return position.x >= box.minx && position.x <= box.maxx;
+            }
+
+            if (MathX.Equals(direction.y, 0.0f))
+            {
+                return position.y >= box.miny && position.y <= box.maxy;
+            }
+
+            var iv = new Vector(1.0f / direction.x, 1.0f / direction.y);
+            var s1 = new Vector(box.minx - position.x, box.miny - position.y);
+            var s2 = new Vector(box.maxx - position.x, box.maxy - position.y);
+
+            var d1 = Vector.Mul(ref s1, ref iv);
+            var d2 = Vector.Mul(ref s2, ref iv);
+            var v1 = Vector.Min(ref d1, ref d2);
+            var v2 = Vector.Max(ref d1, ref d2);
+
+            var L = MathX.Max(v1.x, v1.y);
+            var H = MathX.Min(v2.x, v2.y);
+
+            if (H >= 0 && H >= L && L <= length)
+            {
+                return true;
+            }
+
             return false;
         }
     }

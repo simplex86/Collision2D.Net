@@ -21,7 +21,7 @@ namespace SimpleX.Collision2D.App
 
                 if (collision1.Collides(collision2))
                 {
-                    var direction = Vector.Normalize(collision1.position - collision2.position);
+                    var direction = (collision1.position - collision2.position).normalized;
                     a.movementComponent.direction = direction;
                     b.movementComponent.direction = direction * -1;
                 }

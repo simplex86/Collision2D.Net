@@ -29,19 +29,8 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBContains(ref collision.boundingBox, ref pt))
             {
-                var position = collision.position;
-
-                var m1 = Matrix.CreateRotationMatrix(collision.angle * MathX.DEG2RAD);
-                var m2 = Matrix.CreateTranslationMatrix(position.x, position.y);
-                var mt = m1 * m2;
-
-                var p1 = new Vector(collision.length * 0.5f, 0);
-                p1 = Matrix.Transform(ref p1, ref mt);
-
-                var p2 = new Vector(collision.length * -0.5f, 0);
-                p2 = Matrix.Transform(ref p2, ref mt);
-
-                return GeometryHelper.IsCapsuleContains(ref p1, ref p2, collision.radius, ref pt);
+                var points = GeometryHelper.GetCapsulePoints(ref collision.position, collision.length, collision.angle);
+                return GeometryHelper.IsCapsuleContains(ref points[0], ref points[1], collision.radius, ref pt);
             }
             return false;
         }
@@ -116,19 +105,9 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBOverlays(a, b))
             {
-                var position = a.position;
-                var m1 = Matrix.CreateRotationMatrix(a.angle * MathX.DEG2RAD);
-                var m2 = Matrix.CreateTranslationMatrix(a.position.x, a.position.y);
-                var mt = m1 * m2;
-
-                var p1 = new Vector(a.length * 0.5f, 0);
-                p1 = Matrix.Transform(ref p1, ref mt);
-
-                var p2 = new Vector(a.length * -0.5f, 0);
-                p2 = Matrix.Transform(ref p2, ref mt);
-
+                var points = GeometryHelper.GetCapsulePoints(ref a.position, a.length, a.angle);
                 var radius = a.radius + b.radius;
-                return GeometryHelper.IsCapsuleContains(ref p1, ref p2, radius, ref b.position);
+                return GeometryHelper.IsCapsuleContains(ref points[0], ref points[1], radius, ref b.position);
             }
             return false;
         }
