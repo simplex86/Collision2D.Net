@@ -33,7 +33,6 @@ namespace SimpleX.Collision2D.App
             world.Each((entity) =>
             {
                 DrawEntity(grap, entity);
-                return true;
             });
         }
 

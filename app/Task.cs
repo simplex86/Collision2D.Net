@@ -119,16 +119,22 @@ namespace SimpleX.Collision2D.App
                 var deltaTime = GetDeltaTime();
                 // 刷新数据
                 world.Update(deltaTime);
-                // 重绘（非常耗时）
-                canvas.Invoke(OnRefreshCanvasHandler);
                 // 碰撞检测
                 world.LateUpdate(deltaTime);
-                // 计算FPS并刷新UI
+                // 刷新画布
+                UpdateCanvas();
+                // 刷新FPS
                 UpdateFPS(deltaTime);
             }
         }
 
-        // 刷新FPS
+        // 刷新画布（非常耗时）
+        private void UpdateCanvas()
+        {
+            canvas.Invoke(OnRefreshCanvasHandler);
+        }
+
+        // 计算FPS并刷新UI
         private void UpdateFPS(float dt)
         {
             runtimeAcc += dt;
@@ -200,8 +206,8 @@ namespace SimpleX.Collision2D.App
 
             while (true)
             {
-                var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
-                var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
+                var x = canvas.Location.X + random.Next(50, canvas.Width - 50);
+                var y = canvas.Location.Y + random.Next(50, canvas.Height - 50);
                 var position = new Vector(x, y);
                 var radius = random.Next(15, 30);
 
@@ -229,8 +235,8 @@ namespace SimpleX.Collision2D.App
 
             while (true)
             {
-                var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
-                var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
+                var x = canvas.Location.X + random.Next(50, canvas.Width - 50);
+                var y = canvas.Location.Y + random.Next(50, canvas.Height - 50);
                 var position = new Vector(x, y);
 
                 var width = random.Next(20, 50);
@@ -261,8 +267,8 @@ namespace SimpleX.Collision2D.App
 
             while (true)
             {
-                var x = canvas.Location.X + random.Next(100, canvas.Width - 100);
-                var y = canvas.Location.Y + random.Next(100, canvas.Height - 100);
+                var x = canvas.Location.X + random.Next(50, canvas.Width - 50);
+                var y = canvas.Location.Y + random.Next(50, canvas.Height - 50);
                 var position = new Vector(x, y);
 
                 var length = random.Next(18, 36);

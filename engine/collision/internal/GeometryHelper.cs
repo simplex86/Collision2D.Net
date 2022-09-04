@@ -148,56 +148,39 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 矩形（p1, w1, h1, a1)和矩形（p2, w2, h2, a2）是否碰撞
-        public static bool IsRectangleOverlayWithRectangle(ref Vector p1, float w1, float h1, float a1,
-                                                           ref Vector p2, float w2, float h2, float a2)
+        public static bool IsRectangleOverlayWithRectangle(Vector[] ps1, float w1, float h1, float a1,
+                                                           Vector[] ps2, float w2, float h2, float a2)
         {
-            if (!IsRectangleProjectionOverlays(ref p1, w1, h1, a1, ref p2, w2, h2, a2)) return false;
-            if (!IsRectangleProjectionOverlays(ref p2, w2, h2, a2, ref p1, w1, h1, a1)) return false;
+            if (!IsRectangleProjectionOverlays(ps1, w1, h1, a1, ps2, w2, h2, a2)) return false;
+            if (!IsRectangleProjectionOverlays(ps2, w2, h2, a2, ps1, w1, h1, a1)) return false;
             
             return true;
         }
 
         // 矩形投影是否重叠
-        private static bool IsRectangleProjectionOverlays(ref Vector pa, float wa, float ha, float aa,
-                                                          ref Vector pb, float wb, float hb, float ab)
+        private static bool IsRectangleProjectionOverlays(Vector[] p1, float w1, float h1, float a1,
+                                                          Vector[] p2, float w2, float h2, float a2)
         {
-            var w = wa * 0.5f;
-            var h = ha * 0.5f;
+            var w = w1 * 0.5f;
+            var h = h1 * 0.5f;
+            var d = (p1[0] + p1[2]) * -0.5f;
 
-            var p1 = new Vector(-w, -h);
-            var p3 = new Vector( w,  h);
+            var m1 = Matrix.CreateTranslationMatrix(d.x, d.y);
+            var m2 = Matrix.CreateRotationMatrix(-a1 * MathX.DEG2RAD);
+            var m3 = m1 * m2;
 
-            w = wb * 0.5f;
-            h = hb * 0.5f;
-
-            var p5 = new Vector(-w, -h);
-            var p6 = new Vector( w, -h);
-            var p7 = new Vector( w,  h);
-            var p8 = new Vector(-w,  h);
-
-            var m1 = Matrix.CreateRotationMatrix(ab * MathX.DEG2RAD);
-            var m2 = Matrix.CreateTranslationMatrix(pb.x - pa.x, pb.y - pa.y);
-            var mt = m1 * m2;
-
-            p5 = Matrix.Transform(ref p5, ref mt);
-            p6 = Matrix.Transform(ref p6, ref mt);
-            p7 = Matrix.Transform(ref p7, ref mt);
-            p8 = Matrix.Transform(ref p8, ref mt);
-
-            var m3 = Matrix.CreateRotationMatrix(-aa * MathX.DEG2RAD);
-
-            p5 = Matrix.Transform(ref p5, ref m3);
-            p6 = Matrix.Transform(ref p6, ref m3);
-            p7 = Matrix.Transform(ref p7, ref m3);
-            p8 = Matrix.Transform(ref p8, ref m3);
+            var p5 = Matrix.Transform(ref p2[0], ref m3);
+            var p6 = Matrix.Transform(ref p2[1], ref m3);
+            var p7 = Matrix.Transform(ref p2[2], ref m3);
+            var p8 = Matrix.Transform(ref p2[3], ref m3);
 
             var x1 = MathX.Min(p5.x, p6.x, p7.x, p8.x);
             var x2 = MathX.Max(p5.x, p6.x, p7.x, p8.x);
             var y1 = MathX.Min(p5.y, p6.y, p7.y, p8.y);
             var y2 = MathX.Max(p5.y, p6.y, p7.y, p8.y);
 
-            if (x2 < p1.x || x1 > p3.x) return false;
-            if (y2 < p1.y || y1 > p3.y) return false;
+            if (x2 < -w || x1 > w) return false;
+            if (y2 < -h || y1 > h) return false;
 
             return true;
         }

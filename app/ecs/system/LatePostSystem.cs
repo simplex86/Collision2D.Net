@@ -20,8 +20,6 @@ namespace SimpleX.Collision2D.App
             {
                 var collision = entity.collisionComponent.collision;
                 CheckCollision(collision);
-
-                return true;
             });
         }
 

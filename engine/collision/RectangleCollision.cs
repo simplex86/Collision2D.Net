@@ -8,8 +8,8 @@ namespace SimpleX.Collision2D.Engine
         public float height;
         public float angle;
 
-        public RectangleCollision(ref Vector position, float width, float height, float angle)
-            : base(CollisionType.Rectangle, position)
+        public RectangleCollision(float width, float height, float angle)
+            : base(CollisionType.Rectangle)
         {
             this.width = width;
             this.height = height;
@@ -18,17 +18,22 @@ namespace SimpleX.Collision2D.Engine
 
         public override void RefreshGeometry()
         {
-            var points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+            if (dirty)
+            {
+                points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
 
-            var p1 = points[0];
-            var p2 = points[1];
-            var p3 = points[2];
-            var p4 = points[3];
+                var p1 = points[0];
+                var p2 = points[1];
+                var p3 = points[2];
+                var p4 = points[3];
 
-            boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
-            boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
-            boundingBox.miny = MathX.Min(p1.y, p2.y, p3.y, p4.y);
-            boundingBox.maxy = MathX.Max(p1.y, p2.y, p3.y, p4.y);
+                boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
+                boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
+                boundingBox.miny = MathX.Min(p1.y, p2.y, p3.y, p4.y);
+                boundingBox.maxy = MathX.Max(p1.y, p2.y, p3.y, p4.y);
+
+                dirty = false;
+            }
         }
 
         public override bool Contains(ref Vector pt)

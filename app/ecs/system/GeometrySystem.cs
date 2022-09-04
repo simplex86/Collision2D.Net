@@ -18,8 +18,6 @@ namespace SimpleX.Collision2D.App
             {
                 var collision = entity.collisionComponent.collision;
                 collision.RefreshGeometry();
-
-                return true;
             });
         }
     }

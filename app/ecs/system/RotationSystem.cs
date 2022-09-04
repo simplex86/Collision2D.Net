@@ -18,7 +18,7 @@ namespace SimpleX.Collision2D.App
             world.Each((entity) =>
             {
                 var collision = entity.collisionComponent.collision;
-                if (collision.type == CollisionType.Circle) return true; ;
+                if (collision.type == CollisionType.Circle) return;
 
                 switch (collision.type)
                 {
@@ -32,7 +32,7 @@ namespace SimpleX.Collision2D.App
                         break;
                 }
 
-                return true;
+                collision.dirty = true;
             });
         }
 

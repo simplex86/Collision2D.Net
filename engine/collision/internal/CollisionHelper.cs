@@ -29,18 +29,8 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBContains(ref collision.boundingBox, ref pt))
             {
-                var position = collision.position;
-
-                var m1 = Matrix.CreateRotationMatrix(collision.angle * MathX.DEG2RAD);
-                var m2 = Matrix.CreateTranslationMatrix(position.x, position.y);
-                var mt = m1 * m2;
-
-                var p1 = new Vector(collision.length * 0.5f, 0);
-                p1 = Matrix.Transform(ref p1, ref mt);
-
-                var p2 = new Vector(collision.length * -0.5f, 0);
-                p2 = Matrix.Transform(ref p2, ref mt);
-
+                var p1 = collision.points[0];
+                var p2 = collision.points[1];
                 return GeometryHelper.IsCapsuleContains(ref p1, ref p2, collision.radius, ref pt);
             }
             return false;
@@ -77,8 +67,8 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBOverlays(a, b))
             {
-                return GeometryHelper.IsRectangleOverlayWithRectangle(ref a.position, a.width, a.height, a.angle,
-                                                                      ref b.position, b.width, b.height, b.angle);
+                return GeometryHelper.IsRectangleOverlayWithRectangle(a.points, a.width, a.height, a.angle,
+                                                                      b.points, b.width, b.height, b.angle);
             }
             return false;
         }
@@ -100,8 +90,8 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBOverlays(a, b))
             {
-                var pas = GeometryHelper.GetCapsulePoints(ref a.position, a.length, a.angle);
-                var pbs = GeometryHelper.GetCapsulePoints(ref b.position, b.length, b.angle);
+                var pas = a.points;
+                var pbs = b.points;
 
                 var dr = a.radius + b.radius;
                 if (GeometryHelper.GetDistance2(ref pas[0], ref pas[1], ref pbs[0]) <= dr * dr) return true;
@@ -116,16 +106,8 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBOverlays(a, b))
             {
-                var position = a.position;
-                var m1 = Matrix.CreateRotationMatrix(a.angle * MathX.DEG2RAD);
-                var m2 = Matrix.CreateTranslationMatrix(a.position.x, a.position.y);
-                var mt = m1 * m2;
-
-                var p1 = new Vector(a.length * 0.5f, 0);
-                p1 = Matrix.Transform(ref p1, ref mt);
-
-                var p2 = new Vector(a.length * -0.5f, 0);
-                p2 = Matrix.Transform(ref p2, ref mt);
+                var p1 = a.points[0];
+                var p2 = a.points[1];
 
                 var radius = a.radius + b.radius;
                 return GeometryHelper.IsCapsuleContains(ref p1, ref p2, radius, ref b.position);
@@ -138,10 +120,10 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBOverlays(a, b))
             {
-                var ps = GeometryHelper.GetCapsulePoints(ref a.position, a.length, a.angle);
-                if (GeometryHelper.IsCircleOverlayWithRectangle(ref ps[0], a.radius, ref b.position, b.width, b.height, b.angle)) return true;
-                if (GeometryHelper.IsCircleOverlayWithRectangle(ref ps[1], a.radius, ref b.position, b.width, b.height, b.angle)) return true;
-                if (GeometryHelper.IsRectangleOverlayWithRectangle(ref a.position, a.length, a.radius * 2, a.angle, ref b.position, b.width, b.height, b.angle)) return true;
+                if (GeometryHelper.IsCircleOverlayWithRectangle(ref a.points[0], a.radius, ref b.position, b.width, b.height, b.angle)) return true;
+                if (GeometryHelper.IsCircleOverlayWithRectangle(ref a.points[1], a.radius, ref b.position, b.width, b.height, b.angle)) return true;
+                var points = GeometryHelper.GetRectanglePoints(ref a.position, a.length, a.radius * 2, a.angle);
+                if (GeometryHelper.IsRectangleOverlayWithRectangle(points, a.length, a.radius * 2, a.angle, b.points, b.width, b.height, b.angle)) return true;
             }
             return false;
         }

@@ -52,6 +52,19 @@ namespace SimpleX.Collision2D.App
             }
         }
 
+        public void Each(Action<Entity> callback)
+        {
+            if (callback == null) return;
+
+            lock (mutex)
+            {
+                foreach (var entity in entities)
+                {
+                    callback(entity);
+                }
+            }
+        }
+
         public void Each(Func<Entity, bool> callback)
         {
             if (callback == null) return;

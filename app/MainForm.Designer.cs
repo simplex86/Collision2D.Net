@@ -47,12 +47,12 @@
             // 
             this.fps.AutoSize = true;
             this.fps.BackColor = System.Drawing.Color.Transparent;
-            this.fps.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.fps.Font = new System.Drawing.Font("微软雅黑", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.fps.Location = new System.Drawing.Point(12, 9);
             this.fps.Name = "fps";
-            this.fps.Size = new System.Drawing.Size(118, 36);
+            this.fps.Size = new System.Drawing.Size(90, 31);
             this.fps.TabIndex = 1;
-            this.fps.Text = "FPS : 60";
+            this.fps.Text = "FPS : 0";
             this.fps.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm
@@ -65,7 +65,7 @@
             this.DoubleBuffered = true;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "碰撞检测（2D)";
+            this.Text = "凸多边形（2D）碰撞检测";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosingHandler);
             this.Load += new System.EventHandler(this.OnLoadHandler);
