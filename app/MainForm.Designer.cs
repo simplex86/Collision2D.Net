@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.canvas = new System.Windows.Forms.PictureBox();
-            this.fps = new System.Windows.Forms.Label();
+            this.stats = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,24 +43,25 @@
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintHandler);
             // 
-            // fps
+            // stats
             // 
-            this.fps.AutoSize = true;
-            this.fps.BackColor = System.Drawing.Color.Transparent;
-            this.fps.Font = new System.Drawing.Font("微软雅黑", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.fps.Location = new System.Drawing.Point(12, 9);
-            this.fps.Name = "fps";
-            this.fps.Size = new System.Drawing.Size(90, 31);
-            this.fps.TabIndex = 1;
-            this.fps.Text = "FPS : 0";
-            this.fps.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.stats.AutoSize = true;
+            this.stats.BackColor = System.Drawing.Color.Silver;
+            this.stats.Font = new System.Drawing.Font("微软雅黑", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.stats.Location = new System.Drawing.Point(9, 9);
+            this.stats.Name = "stats";
+            this.stats.Size = new System.Drawing.Size(131, 120);
+            this.stats.TabIndex = 1;
+            this.stats.Text = "Collision Count: --\r\n\r\nRender\r\n  FPS : -  Cost: - ms\r\nLogic\r\n  FPS : -  Cost: - m" +
+    "s";
+            this.stats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.fps);
+            this.Controls.Add(this.stats);
             this.Controls.Add(this.canvas);
             this.DoubleBuffered = true;
             this.Name = "MainForm";
@@ -77,7 +78,7 @@
 
         #endregion
         private System.Windows.Forms.PictureBox canvas;
-        private System.Windows.Forms.Label fps;
+        private System.Windows.Forms.Label stats;
     }
 }
 

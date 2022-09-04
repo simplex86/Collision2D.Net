@@ -7,67 +7,30 @@ namespace SimpleX.Collision2D.App
 {
     using SimpleX.Collision2D.Engine;
 
-    class Task
+    class LogicTask
     {
         private Thread thread = null;
-        private bool running = false;
-        private Random random = new Random();
-        private long previousTime = 0;
+        
+        private int width;
+        private int height;
 
+        private Random random = new Random();
+
+        private long previousTime = 0;
         private float runtimeAcc = 0;
         private int frameCount = 0;
 
-        private Control canvas = null;
-        private Control cfps = null;
-
-        // 子线程刷新画布的委托
-        private Action OnRefreshCanvasHandler;
-        // 子线程刷新FPS的委托
-        private Action OnRefreshFpsHandler;
-
-        // 格林威治时间起始
-        private static readonly DateTime GMT_ZERO = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         // 实体数量
-        private const int ENTITY_COUNT = 150;
+        private const int ENTITY_COUNT = 200;
 
-        public World world { get; private set; } = null;
-        public int fps { get; private set; } = 0;
+        private World world = null;
+        public float cost { get; private set; } = 1.0f;
 
-        public Task(Control canvas, Control cfps)
+        public LogicTask(World world, int width, int height)
         {
-            this.world = new World()
-            {
-                left = new Boundary()
-                {
-                    x = canvas.Location.X,
-                    y = canvas.Location.Y,
-                    normal = Vector.right
-                },
-                right = new Boundary()
-                {
-                    x = canvas.Location.X + canvas.Width,
-                    y = canvas.Location.Y,
-                    normal = Vector.left
-                },
-                top = new Boundary()
-                {
-                    x = canvas.Location.X,
-                    y = canvas.Location.Y,
-                    normal = Vector.down
-                },
-                bottom = new Boundary()
-                {
-                    x = canvas.Location.X,
-                    y = canvas.Location.Y + canvas.Height,
-                    normal = Vector.up
-                },
-            };
-
-            this.canvas = canvas;
-            this.cfps = cfps;
-
-            OnRefreshCanvasHandler = () => canvas.Refresh();
-            OnRefreshFpsHandler = () => cfps.Text = $"FPS: {fps}";
+            this.world = world;
+            this.width = width;
+            this.height = height;
         }
 
         // 开始
@@ -78,9 +41,7 @@ namespace SimpleX.Collision2D.App
                 var entity = CreateEntity();
                 world.AddEntity(entity);
             }
-
-            previousTime = GetCurrentTime();
-            running = true;
+            previousTime = GMT.now;
 
             thread = new Thread(OnTick);
             thread.Start();
@@ -91,8 +52,6 @@ namespace SimpleX.Collision2D.App
         {
             try
             {
-                running = false;
-
                 if (thread != null)
                 {
                     thread.Abort();
@@ -114,36 +73,27 @@ namespace SimpleX.Collision2D.App
         // 线程函数
         private void OnTick()
         {
-            while (running)
+            while (true)
             {
                 var deltaTime = GetDeltaTime();
                 // 刷新数据
                 world.Update(deltaTime);
                 // 碰撞检测
                 world.LateUpdate(deltaTime);
-                // 刷新画布
-                UpdateCanvas();
-                // 刷新FPS
-                UpdateFPS(deltaTime);
+                // 刷新统计数据
+                UpdateStats(deltaTime);
             }
         }
 
-        // 刷新画布（非常耗时）
-        private void UpdateCanvas()
-        {
-            canvas.Invoke(OnRefreshCanvasHandler);
-        }
-
-        // 计算FPS并刷新UI
-        private void UpdateFPS(float dt)
+        // 统计数据
+        private void UpdateStats(float dt)
         {
             runtimeAcc += dt;
             frameCount++;
 
             if (runtimeAcc >= 1.0f)
             {
-                fps = (int)(frameCount / runtimeAcc);
-                cfps.Invoke(OnRefreshFpsHandler);
+                cost = runtimeAcc / frameCount;
 
                 runtimeAcc = 0;
                 frameCount = 0;
@@ -194,6 +144,7 @@ namespace SimpleX.Collision2D.App
             return entity;
         }
 
+        // 随机获取碰撞体类型
         public CollisionType GetRandomCollisionType()
         {
             return (CollisionType)random.Next(0, 3);
@@ -206,9 +157,7 @@ namespace SimpleX.Collision2D.App
 
             while (true)
             {
-                var x = canvas.Location.X + random.Next(50, canvas.Width - 50);
-                var y = canvas.Location.Y + random.Next(50, canvas.Height - 50);
-                var position = new Vector(x, y);
+                var position = GetRandomPosition();
                 var radius = random.Next(15, 30);
 
                 collision = CollisionFactory.CreateCircleCollision(ref position, radius);
@@ -235,10 +184,7 @@ namespace SimpleX.Collision2D.App
 
             while (true)
             {
-                var x = canvas.Location.X + random.Next(50, canvas.Width - 50);
-                var y = canvas.Location.Y + random.Next(50, canvas.Height - 50);
-                var position = new Vector(x, y);
-
+                var position = GetRandomPosition();
                 var width = random.Next(20, 50);
                 var height = random.Next(20, 50);
                 var angle = random.Next(0, 360);
@@ -267,10 +213,7 @@ namespace SimpleX.Collision2D.App
 
             while (true)
             {
-                var x = canvas.Location.X + random.Next(50, canvas.Width - 50);
-                var y = canvas.Location.Y + random.Next(50, canvas.Height - 50);
-                var position = new Vector(x, y);
-
+                var position = GetRandomPosition();
                 var length = random.Next(18, 36);
                 var radius = random.Next(8, Math.Min(14, length / 2));
                 var angle = random.Next(0, 360);
@@ -291,15 +234,16 @@ namespace SimpleX.Collision2D.App
             return collision;
         }
 
-        private long GetCurrentTime()
+        private Vector GetRandomPosition()
         {
-            var ts = DateTime.UtcNow - GMT_ZERO;
-            return Convert.ToInt64(ts.TotalMilliseconds);
+            var x = random.Next(50, width - 50);
+            var y = random.Next(50, height - 50);
+            return new Vector(x, y);
         }
 
         private float GetDeltaTime()
         {
-            var currentTime = GetCurrentTime();
+            var currentTime = GMT.now;
             var deltaTime = (currentTime - previousTime) / 1000.0f;
             previousTime = currentTime;
 

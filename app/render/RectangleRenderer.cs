@@ -14,19 +14,7 @@ namespace SimpleX.Collision2D.App
 
         private void DrawCollision(Graphics grap, RectangleCollision collision)
         {
-            var verts = collision.points;
-            if (verts == null) return;
-
-            var points = new PointF[]
-            {
-                new PointF(verts[0].x, verts[0].y),
-                new PointF(verts[1].x, verts[1].y),
-                new PointF(verts[2].x, verts[2].y),
-                new PointF(verts[3].x, verts[3].y),
-                new PointF(verts[0].x, verts[0].y),
-            };
-
-            grap.FillPolygon(brush, points);
+            DrawRectangle(grap, collision.points);
         }
     }
 }

@@ -35,7 +35,9 @@ namespace SimpleX.Collision2D.App
             position.y = MathX.Clamp(position.y, world.top.y + h, world.bottom.y - h);
 
             collision.position = position;
-            collision.RefreshGeometry();
+            collision.dirty = true;
+
+            //collision.RefreshGeometry();
         }
     }
 }

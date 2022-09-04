@@ -14,19 +14,12 @@ namespace SimpleX.Collision2D.App
 
         private void DrawCollision(Graphics grap, CapsuleCollision collision)
         {
+            var vertics = GeometryHelper.GetRectanglePoints(ref collision.position, collision.length, collision.radius * 2, collision.angle);
+            DrawRectangle(grap, vertics);
+
             var points = collision.points;
-            if (points == null) return;
-
-            var x = collision.position.x;
-            var y = collision.position.y;
-            var length = collision.length;
-            var radius = collision.radius;
-            var angle = collision.angle;
-
-            DrawRectangle(grap, x, y, length + 2, radius * 2, angle, brush);
-
-            DrawSemicircle(grap, points[0].x, points[0].y, radius, angle - 90, brush);
-            DrawSemicircle(grap, points[1].x, points[1].y, radius, angle + 90, brush);
+            DrawSemicircle(grap, points[0].x, points[0].y, collision.radius, collision.angle - 90, brush);
+            DrawSemicircle(grap, points[1].x, points[1].y, collision.radius, collision.angle + 90, brush);
         }
 
         private void DrawSemicircle(Graphics grap, float x, float y, float radius, float angle, Brush brush)

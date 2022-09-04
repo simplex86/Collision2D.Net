@@ -36,6 +36,11 @@ namespace SimpleX.Collision2D.App
             }
         }
 
+        public int GetEntityCount()
+        {
+            return entities.Count;
+        }
+
         public void Update(float dt)
         {
             foreach (var system in systems)

@@ -19,7 +19,7 @@ namespace SimpleX.Collision2D.App
         // 窗体加载完后，初始化数据
         private void OnLoadHandler(object sender, EventArgs e)
         {
-            task = new Task(canvas, fps);
+            task = new Task(canvas, stats);
             task.Start();
         }
 
