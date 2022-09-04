@@ -50,10 +50,9 @@
             this.stats.Font = new System.Drawing.Font("微软雅黑", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.stats.Location = new System.Drawing.Point(9, 9);
             this.stats.Name = "stats";
-            this.stats.Size = new System.Drawing.Size(131, 120);
+            this.stats.Size = new System.Drawing.Size(131, 100);
             this.stats.TabIndex = 1;
-            this.stats.Text = "Collision Count: --\r\n\r\nRender\r\n  FPS : -  Cost: - ms\r\nLogic\r\n  FPS : -  Cost: - m" +
-    "s";
+            this.stats.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nLogic\r\n  FPS : -  Cost: - ms";
             this.stats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm
