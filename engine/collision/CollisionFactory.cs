@@ -6,17 +6,35 @@ namespace SimpleX.Collision2D.Engine
     {
         public static BaseCollision CreateCircleCollision(ref Vector position, float radius)
         {
-            return new CircleCollision(ref position, radius);
+            var collision = new CircleCollision(radius)
+            {
+                position = position
+            };
+            collision.RefreshGeometry();
+
+            return collision;
         }
 
         public static BaseCollision CreateRectangleCollision(ref Vector position, float width, float height, float angle)
         {
-            return new RectangleCollision(ref position, width, height, angle);
+            var collision = new RectangleCollision(width, height, angle)
+            {
+                position = position
+            };
+            collision.RefreshGeometry();
+
+            return collision;
         } 
 
         public static BaseCollision CreateCapsuleCollision(ref Vector position, float length, float radius, float angle)
         {
-            return new CapsuleCollision(ref position, length, radius, angle);
+            var collision = new CapsuleCollision(length, radius, angle)
+            {
+                position = position
+            };
+            collision.RefreshGeometry();
+
+            return collision;
         }
     }
 }

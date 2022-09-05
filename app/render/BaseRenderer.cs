@@ -37,17 +37,15 @@ namespace SimpleX.Collision2D.App
         }
 
         // 画矩形
-        protected void DrawRectangle(Graphics grap, float x, float y, float width, float height, float angle, Brush brush)
+        protected void DrawRectangle(Graphics grap, Vector[] vertics)
         {
-            var verts = GeometryHelper.GetRectanglePoints(x, y, width, height, angle);
-
             var points = new PointF[]
             {
-                new PointF(verts[0].x, verts[0].y),
-                new PointF(verts[1].x, verts[1].y),
-                new PointF(verts[2].x, verts[2].y),
-                new PointF(verts[3].x, verts[3].y),
-                new PointF(verts[0].x, verts[0].y),
+                new PointF(vertics[0].x, vertics[0].y),
+                new PointF(vertics[1].x, vertics[1].y),
+                new PointF(vertics[2].x, vertics[2].y),
+                new PointF(vertics[3].x, vertics[3].y),
+                new PointF(vertics[0].x, vertics[0].y),
             };
 
             grap.FillPolygon(brush, points);

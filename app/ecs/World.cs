@@ -36,6 +36,11 @@ namespace SimpleX.Collision2D.App
             }
         }
 
+        public int GetEntityCount()
+        {
+            return entities.Count;
+        }
+
         public void Update(float dt)
         {
             foreach (var system in systems)
@@ -49,6 +54,19 @@ namespace SimpleX.Collision2D.App
             foreach (var system in lateSystems)
             {
                 system.Tick(dt);
+            }
+        }
+
+        public void Each(Action<Entity> callback)
+        {
+            if (callback == null) return;
+
+            lock (mutex)
+            {
+                foreach (var entity in entities)
+                {
+                    callback(entity);
+                }
             }
         }
 

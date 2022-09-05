@@ -14,13 +14,7 @@ namespace SimpleX.Collision2D.App
 
         private void DrawCollision(Graphics grap, RectangleCollision collision)
         {
-            var x = collision.position.x;
-            var y = collision.position.y;
-            var width = collision.width;
-            var height = collision.height;
-            var angle = collision.angle;
-
-            DrawRectangle(grap, x, y, width, height, angle, brush);
+            DrawRectangle(grap, collision.points);
         }
     }
 }
