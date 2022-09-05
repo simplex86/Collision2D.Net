@@ -18,7 +18,7 @@ namespace SimpleX.Collision2D.Engine
         {
             float px = pt.x - pa.x, py = pt.y - pa.y;
             float xx = pb.x - pa.x, yy = pb.y - pa.y;
-            float h = MathX.Max(MathX.Min((px * xx + py * yy) / (xx * xx + yy * yy), 1.0f), 0.0f);
+            float h = MathX.Clamp((px * xx + py * yy) / (xx * xx + yy * yy), 0.0f, 1.0f);
             float dx = px - xx * h, dy = py - yy * h;
 
             return dx * dx + dy * dy;

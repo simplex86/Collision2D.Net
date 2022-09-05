@@ -73,7 +73,7 @@
     <Compile Include="app\render\CircleRenderer.cs" />
     <Compile Include="app\render\RectangleRenderer.cs" />
     <Compile Include="app\task\internal\Const.cs" />
-    <Compile Include="app\task\internal\LogicTask.cs" />
+    <Compile Include="app\task\internal\CollideTask.cs" />
     <Compile Include="app\task\internal\RenderTask.cs" />
     <Compile Include="app\task\Task.cs" />
     <Compile Include="engine\collision\Const.cs" />

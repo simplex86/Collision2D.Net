@@ -9,7 +9,7 @@ namespace SimpleX.Collision2D.App
     {
         public World world { get; private set; }
 
-        private LogicTask logic;
+        private CollideTask collide;
         private RenderTask render;
 
         public Task(Control canvas, Control stats)
@@ -42,27 +42,27 @@ namespace SimpleX.Collision2D.App
                 },
             };
 
-            logic = new LogicTask(world, canvas.Width, canvas.Height);
+            collide = new CollideTask(world, canvas.Width, canvas.Height);
+            render = new RenderTask(world, canvas, stats);
 
-            render = new RenderTask(world);
-            render.SetCanvasHandler(canvas, () => canvas.Refresh());
-            render.SetStatsHandler(stats, () => {
-                var countText = string.Format("Collision Count: {0}", world.GetEntityCount());
+            render.OnRefreshCanvasHandler = () => canvas.Refresh();
+            render.OnRefreshStatsHandler = () => {
+                var countText  = string.Format("Collision Count: {0}", world.GetEntityCount());
                 var renderText = string.Format("Render\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / render.cost), render.cost * 1000);
-                var logicText = string.Format("Logic\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / logic.cost), logic.cost * 1000);
+                var logicText  = string.Format("Collide\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / collide.cost), collide.cost * 1000);
                 stats.Text = $"{countText}\n{renderText}\n{logicText}";
-            });
+            };
         }
 
         public void Start()
         {
-            logic.Start();
+            collide.Start();
             render.Start();
         }
 
         public void Destroy()
         {
-            logic.Destroy();
+            collide.Destroy();
             render.Destroy();
         }
     }

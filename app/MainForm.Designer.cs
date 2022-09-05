@@ -38,7 +38,7 @@
             this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(800, 450);
+            this.canvas.Size = new System.Drawing.Size(1482, 953);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintHandler);
@@ -52,17 +52,21 @@
             this.stats.Name = "stats";
             this.stats.Size = new System.Drawing.Size(131, 100);
             this.stats.TabIndex = 1;
-            this.stats.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nLogic\r\n  FPS : -  Cost: - ms";
+            this.stats.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nCollide\r\n  FPS : -  Cost: - m" +
+    "s";
             this.stats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1482, 953);
             this.Controls.Add(this.stats);
             this.Controls.Add(this.canvas);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "凸多边形（2D）碰撞检测";

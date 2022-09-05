@@ -20,27 +20,17 @@ namespace SimpleX.Collision2D.App
         private Control stats = null;
 
         // 子线程刷新画布的委托
-        private Action OnRefreshCanvasHandler;
+        public Action OnRefreshCanvasHandler;
         // 子线程刷新Stats的委托
-        private Action OnRefreshStatsHandler;
+        public Action OnRefreshStatsHandler;
         
         public float cost { get; private set; } = 1.0f;
 
-        public RenderTask(World world)
+        public RenderTask(World world, Control canvas, Control stats)
         {
             this.world = world;
-        }
-
-        public void SetCanvasHandler(Control canvas, Action handler)
-        {
             this.canvas = canvas;
-            OnRefreshCanvasHandler = handler;
-        }
-
-        public void SetStatsHandler(Control stats, Action handler)
-        {
             this.stats = stats;
-            OnRefreshStatsHandler = handler;
         }
 
         // 开始
