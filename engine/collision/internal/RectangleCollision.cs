@@ -2,24 +2,35 @@
 
 namespace SimpleX.Collision2D.Engine
 {
-    public class CircleCollision : BaseCollision
+    internal class RectangleCollision : BaseCollision
     {
-        public float radius;
+        public float width;
+        public float height;
+        public float angle;
 
-        public CircleCollision(float radius)
-            : base(CollisionType.Circle)
+        public RectangleCollision(float width, float height, float angle)
+            : base(CollisionType.Rectangle)
         {
-            this.radius = radius;
+            this.width = width;
+            this.height = height;
+            this.angle = angle;
         }
 
         public override void RefreshGeometry()
         {
             if (dirty)
             {
-                boundingBox.minx = position.x - radius;
-                boundingBox.maxx = position.x + radius;
-                boundingBox.miny = position.y - radius;
-                boundingBox.maxy = position.y + radius;
+                points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+
+                var p1 = points[0];
+                var p2 = points[1];
+                var p3 = points[2];
+                var p4 = points[3];
+
+                boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
+                boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
+                boundingBox.miny = MathX.Min(p1.y, p2.y, p3.y, p4.y);
+                boundingBox.maxy = MathX.Max(p1.y, p2.y, p3.y, p4.y);
 
                 dirty = false;
             }
