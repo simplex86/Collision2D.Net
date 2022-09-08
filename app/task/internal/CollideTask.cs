@@ -128,19 +128,33 @@ namespace SimpleX.Collision2D.App
                     break;
             }
 
-            var x = 0;
-            var y = 0;
-            while (x * y == 0)
+            var movable = IsMovable();
+            if (movable)
             {
-                x = random.Next(-99, 100);
-                y = random.Next(-99, 100);
-            }
-            entity.movementComponent.direction = Vector.Normalize(x, y);
-            entity.movementComponent.speed = random.Next(20, 80);
+                var x = 0;
+                var y = 0;
+                while (x * y == 0)
+                {
+                    x = random.Next(-99, 100);
+                    y = random.Next(-99, 100);
+                }
+                entity.movementComponent.direction = Vector.Normalize(x, y);
+                entity.movementComponent.speed = random.Next(20, 80);
 
-            var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(20, 80)
-                                                      : random.Next(-80, -20);
-            entity.rotationComponent.speed = speed;
+                var rotatable = IsRotatable(); // 能移动的才有可能旋转
+                if (rotatable)
+                {
+                    var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(20, 80)
+                                                              : random.Next(-80, -20);
+                    entity.rotationComponent.speed = speed;
+                }
+            }
+            
+            // 不能移动(同时即不能旋转）的渲染成灰色
+            if (!movable)
+            {
+                entity.colorComponent.color = Color.Gray;
+            }
 
             return entity;
         }
@@ -149,6 +163,18 @@ namespace SimpleX.Collision2D.App
         public CollisionType GetRandomCollisionType()
         {
             return (CollisionType)random.Next(0, 3);
+        }
+
+        // 是否可移动
+        public bool IsMovable()
+        {
+            return random.Next(0, 10) > 0;
+        }
+
+        // 是否可旋转
+        public bool IsRotatable()
+        {
+            return random.Next(0, 10) > 4;
         }
 
         // 创建圆形碰撞体

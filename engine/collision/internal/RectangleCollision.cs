@@ -8,19 +8,32 @@ namespace SimpleX.Collision2D.Engine
         public float height;
         public float angle;
 
-        public RectangleCollision(float width, float height, float angle)
+        public RectangleCollision(Vector position, float width, float height, float angle)
             : base(CollisionType.Rectangle)
         {
+            this.position = position;
             this.width = width;
             this.height = height;
             this.angle = angle;
+
+            RefreshGeometry();
+        }
+
+        // 旋转
+        public override void Rotate(float delta)
+        {
+            angle += delta;
+            dirty |= DirtyFlag.Rotation;
         }
 
         public override void RefreshGeometry()
         {
-            if (dirty)
+            if (dirty != DirtyFlag.None)
             {
-                points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+                if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
+                {
+                    points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+                }
 
                 var p1 = points[0];
                 var p2 = points[1];
@@ -32,7 +45,7 @@ namespace SimpleX.Collision2D.Engine
                 boundingBox.miny = MathX.Min(p1.y, p2.y, p3.y, p4.y);
                 boundingBox.maxy = MathX.Max(p1.y, p2.y, p3.y, p4.y);
 
-                dirty = false;
+                dirty = DirtyFlag.None;
             }
         }
 

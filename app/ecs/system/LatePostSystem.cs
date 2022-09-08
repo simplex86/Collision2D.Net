@@ -31,13 +31,10 @@ namespace SimpleX.Collision2D.App
             var w = bounding.width * 0.5f;
             var h = bounding.height * 0.5f;
 
-            position.x = MathX.Clamp(position.x, world.left.x + w, world.right.x - w);
-            position.y = MathX.Clamp(position.y, world.top.y + h, world.bottom.y - h);
+            var dx = MathX.Clamp(position.x, world.left.x + w, world.right.x - w) - position.x;
+            var dy = MathX.Clamp(position.y, world.top.y + h, world.bottom.y - h) - position.y;
 
-            collision.position = position;
-            collision.dirty = true;
-
-            //collision.RefreshGeometry();
+            collision.Move(new Vector(dx, dy));
         }
     }
 }

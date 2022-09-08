@@ -4,24 +4,39 @@ namespace SimpleX.Collision2D.Engine
 {
     internal class CircleCollision : BaseCollision
     {
+        //半径
         public float radius;
 
-        public CircleCollision(float radius)
+        public CircleCollision(Vector position, float radius)
             : base(CollisionType.Circle)
         {
+            this.position = position;
             this.radius = radius;
+        }
+
+        // 移动
+        public override void Move(Vector delta)
+        {
+            position += delta;
+            dirty |= DirtyFlag.Position;
+        }
+
+        // 旋转
+        public override void Rotate(float delta)
+        {
+
         }
 
         public override void RefreshGeometry()
         {
-            if (dirty)
+            if (dirty != DirtyFlag.None)
             {
                 boundingBox.minx = position.x - radius;
                 boundingBox.maxx = position.x + radius;
                 boundingBox.miny = position.y - radius;
                 boundingBox.maxy = position.y + radius;
 
-                dirty = false;
+                dirty = DirtyFlag.None;
             }
         }
 

@@ -6,6 +6,6 @@ namespace SimpleX.Collision2D.App
 
     class CollisionComponent
     {
-        public BaseCollision collision { get; set; } = null;
+        public BaseCollision collision = null;
     }
 }

@@ -17,17 +17,16 @@ namespace SimpleX.Collision2D.App
         {
             world.Each((entity) =>
             {
-                var collisionComponent = entity.collisionComponent;
                 var movementComponent = entity.movementComponent;
-
-                var direction = movementComponent.direction;
                 var speed = movementComponent.speed;
 
-                var position = collisionComponent.collision.position;
-                var delta = direction * (speed * dt);
+                if (!MathX.Equals(speed, 0))
+                {
+                    var direction = movementComponent.direction;
+                    var delta = direction * (speed * dt);
 
-                collisionComponent.collision.position = position + delta;
-                collisionComponent.collision.dirty = true;
+                    entity.collisionComponent.collision.Move(delta);
+                }
             });
         }
     }
