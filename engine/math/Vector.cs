@@ -46,6 +46,13 @@ namespace SimpleX.Collision2D.Engine
             }
         }
 
+        // 取反
+        public void Negative()
+        {
+            x *= -1;
+            y *= -1;
+        }
+
         // 归一化
         public void Normalized()
         {
@@ -142,6 +149,12 @@ namespace SimpleX.Collision2D.Engine
             var R = I - 2 * Vector.Dot(ref I, ref N) * N;
 
             return R.normalized;
+        }
+
+        // 反向向量
+        public static Vector operator -(Vector v)
+        {
+            return new Vector(-v.x, -v.y);
         }
 
         public static Vector operator +(Vector a, Vector b)

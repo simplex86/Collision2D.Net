@@ -77,6 +77,8 @@
     <Compile Include="app\task\internal\RenderTask.cs" />
     <Compile Include="app\task\Task.cs" />
     <Compile Include="engine\collision\Const.cs" />
+    <Compile Include="engine\collision\internal\gjk\GJK.cs" />
+    <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
     <Compile Include="engine\collision\internal\helper\GeometryHelper.cs" />
     <Compile Include="engine\math\AABB.cs" />
     <Compile Include="engine\collision\BaseCollision.cs" />
