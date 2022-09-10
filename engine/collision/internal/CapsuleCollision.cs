@@ -4,28 +4,41 @@ namespace SimpleX.Collision2D.Engine
 {
     internal class CapsuleCollision : BaseCollision
     {
-        public float length = 20.0f;
-        public float radius = 10.0f;
-        public float angle = 0.0f;
-        // AABB的顶点
-        private Vector[] vertics;
+        internal Capsule geometry;
+
+        internal override Vector position => (geometry.points[0] + geometry.points[1]) * 0.5f;
+        internal override Vector[] points => geometry.points;
+
+        private Rectangle rectangle;
+
+        public float length => geometry.length;
+        public float radius => geometry.radius;
+        public float angle => geometry.angle;
 
         public CapsuleCollision(Vector position, float length, float radius, float angle)
             : base(CollisionType.Capsule)
         {
-            this.position = position;
-            this.length = length;
-            this.radius = radius;
-            this.angle = angle;
-
-            RefreshGeometry();
+            geometry = new Capsule()
+            {
+                length = length,
+                radius = radius,
+                angle = angle,
+                points = GeometryHelper.GetCapsulePoints(ref position, length, angle),
+            };
+            rectangle = new Rectangle()
+            {
+                width = length + radius * 2,
+                height = radius * 2,
+                angle = angle,
+                vertics = GeometryHelper.GetRectanglePoints(ref position, length + radius * 2, radius * 2, angle),
+            };
         }
 
         public override void Move(Vector delta)
         {   
-            for (int i=0; i<vertics.Length; i++)
+            for (int i=0; i< rectangle.vertics.Length; i++)
             {
-                vertics[i] += delta;
+                rectangle.vertics[i] += delta;
             }
 
             base.Move(delta);
@@ -34,7 +47,9 @@ namespace SimpleX.Collision2D.Engine
         // 旋转
         public override void Rotate(float delta)
         {
-            angle += delta;
+            geometry.angle += delta;
+            rectangle.angle += delta;
+
             dirty |= DirtyFlag.Rotation;
         }
 
@@ -44,14 +59,15 @@ namespace SimpleX.Collision2D.Engine
             {
                 if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
                 {
-                    points = GeometryHelper.GetCapsulePoints(ref position, length, angle);
-                    vertics = GeometryHelper.GetRectanglePoints(ref position, length + radius * 2, radius * 2, angle);
+                    var position = this.position;
+                    geometry.points = GeometryHelper.GetCapsulePoints(ref position, length, angle);
+                    rectangle.vertics = GeometryHelper.GetRectanglePoints(ref position, rectangle.width, rectangle.height, angle);
                 }
 
-                var p1 = vertics[0];
-                var p2 = vertics[1];
-                var p3 = vertics[2];
-                var p4 = vertics[3];
+                var p1 = rectangle.vertics[0];
+                var p2 = rectangle.vertics[1];
+                var p3 = rectangle.vertics[2];
+                var p4 = rectangle.vertics[3];
 
                 boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
                 boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
@@ -64,19 +80,25 @@ namespace SimpleX.Collision2D.Engine
 
         public override bool Contains(ref Vector pt)
         {
-            return CollisionHelper.Contains(this, ref pt);
+            if (IsAABBContains(ref pt))
+            {
+                return GeometryHelper.IsCapsuleContains(ref geometry, ref pt);
+            }
+            return false;
         }
 
-        public override bool Collides(BaseCollision collision)
+        public override bool Overlays(BaseCollision collision)
         {
             switch (collision.type)
             {
                 case CollisionType.Circle:
-                    return CollisionHelper.Collides(this, collision as CircleCollision);
+                    return CollisionHelper.Overlays(this, collision as CircleCollision);
                 case CollisionType.Rectangle:
-                    return CollisionHelper.Collides(this, collision as RectangleCollision);
+                    return CollisionHelper.Overlays(this, collision as RectangleCollision);
                 case CollisionType.Capsule:
-                    return CollisionHelper.Collides(this, collision as CapsuleCollision);
+                    return CollisionHelper.Overlays(this, collision as CapsuleCollision);
+                case CollisionType.Triangle:
+                    return CollisionHelper.Overlays(collision as TriangleCollision, this);
                 default:
                     break;
             }

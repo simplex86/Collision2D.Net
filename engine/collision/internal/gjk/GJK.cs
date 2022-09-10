@@ -158,8 +158,10 @@ namespace SimpleX.Collision2D.Engine
         // 向量三重积
         private static Vector Mul3(ref Vector a, ref Vector b, ref Vector c)
         {
-            var n = Vector.Cross(ref a, ref b);
-            return Vector.Cross(ref n, ref c);
+            //var n = Vector.Cross(ref a, ref b);
+            //return Vector.Cross(ref n, ref c);
+            var z = a.x * b.y - a.y * b.x;
+            return new Vector(-z * c.y, z * c.x);
         }
     }
 }

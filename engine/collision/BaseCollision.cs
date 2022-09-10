@@ -10,9 +10,9 @@ namespace SimpleX.Collision2D.Engine
         public AABB boundingBox;
 
         // 位置
-        internal Vector position;
+        internal abstract Vector position { get; }
         // 顶点
-        internal Vector[] points;
+        internal abstract Vector[] points { get; }
 
         protected static class DirtyFlag
         {
@@ -27,13 +27,12 @@ namespace SimpleX.Collision2D.Engine
         protected BaseCollision(CollisionType type)
         {
             this.type = type;
-            dirty = DirtyFlag.Position | DirtyFlag.Rotation;
+            dirty = DirtyFlag.Position;
         }
 
         // 移动
         public virtual void Move(Vector delta)
         {
-            position += delta;
             for (int i = 0; i < points.Length; i++)
             {
                 points[i] += delta;
@@ -51,6 +50,13 @@ namespace SimpleX.Collision2D.Engine
         public abstract bool Contains(ref Vector pt);
 
         // 是否与collision产生碰撞
-        public abstract bool Collides(BaseCollision collision);
+        public abstract bool Overlays(BaseCollision collision);
+
+        // AABB是否包含点pt
+        protected bool IsAABBContains(ref Vector pt)
+        {
+            return boundingBox.minx <= pt.x && boundingBox.maxx >= pt.x &&
+                   boundingBox.miny <= pt.y && boundingBox.maxy >= pt.y;
+        }
     }
 }

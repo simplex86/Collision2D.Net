@@ -72,6 +72,7 @@
     <Compile Include="app\render\CapsuleRenderer.cs" />
     <Compile Include="app\render\CircleRenderer.cs" />
     <Compile Include="app\render\RectangleRenderer.cs" />
+    <Compile Include="app\render\TriangleRenderer.cs" />
     <Compile Include="app\task\internal\Const.cs" />
     <Compile Include="app\task\internal\CollideTask.cs" />
     <Compile Include="app\task\internal\RenderTask.cs" />
@@ -79,7 +80,12 @@
     <Compile Include="engine\collision\Const.cs" />
     <Compile Include="engine\collision\internal\gjk\GJK.cs" />
     <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
-    <Compile Include="engine\collision\internal\helper\GeometryHelper.cs" />
+    <Compile Include="engine\collision\internal\TriangleCollision.cs" />
+    <Compile Include="engine\geometry\internal\GeometryHelper.cs" />
+    <Compile Include="engine\geometry\Capsule.cs" />
+    <Compile Include="engine\geometry\Circle.cs" />
+    <Compile Include="engine\geometry\Rectangle.cs" />
+    <Compile Include="engine\geometry\Triangle.cs" />
     <Compile Include="engine\math\AABB.cs" />
     <Compile Include="engine\collision\BaseCollision.cs" />
     <Compile Include="engine\collision\internal\CapsuleCollision.cs" />

@@ -4,90 +4,35 @@ namespace SimpleX.Collision2D.Engine
 {
     internal static class CollisionHelper
     {
-        // 圆是否包含点
-        public static bool Contains(CircleCollision collision, ref Vector pt)
-        {
-            if (IsAABBContains(ref collision.boundingBox, ref pt))
-            {
-                return GeometryHelper.IsCircleContains(ref collision.position, collision.radius, ref pt);
-            }
-            return false;
-        }
-
-        // 矩形是否包含点
-        public static bool Contains(RectangleCollision collision, ref Vector pt)
-        {
-            if (IsAABBContains(ref collision.boundingBox, ref pt))
-            {
-                return GeometryHelper.IsRectangleContains(ref collision.position, collision.width, collision.height, collision.angle, ref pt);
-            }
-            return false;
-        }
-
-        // 胶囊是否包含点
-        public static bool Contains(CapsuleCollision collision, ref Vector pt)
-        {
-            if (IsAABBContains(ref collision.boundingBox, ref pt))
-            {
-                var p1 = collision.points[0];
-                var p2 = collision.points[1];
-                return GeometryHelper.IsCapsuleContains(ref p1, ref p2, collision.radius, ref pt);
-            }
-            return false;
-        }
-
         // 两个圆是否碰撞
-        public static bool Collides(CircleCollision a, CircleCollision b)
+        public static bool Overlays(CircleCollision a, CircleCollision b)
         {
             if (!IsAABBOverlays(a, b)) return false;
-
-            var dist = a.position.Distance(ref b.position);
-            return dist <= a.radius + b.radius;
-        }
-
-        // 圆和矩形是否碰撞
-        public static bool Collides(CircleCollision c, RectangleCollision r)
-        {
-            if (IsAABBOverlays(c, r))
-            {
-                return GJK.Overlays(ref r.position, r.points, ref c.position, c.radius);
-                //return GeometryHelper.IsCircleOverlayWithRectangle(ref c.position, c.radius,
-                //                                                   ref r.position, r.width, r.height, r.angle);
-            }
-            return false;
-        }
-
-        // 圆和胶囊是否碰撞
-        public static bool Collides(CircleCollision a, CapsuleCollision b)
-        {
-            return Collides(b, a);
+            return GeometryHelper.IsCircleOverlayWithCircle(ref a.geometry, ref b.geometry);
         }
 
         // 两个矩形是否碰撞
-        public static bool Collides(RectangleCollision a, RectangleCollision b)
+        public static bool Overlays(RectangleCollision a, RectangleCollision b)
         {
             if (IsAABBOverlays(a, b))
             {
-                return GeometryHelper.IsRectangleOverlayWithRectangle(a.points, a.width, a.height, a.angle,
-                                                                      b.points, b.width, b.height, b.angle);
+                return GeometryHelper.IsRectangleOverlayWithRectangle(ref a.geometry, ref b.geometry);
             }
             return false;
         }
 
         // 矩形和圆是否碰撞
-        public static bool Collides(RectangleCollision r, CircleCollision c)
+        public static bool Overlays(RectangleCollision r, CircleCollision c)
         {
-            return Collides(c, r);
-        }
-
-        // 矩形和胶囊是否碰撞
-        public static bool Collides(RectangleCollision a, CapsuleCollision b)
-        {
-            return Collides(b, a);
+            if (IsAABBOverlays(c, r))
+            {
+                return GeometryHelper.IsCircleOverlayWithRectangle(ref c.geometry, ref r.geometry);
+            }
+            return false;
         }
 
         // 两个胶囊是否碰撞
-        public static bool Collides(CapsuleCollision a, CapsuleCollision b)
+        public static bool Overlays(CapsuleCollision a, CapsuleCollision b)
         {
             if (IsAABBOverlays(a, b))
             {
@@ -103,37 +48,82 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 胶囊和圆是否碰撞
-        public static bool Collides(CapsuleCollision a, CircleCollision b)
+        public static bool Overlays(CapsuleCollision a, CircleCollision b)
         {
             if (IsAABBOverlays(a, b))
             {
-                var p1 = a.points[0];
-                var p2 = a.points[1];
-
-                var radius = a.radius + b.radius;
-                return GeometryHelper.IsCapsuleContains(ref p1, ref p2, radius, ref b.position);
+                var capsule = new Capsule()
+                {
+                    length = a.length,
+                    radius = a.radius + b.radius,
+                    points = new Vector[] { a.points[0], a.points[1] },
+                };
+                var position = b.position;
+                return GeometryHelper.IsCapsuleContains(ref capsule, ref position);
             }
             return false;
         }
 
         // 胶囊和矩形是否碰撞
-        public static bool Collides(CapsuleCollision a, RectangleCollision b)
+        public static bool Overlays(CapsuleCollision a, RectangleCollision b)
         {
             if (IsAABBOverlays(a, b))
             {
-                if (GeometryHelper.IsCircleOverlayWithRectangle(ref a.points[0], a.radius, ref b.position, b.width, b.height, b.angle)) return true;
-                if (GeometryHelper.IsCircleOverlayWithRectangle(ref a.points[1], a.radius, ref b.position, b.width, b.height, b.angle)) return true;
-                var points = GeometryHelper.GetRectanglePoints(ref a.position, a.length, a.radius * 2, a.angle);
-                if (GeometryHelper.IsRectangleOverlayWithRectangle(points, a.length, a.radius * 2, a.angle, b.points, b.width, b.height, b.angle)) return true;
+                var circle = new Circle()
+                {
+                    center = a.points[0],
+                    radius = a.radius,
+                };
+                if (GeometryHelper.IsCircleOverlayWithRectangle(ref circle, ref b.geometry)) return true;
+
+                circle = new Circle()
+                {
+                    center = a.points[1],
+                    radius = a.radius,
+                };
+                if (GeometryHelper.IsCircleOverlayWithRectangle(ref circle, ref b.geometry)) return true;
+
+                var position = (a.points[0] + a.points[1]) * 0.5f;
+                var rectangle = new Rectangle()
+                {
+                    width = a.length,
+                    height = a.radius * 2,
+                    angle = a.angle,
+                    vertics = GeometryHelper.GetRectanglePoints(ref position, a.length, a.radius * 2, a.angle),
+                };
+                if (GeometryHelper.IsRectangleOverlayWithRectangle(ref rectangle, ref b.geometry)) return true;
             }
             return false;
         }
 
-        // AABB是否包含点pt
-        private static bool IsAABBContains(ref AABB box, ref Vector pt)
+        //
+        public static bool Overlays(TriangleCollision a, TriangleCollision b)
         {
-            return box.minx <= pt.x && box.maxx >= pt.x &&
-                   box.miny <= pt.y && box.maxy >= pt.y;
+            var p1 = a.position;
+            var p2 = b.position;
+            return GJK.Overlays(ref p1, a.points, ref p2, b.points);
+        }
+
+        //
+        public static bool Overlays(TriangleCollision a, CircleCollision b)
+        {
+            var p1 = a.position;
+            var p2 = b.position;
+            return GJK.Overlays(ref p1, a.points, ref p2, b.radius);
+        }
+
+        //
+        public static bool Overlays(TriangleCollision a, RectangleCollision b)
+        {
+            var p1 = a.position;
+            var p2 = b.position;
+            return GJK.Overlays(ref p1, a.points, ref p2, b.points);
+        }
+
+        //
+        public static bool Overlays(TriangleCollision a, CapsuleCollision b)
+        {
+            return false;
         }
 
         // AABB是否重叠

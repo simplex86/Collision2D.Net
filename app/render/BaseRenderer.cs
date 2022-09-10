@@ -10,6 +10,8 @@ namespace SimpleX.Collision2D.App
         protected Pen pen = new Pen(Color.Red);
         protected SolidBrush brush = new SolidBrush(Color.Red);
 
+        public bool showBoundingBox = false;
+
         protected BaseRenderer()
         {
             pen.DashStyle = DashStyle.Dash;
@@ -18,7 +20,10 @@ namespace SimpleX.Collision2D.App
         public void Render(Graphics grap, BaseCollision collision, ref Color color)
         {
             DrawCollision(grap, collision, ref color);
-            //DrawBoundingBox(grap, ref collision.boundingBox, ref color);
+            if (showBoundingBox)
+            {
+                DrawBoundingBox(grap, ref collision.boundingBox, ref color);
+            }
         }
 
         public abstract void DrawCollision(Graphics grap, BaseCollision collision, ref Color color);

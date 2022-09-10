@@ -24,8 +24,8 @@ namespace SimpleX.Collision2D.Engine
             return dx * dx + dy * dy;
         }
 
-        // 获取矩形（pos, width, height, angle）的顶点
-        public static Vector[] GetRectanglePoints(float x, float y, float width, float height, float angle)
+        // 获取矩形（x, y, width, height, angle）的顶点
+        private static Vector[] GetRectanglePoints(float x, float y, float width, float height, float angle)
         {
             var w = width * 0.5f;
             var h = height * 0.5f;
@@ -55,8 +55,8 @@ namespace SimpleX.Collision2D.Engine
             return GetRectanglePoints(pos.x, pos.y, width, height, angle);
         }
 
-        // 获取胶囊（pos, length, angle）的端点
-        public static Vector[] GetCapsulePoints(float x, float y, float length, float angle)
+        // 获取胶囊（x, y, length, angle）的端点
+        private static Vector[] GetCapsulePoints(float x, float y, float length, float angle)
         {
             var m1 = Matrix.CreateRotationMatrix(angle * MathX.DEG2RAD);
             var m2 = Matrix.CreateTranslationMatrix(x, y);
@@ -77,102 +77,102 @@ namespace SimpleX.Collision2D.Engine
             return GetCapsulePoints(pos.x, pos.y, length, angle);
         }
 
-        // 圆（pos，radius）是否包含点（pt）
-        public static bool IsCircleContains(ref Vector pos, float radius, ref Vector pt)
+        // 圆（circle）是否包含点（pt）
+        public static bool IsCircleContains(ref Circle circle, ref Vector pt)
         {
-            var dx = pos.x - pt.x;
-            var dy = pos.y - pt.y;
+            var d = circle.center - pt;
+            var r = circle.radius;
 
-            return dx * dx + dy * dy <= radius * radius; 
+            return d.magnitude2 <= r * r; 
         }
 
-        // 矩形（x, y, width, height, angle)是否包含点（px, py)
-        public static bool IsRectangleContains(float x, float y, float width, float height, float angle, float px, float py)
+        // 矩形（rectangle)是否包含点（pt)
+        public static bool IsRectangleContains(ref Rectangle rectangle, ref Vector pt)
         {
-            var m1 = Matrix.CreateRotationMatrix(-angle * MathX.DEG2RAD);
-            var m2 = Matrix.CreateTranslationMatrix(-x, -y);
-            var mt = m2 * m1;
+            var p = (rectangle.vertics[0] + rectangle.vertics[2]) * 0.5f;
+            var m1 = Matrix.CreateTranslationMatrix(-p.x, -p.y);
+            var m2 = Matrix.CreateRotationMatrix(-rectangle.angle * MathX.DEG2RAD);
+            var mt = m1 * m2;
+            
+            var t = Matrix.Transform(ref pt, ref mt);
 
-            var pt = new Vector(px, py);
-            pt = Matrix.Transform(ref pt, ref mt);
+            var w = rectangle.width * 0.5f;
+            var h = rectangle.height * 0.5f;
 
-            var w = width * 0.5f;
-            var h = height * 0.5f;
-
-            if (pt.x < -w || pt.x > w) return false;
-            if (pt.y < -h || pt.y > h) return false;
+            if (t.x < -w || t.x > w) return false;
+            if (t.y < -h || t.y > h) return false;
 
             return true;
         }
 
-        // 矩形（pos, width, height, angle)是否包含点（pt)
-        public static bool IsRectangleContains(ref Vector pos, float width, float height, float angle, ref Vector pt)
+        // 胶囊（pa，pb，radius）是否包含点（pt）
+        public static bool IsCapsuleContains(ref Capsule capsule, ref Vector pt)
         {
-            return IsRectangleContains(pos.x, pos.y, width, height, angle, pt.x, pt.y);
+            var dist2 = GetDistance2(ref capsule.points[0], ref capsule.points[1], ref pt);
+            var radius2 = capsule.radius * capsule.radius;
+
+            return dist2 <= radius2;
         }
 
-        // 胶囊（pa，pb，radius）是否包含点（pt）
-        public static bool IsCapsuleContains(ref Vector pa, ref Vector pb, float radius, ref Vector pt)
+        // 三角形（triangle）是否包含点（pt）
+        public static bool IsTriangleContains(ref Triangle triangle, ref Vector pt)
         {
-            var dist2 = GetDistance2(ref pa, ref pb, ref pt);
-            return dist2 < radius * radius;
+            return false;
         }
 
         // 圆（pa, ra)是否和圆（pb, rb）碰撞
-        public static bool IsCircleOverlayWidthCircle(ref Vector pa, float ra, ref Vector pb, float rb)
+        public static bool IsCircleOverlayWithCircle(ref Circle a, ref Circle b)
         {
-            var dist2 = GetDistance2(ref pa, ref pb);
-            var radius2 = (ra + rb) * (ra + rb);
+            var dist2 = GetDistance2(ref a.center, ref b.center);
+            var radius2 = (a.radius + b.radius) * (a.radius + b.radius);
 
             return dist2 <= radius2;
         }
 
         // 圆（cp，radius）是否和矩形（rp，width, height, angle)重叠
-        public static bool IsCircleOverlayWithRectangle(ref Vector cp, float radius, 
-                                                        ref Vector rp, float width, float height, float angle)
+        public static bool IsCircleOverlayWithRectangle(ref Circle circle, ref Rectangle rectangle)
         {
-            var m = Matrix.CreateRotationMatrix(-angle * MathX.DEG2RAD);
-            var p = cp - rp;
+            var p = (rectangle.vertics[0] + rectangle.vertics[2]) * 0.5f;
+            var m = Matrix.CreateRotationMatrix(-rectangle.angle * MathX.DEG2RAD);
+            var v = circle.center - p;
 
-            p = Matrix.Transform(ref p, ref m);
-            p.x = MathX.Abs(p.x);
-            p.y = MathX.Abs(p.y);
+            v = Matrix.Transform(ref v, ref m);
+            v.x = MathX.Abs(v.x);
+            v.y = MathX.Abs(v.y);
 
-            var h = new Vector(width * 0.5f, height * 0.5f);
-            var u = p - h;
+            var h = new Vector(rectangle.width * 0.5f, rectangle.height * 0.5f);
+            var u = v - h;
 
             u.x = MathX.Max(0, u.x);
             u.y = MathX.Max(0, u.y);
 
-            return u.magnitude2 <= radius * radius;
+            return u.magnitude2 <= circle.radius * circle.radius;
         }
 
         // 矩形（p1, w1, h1, a1)和矩形（p2, w2, h2, a2）是否碰撞
-        public static bool IsRectangleOverlayWithRectangle(Vector[] ps1, float w1, float h1, float a1,
-                                                           Vector[] ps2, float w2, float h2, float a2)
+        public static bool IsRectangleOverlayWithRectangle(ref Rectangle a, ref Rectangle b)
         {
-            if (!IsRectangleProjectionOverlays(ps1, w1, h1, a1, ps2, w2, h2, a2)) return false;
-            if (!IsRectangleProjectionOverlays(ps2, w2, h2, a2, ps1, w1, h1, a1)) return false;
+            if (!IsRectangleProjectionOverlays(ref a, ref b)) return false;
+            if (!IsRectangleProjectionOverlays(ref a, ref b)) return false;
             
             return true;
         }
 
         // 矩形投影是否重叠
-        private static bool IsRectangleProjectionOverlays(Vector[] p1, float w1, float h1, float a1,
-                                                          Vector[] p2, float w2, float h2, float a2)
+        private static bool IsRectangleProjectionOverlays(ref Rectangle a, ref Rectangle b)
         {
-            var w = w1 * 0.5f;
-            var h = h1 * 0.5f;
-            var d = (p1[0] + p1[2]) * -0.5f;
+            var w = a.width * 0.5f;
+            var h = a.height * 0.5f;
+            var d = (a.vertics[0] + a.vertics[2]) * -0.5f;
 
             var m1 = Matrix.CreateTranslationMatrix(d.x, d.y);
-            var m2 = Matrix.CreateRotationMatrix(-a1 * MathX.DEG2RAD);
+            var m2 = Matrix.CreateRotationMatrix(-a.angle * MathX.DEG2RAD);
             var m3 = m1 * m2;
 
-            var p5 = Matrix.Transform(ref p2[0], ref m3);
-            var p6 = Matrix.Transform(ref p2[1], ref m3);
-            var p7 = Matrix.Transform(ref p2[2], ref m3);
-            var p8 = Matrix.Transform(ref p2[3], ref m3);
+            var p5 = Matrix.Transform(ref b.vertics[0], ref m3);
+            var p6 = Matrix.Transform(ref b.vertics[1], ref m3);
+            var p7 = Matrix.Transform(ref b.vertics[2], ref m3);
+            var p8 = Matrix.Transform(ref b.vertics[3], ref m3);
 
             var x1 = MathX.Min(p5.x, p6.x, p7.x, p8.x);
             var x2 = MathX.Max(p5.x, p6.x, p7.x, p8.x);

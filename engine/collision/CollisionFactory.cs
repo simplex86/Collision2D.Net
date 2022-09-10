@@ -27,5 +27,13 @@ namespace SimpleX.Collision2D.Engine
 
             return collision;
         }
+
+        public static BaseCollision CreateTriangleCollision(ref Vector a, ref Vector b, ref Vector c)
+        {
+            var collision = new TriangleCollision(a, b, c);
+            collision.RefreshGeometry();
+
+            return collision;
+        }
     }
 }

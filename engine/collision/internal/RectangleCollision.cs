@@ -4,25 +4,40 @@ namespace SimpleX.Collision2D.Engine
 {
     internal class RectangleCollision : BaseCollision
     {
-        public float width;
-        public float height;
-        public float angle;
+        internal Rectangle geometry;
+
+        internal override Vector position => (geometry.vertics[0] + geometry.vertics[2]) * 0.5f;
+        internal override Vector[] points => geometry.vertics;
+
+        public float width
+        {
+            get => geometry.width;
+        }
+        public float height
+        {
+            get => geometry.height;
+        }
+        public float angle
+        {
+            get => geometry.angle;
+        }
 
         public RectangleCollision(Vector position, float width, float height, float angle)
             : base(CollisionType.Rectangle)
         {
-            this.position = position;
-            this.width = width;
-            this.height = height;
-            this.angle = angle;
-
-            RefreshGeometry();
+            geometry = new Rectangle()
+            {
+                width = width,
+                height = height,
+                angle = angle,
+                vertics = GeometryHelper.GetRectanglePoints(ref position, width, height, angle),
+            };
         }
 
         // 旋转
         public override void Rotate(float delta)
         {
-            angle += delta;
+            geometry.angle += delta;
             dirty |= DirtyFlag.Rotation;
         }
 
@@ -32,13 +47,14 @@ namespace SimpleX.Collision2D.Engine
             {
                 if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
                 {
-                    points = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+                    var position = this.position;
+                    geometry.vertics = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
                 }
 
-                var p1 = points[0];
-                var p2 = points[1];
-                var p3 = points[2];
-                var p4 = points[3];
+                var p1 = geometry.vertics[0];
+                var p2 = geometry.vertics[1];
+                var p3 = geometry.vertics[2];
+                var p4 = geometry.vertics[3];
 
                 boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
                 boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
@@ -51,19 +67,25 @@ namespace SimpleX.Collision2D.Engine
 
         public override bool Contains(ref Vector pt)
         {
-            return CollisionHelper.Contains(this, ref pt);
+            if (IsAABBContains(ref pt))
+            {
+                return GeometryHelper.IsRectangleContains(ref geometry, ref pt);
+            }
+            return false;
         }
 
-        public override bool Collides(BaseCollision collision)
+        public override bool Overlays(BaseCollision collision)
         {
             switch (collision.type)
             {
                 case CollisionType.Circle:
-                    return CollisionHelper.Collides(this, collision as CircleCollision);
+                    return CollisionHelper.Overlays(this, collision as CircleCollision);
                 case CollisionType.Rectangle:
-                    return CollisionHelper.Collides(this, collision as RectangleCollision);
+                    return CollisionHelper.Overlays(this, collision as RectangleCollision);
                 case CollisionType.Capsule:
-                    return CollisionHelper.Collides(this, collision as CapsuleCollision);
+                    return CollisionHelper.Overlays(collision as CapsuleCollision, this);
+                case CollisionType.Triangle:
+                    return CollisionHelper.Overlays(collision as TriangleCollision, this);
                 default:
                     break;
             }

@@ -4,20 +4,29 @@ namespace SimpleX.Collision2D.Engine
 {
     internal class CircleCollision : BaseCollision
     {
+        internal Circle geometry;
+        //
+        internal override Vector position => geometry.center;
+        //
+        internal override Vector[] points => null;
+
         //半径
-        public float radius;
+        public float radius => geometry.radius;
 
         public CircleCollision(Vector position, float radius)
             : base(CollisionType.Circle)
         {
-            this.position = position;
-            this.radius = radius;
+            geometry = new Circle()
+            {
+                radius = radius,
+            };
+            geometry.center = position;
         }
 
         // 移动
         public override void Move(Vector delta)
         {
-            position += delta;
+            geometry.center += delta;
             dirty |= DirtyFlag.Position;
         }
 
@@ -42,19 +51,25 @@ namespace SimpleX.Collision2D.Engine
 
         public override bool Contains(ref Vector pt)
         {
-            return CollisionHelper.Contains(this, ref pt);
+            if (IsAABBContains(ref pt))
+            {
+                return GeometryHelper.IsCircleContains(ref geometry, ref pt);
+            }
+            return false;
         }
 
-        public override bool Collides(BaseCollision collision)
+        public override bool Overlays(BaseCollision collision)
         {
             switch (collision.type)
             {
                 case CollisionType.Circle:
-                    return CollisionHelper.Collides(this, collision as CircleCollision);
+                    return CollisionHelper.Overlays(this, collision as CircleCollision);
                 case CollisionType.Rectangle:
-                    return CollisionHelper.Collides(this, collision as RectangleCollision);
+                    return CollisionHelper.Overlays(collision as RectangleCollision, this);
                 case CollisionType.Capsule:
-                    return CollisionHelper.Collides(this, collision as CapsuleCollision);
+                    return CollisionHelper.Overlays(collision as CapsuleCollision, this);
+                case CollisionType.Triangle:
+                    return CollisionHelper.Overlays(collision as TriangleCollision, this);
                 default:
                     break;
             }
