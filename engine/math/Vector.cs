@@ -16,10 +16,16 @@ namespace SimpleX.Collision2D.Engine
         public readonly static Vector down  = new Vector( 0,  1);
 
         public Vector(float x, float y)
+            : this(x, y, 1)
+        {
+
+        }
+
+        private Vector(float x, float y, float w)
         {
             this.x = x;
             this.y = y;
-            this.w = 1;
+            this.w = w;
         }
 
         // 向量的模
@@ -122,7 +128,11 @@ namespace SimpleX.Collision2D.Engine
         // 在2D中，向量叉乘没有意义。但为了方便某些计算，定义了叉乘。由W分量表示Z轴
         public static Vector Cross(ref Vector a, ref Vector b)
         {
-            return zero;
+            var x = a.y * b.w - a.w * b.y;
+            var y = a.w * b.x - a.x * b.w;
+            var w = a.x * b.y - a.y * b.x;
+
+            return new Vector(x, y, w);
         }
 
         // 向量夹角，度

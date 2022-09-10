@@ -50,8 +50,9 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBOverlays(c, r))
             {
-                return GeometryHelper.IsCircleOverlayWithRectangle(ref c.position, c.radius,
-                                                                   ref r.position, r.width, r.height, r.angle);
+                return GJK.Overlays(ref r.position, r.points, ref c.position, c.radius);
+                //return GeometryHelper.IsCircleOverlayWithRectangle(ref c.position, c.radius,
+                //                                                   ref r.position, r.width, r.height, r.angle);
             }
             return false;
         }

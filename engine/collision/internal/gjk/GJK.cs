@@ -4,22 +4,23 @@ namespace SimpleX.Collision2D.Engine
 {
     static class GJK
     {
-        public static bool Overlays(BaseCollision a, BaseCollision b)
+        // 检测凸多边形（position1, points1）与凸多边形（position2, points2）是否重叠
+        public static bool Overlays(ref Vector position1, Vector[] points1, ref Vector position2, Vector[] points2)
         {
             var simplex = new Simplex()
             {
                 vertics = new List<Vector>(3)
             };
-            var dir = a.position - b.position;
+            var dir = position1 - position2;
 
-            var pt = Support(a.points, b.points, ref dir);
+            var pt = Support(points1, points2, ref dir);
             simplex.Add(ref pt);
 
             dir.Negative();
 
             while (true)
             {
-                pt = Support(a.points, b.points, ref dir);
+                pt = Support(points1, points2, ref dir);
                 simplex.Add(ref pt);
 
                 if (simplex.a.Dot(ref dir) <= 0.0f)
@@ -36,6 +37,40 @@ namespace SimpleX.Collision2D.Engine
             return false;
         }
 
+        // 检测凸多边形（position1, points）与圆（position2，radius）是否重叠
+        public static bool Overlays(ref Vector position1, Vector[] points, ref Vector position2, float radius)
+        {
+            var simplex = new Simplex()
+            {
+                vertics = new List<Vector>(3)
+            };
+            var dir = position1 - position2;
+
+            var pt = Support(points, ref position2, radius, ref dir);
+            simplex.Add(ref pt);
+
+            dir.Negative();
+
+            while (true)
+            {
+                pt = Support(points, ref position2, radius, ref dir);
+                simplex.Add(ref pt);
+
+                if (simplex.a.Dot(ref dir) <= 0.0f)
+                {
+                    return false;
+                }
+
+                if (IsContainsOrigin(ref simplex, ref dir))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // 两个多边形的闵可夫斯基差
         private static Vector Support(Vector[] a, Vector[] b, ref Vector dir)
         {
             var p1 = Support(a, ref dir);
@@ -45,6 +80,17 @@ namespace SimpleX.Collision2D.Engine
             return p1 - p2;
         }
 
+        // 闵可夫斯基差
+        private static Vector Support(Vector[] vertics, ref Vector position, float radius, ref Vector dir)
+        {
+            var p1 = Support(vertics, ref dir);
+            var neg = -dir;
+            var p2 = Support(ref position, radius, ref neg);
+
+            return p1 - p2;
+        }
+
+        // 获取顶点集合（vertics）中在方向（dir）上最大投影的点
         private static Vector Support(Vector[] vertics, ref Vector dir)
         {
             var point = vertics[0];
@@ -61,6 +107,12 @@ namespace SimpleX.Collision2D.Engine
             }
 
             return point;
+        }
+
+        // 获取圆（）在方向（dir）上最大投影的点
+        private static Vector Support(ref Vector position, float radius, ref Vector dir)
+        {
+            return position + radius * dir.normalized;
         }
 
         // 简单形是否包含原点
@@ -106,8 +158,8 @@ namespace SimpleX.Collision2D.Engine
         // 向量三重积
         private static Vector Mul3(ref Vector a, ref Vector b, ref Vector c)
         {
-            var z = a.x * b.y - a.y * b.x;
-            return new Vector(-z * c.y, z * c.x);
+            var n = Vector.Cross(ref a, ref b);
+            return Vector.Cross(ref n, ref c);
         }
     }
 }
