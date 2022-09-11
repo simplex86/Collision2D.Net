@@ -5,7 +5,7 @@ namespace SimpleX.Collision2D.Engine
     static class GJK
     {
         // 检测凸多边形（position1, points1）与凸多边形（position2, points2）是否重叠
-        public static bool Overlays(ref Vector position1, Vector[] points1, ref Vector position2, Vector[] points2)
+        public static bool Overlaps(ref Vector position1, Vector[] points1, ref Vector position2, Vector[] points2)
         {
             var simplex = new Simplex()
             {
@@ -38,7 +38,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 检测凸多边形（position1, points）与圆（position2，radius）是否重叠
-        public static bool Overlays(ref Vector position1, Vector[] points, ref Vector position2, float radius)
+        public static bool Overlaps(ref Vector position1, Vector[] points, ref Vector position2, float radius)
         {
             var simplex = new Simplex()
             {

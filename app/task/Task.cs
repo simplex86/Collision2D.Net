@@ -179,7 +179,7 @@ namespace SimpleX.Collision2D.App
                 collision = CollisionFactory.CreateCircleCollision(ref position, radius);
                 world.Each((entity) =>
                 {
-                    var overlay = entity.collisionComponent.collision.Overlays(collision);
+                    var overlay = entity.collisionComponent.collision.Overlaps(collision);
                     if (overlay)
                     {
                         collision = null;
@@ -208,7 +208,7 @@ namespace SimpleX.Collision2D.App
                 collision = CollisionFactory.CreateRectangleCollision(ref position, width, height, angle);
                 world.Each((entity) =>
                 {
-                    var overlay = entity.collisionComponent.collision.Overlays(collision);
+                    var overlay = entity.collisionComponent.collision.Overlaps(collision);
                     if (overlay)
                     {
                         collision = null;
@@ -237,7 +237,7 @@ namespace SimpleX.Collision2D.App
                 collision = CollisionFactory.CreateCapsuleCollision(ref position, length, radius, angle);
                 world.Each((entity) =>
                 {
-                    var overlay = entity.collisionComponent.collision.Overlays(collision);
+                    var overlay = entity.collisionComponent.collision.Overlaps(collision);
                     if (overlay)
                     {
                         collision = null;
@@ -263,7 +263,7 @@ namespace SimpleX.Collision2D.App
                 collision = CollisionFactory.CreatePolygonCollision(vertics);
                 world.Each((entity) =>
                 {
-                    var overlay = entity.collisionComponent.collision.Overlays(collision);
+                    var overlay = entity.collisionComponent.collision.Overlaps(collision);
                     if (overlay)
                     {
                         collision = null;

@@ -87,18 +87,18 @@ namespace SimpleX.Collision2D.Engine
             return false;
         }
 
-        public override bool Overlays(BaseCollision collision)
+        public override bool Overlaps(BaseCollision collision)
         {
             switch (collision.type)
             {
                 case CollisionType.Circle:
-                    return CollisionHelper.Overlays(this, collision as CircleCollision);
+                    return CollisionHelper.Overlaps(this, collision as CircleCollision);
                 case CollisionType.Rectangle:
-                    return CollisionHelper.Overlays(this, collision as RectangleCollision);
+                    return CollisionHelper.Overlaps(this, collision as RectangleCollision);
                 case CollisionType.Capsule:
-                    return CollisionHelper.Overlays(this, collision as CapsuleCollision);
+                    return CollisionHelper.Overlaps(this, collision as CapsuleCollision);
                 case CollisionType.Polygon:
-                    return CollisionHelper.Overlays(collision as PolygonCollision, this);
+                    return CollisionHelper.Overlaps(collision as PolygonCollision, this);
                 default:
                     break;
             }

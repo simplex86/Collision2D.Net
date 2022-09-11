@@ -50,7 +50,7 @@ namespace SimpleX.Collision2D.Engine
         public abstract bool Contains(ref Vector pt);
 
         // 是否与collision产生碰撞
-        public abstract bool Overlays(BaseCollision collision);
+        public abstract bool Overlaps(BaseCollision collision);
 
         // AABB是否包含点pt
         protected bool IsAABBContains(ref Vector pt)

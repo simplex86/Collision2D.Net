@@ -81,7 +81,7 @@
     <Compile Include="engine\collision\Const.cs" />
     <Compile Include="engine\collision\internal\gjk\GJK.cs" />
     <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
-    <Compile Include="engine\collision\internal\TriangleCollision.cs" />
+    <Compile Include="engine\collision\internal\PolygonCollision.cs" />
     <Compile Include="engine\geometry\internal\GeometryHelper.cs" />
     <Compile Include="engine\geometry\Capsule.cs" />
     <Compile Include="engine\geometry\Circle.cs" />

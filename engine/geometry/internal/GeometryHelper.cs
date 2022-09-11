@@ -136,7 +136,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 圆（pa, ra)是否和圆（pb, rb）重叠
-        public static bool IsCircleOverlayWithCircle(ref Circle a, ref Circle b)
+        public static bool IsCircleOverlapsWithCircle(ref Circle a, ref Circle b)
         {
             var dist2 = GetDistance2(ref a.center, ref b.center);
             var radius2 = (a.radius + b.radius) * (a.radius + b.radius);
@@ -145,7 +145,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 圆（cp，radius）是否和矩形（rp，width, height, angle)重叠
-        public static bool IsCircleOverlayWithRectangle(ref Circle circle, ref Rectangle rectangle)
+        public static bool IsCircleOverlapsWithRectangle(ref Circle circle, ref Rectangle rectangle)
         {
             var p = (rectangle.vertics[0] + rectangle.vertics[2]) * 0.5f;
             var m = Matrix.CreateRotationMatrix(-rectangle.angle * MathX.DEG2RAD);
@@ -165,16 +165,16 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 矩形（p1, w1, h1, a1)和矩形（p2, w2, h2, a2）是否重叠
-        public static bool IsRectangleOverlayWithRectangle(ref Rectangle a, ref Rectangle b)
+        public static bool IsRectangleOverlapsWithRectangle(ref Rectangle a, ref Rectangle b)
         {
-            if (!IsRectangleProjectionOverlays(ref a, ref b)) return false;
-            if (!IsRectangleProjectionOverlays(ref b, ref a)) return false;
+            if (!IsRectangleProjectionOverlaps(ref a, ref b)) return false;
+            if (!IsRectangleProjectionOverlaps(ref b, ref a)) return false;
             
             return true;
         }
 
         // 矩形投影是否重叠
-        private static bool IsRectangleProjectionOverlays(ref Rectangle a, ref Rectangle b)
+        private static bool IsRectangleProjectionOverlaps(ref Rectangle a, ref Rectangle b)
         {
             var w = a.width * 0.5f;
             var h = a.height * 0.5f;
