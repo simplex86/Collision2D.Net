@@ -128,8 +128,8 @@ namespace SimpleX.Collision2D.Engine
                 var c = simplex.c;
                 var ac = c - a;
 
-                var u = Mul3(ref ac, ref ab, ref ab);
-                var v = Mul3(ref ab, ref ac, ref ac);
+                var u = Vector.Mul3(ref ac, ref ab, ref ab);
+                var v = Vector.Mul3(ref ab, ref ac, ref ac);
 
                 if (Vector.Dot(ref u, ref ao) > 0.0f)
                 {
@@ -149,19 +149,10 @@ namespace SimpleX.Collision2D.Engine
             }
             else
             {
-                dir = Mul3(ref ab, ref ao, ref ab);
+                dir = Vector.Mul3(ref ab, ref ao, ref ab);
             }
 
             return false;
-        }
-
-        // 向量三重积
-        private static Vector Mul3(ref Vector a, ref Vector b, ref Vector c)
-        {
-            //var n = Vector.Cross(ref a, ref b);
-            //return Vector.Cross(ref n, ref c);
-            var z = a.x * b.y - a.y * b.x;
-            return new Vector(-z * c.y, z * c.x);
         }
     }
 }

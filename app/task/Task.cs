@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -107,10 +108,10 @@ namespace SimpleX.Collision2D.App
                     entity.colorComponent.color = Color.Blue;
                     entity.renderComponent.renderer = new CapsuleRenderer();
                     break;
-                case CollisionType.Triangle:
-                    entity.collisionComponent.collision = CreateTriangleCollision();
+                case CollisionType.Polygon:
+                    entity.collisionComponent.collision = CreatePolygonCollision();
                     entity.colorComponent.color = Color.Orange;
-                    entity.renderComponent.renderer = new TriangleRenderer();
+                    entity.renderComponent.renderer = new PolygonRenderer();
                     break;
                 default:
                     break;
@@ -250,20 +251,16 @@ namespace SimpleX.Collision2D.App
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateTriangleCollision()
+        private BaseCollision CreatePolygonCollision()
         {
             BaseCollision collision = null;
 
             while (true)
             {
-                var o = GetRandomPosition();
-                var a = GetRandomPosition(ref o, -30, -10);
-                var b = GetRandomPosition(ref o, 10, 30);
-                var c = GetRandomPosition(ref o, -25, 25);
+                var vertics = GetRandomConvexPoints();
+                if (CalculatePolygonSize(vertics) < 300) continue;
 
-                if (GetTriangleSize(ref a, ref b, ref c) < 200) continue;
-
-                collision = CollisionFactory.CreateTriangleCollision(ref a, ref b, ref c);
+                collision = CollisionFactory.CreatePolygonCollision(vertics);
                 world.Each((entity) =>
                 {
                     var overlay = entity.collisionComponent.collision.Overlays(collision);
@@ -279,6 +276,7 @@ namespace SimpleX.Collision2D.App
             return collision;
         }
 
+        // 获取随机坐标
         private Vector GetRandomPosition()
         {
             var x = random.Next(50, width - 50);
@@ -286,6 +284,7 @@ namespace SimpleX.Collision2D.App
             return new Vector(x, y);
         }
 
+        // 获取在某点（o）附近指定范围(min, max)内的坐标
         private Vector GetRandomPosition(ref Vector O, int min, int max)
         {
             var x = random.Next(min, max+1);
@@ -293,14 +292,34 @@ namespace SimpleX.Collision2D.App
             return new Vector(O.x + x, O.y + y);
         }
 
-        private float GetTriangleSize(ref Vector a, ref Vector b, ref Vector c)
+        // 计算三角形面积
+        // 注：格林公式
+        private float CalculatePolygonSize(Vector[] vertics)
         {
-            float x = MathX.Sqrt(GeometryHelper.GetDistance2(ref a, ref b));
-            float y = MathX.Sqrt(GeometryHelper.GetDistance2(ref b, ref c));
-            float z = MathX.Sqrt(GeometryHelper.GetDistance2(ref c, ref a));
-            float p = (x + y + z) * 0.5f;
+            var s = 0.0f;
+            var i = 0;
+            for (; i<vertics.Length-1; i++)
+            {
+                var a = vertics[i];
+                var b = vertics[i + 1];
+                s += (a.x + b.x) * (b.y - a.y);
+            }
+            var c = vertics[i];
+            var d = vertics[0];
+            s += (c.x + d.x) * (d.y - c.y);
 
-            return MathX.Sqrt(p * (p - x) * (p - y) * (p - z));
+            return MathX.Abs(s) * 0.5f;
+        }
+
+        // 生成随机的凸多边形
+        // 注：顶点数[3, 9]
+        private Vector[] GetRandomConvexPoints()
+        {
+            var count = random.Next(3, 10);
+            var position = GetRandomPosition();
+
+            var convex = new ConvexGenerator(random);
+            return convex.Gen(ref position, 45, 45, count);
         }
     }
 }

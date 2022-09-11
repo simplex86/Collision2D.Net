@@ -68,8 +68,8 @@ namespace SimpleX.Collision2D.Engine
                     return CollisionHelper.Overlays(collision as RectangleCollision, this);
                 case CollisionType.Capsule:
                     return CollisionHelper.Overlays(collision as CapsuleCollision, this);
-                case CollisionType.Triangle:
-                    return CollisionHelper.Overlays(collision as TriangleCollision, this);
+                case CollisionType.Polygon:
+                    return CollisionHelper.Overlays(collision as PolygonCollision, this);
                 default:
                     break;
             }

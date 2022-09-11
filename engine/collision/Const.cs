@@ -7,6 +7,6 @@ namespace SimpleX.Collision2D.Engine
         Circle,
         Rectangle,
         Capsule,
-        Triangle,
+        Polygon,
     }
 }

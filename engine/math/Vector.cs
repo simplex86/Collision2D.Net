@@ -131,6 +131,13 @@ namespace SimpleX.Collision2D.Engine
             return a.x * b.y - a.y * b.x;
         }
 
+        // 向量三重积
+        public static Vector Mul3(ref Vector a, ref Vector b, ref Vector c)
+        {
+            var z = a.x * b.y - a.y * b.x;
+            return new Vector(-z * c.y, z * c.x);
+        }
+
         // 向量夹角，度
         public float Angle(ref Vector v)
         {

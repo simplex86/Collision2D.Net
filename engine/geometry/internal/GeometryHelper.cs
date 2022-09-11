@@ -114,21 +114,25 @@ namespace SimpleX.Collision2D.Engine
             return dist2 <= radius2;
         }
 
-        // 三角形（triangle）是否包含点（pt）
-        public static bool IsTriangleContains(ref Triangle triangle, ref Vector pt)
+        // 三角形（polygon）是否包含点（pt）
+        public static bool IsPolygonContains(ref Polygon polygon, ref Vector pt)
         {
-            var pa = triangle.vertics[0] - pt;
-            var pb = triangle.vertics[1] - pt;
-            var pc = triangle.vertics[2] - pt;
+            int n = polygon.vertics.Length;
 
-            var w1 = Vector.Cross(ref pa, ref pb);
-            var w2 = Vector.Cross(ref pb, ref pc);
-            var w3 = Vector.Cross(ref pc, ref pa);
+            var u = polygon.vertics[n-1] - pt;
+            var v = polygon.vertics[0] - pt;
+            var z = Vector.Cross(ref u, ref v);
 
-            if (w1 > 0 && w2 > 0 && w3 > 0) return true;
-            if (w1 < 0 && w2 < 0 && w3 < 0) return true;
+            for (int i=0; i<n-1; i++)
+            {
+                u = polygon.vertics[i] - pt;
+                v = polygon.vertics[i+1] - pt;
+                var w = Vector.Cross(ref u, ref v);
 
-            return false;
+                if (z * w < 0) return false;
+            }
+
+            return true;
         }
 
         // 圆（pa, ra)是否和圆（pb, rb）重叠
@@ -164,7 +168,7 @@ namespace SimpleX.Collision2D.Engine
         public static bool IsRectangleOverlayWithRectangle(ref Rectangle a, ref Rectangle b)
         {
             if (!IsRectangleProjectionOverlays(ref a, ref b)) return false;
-            if (!IsRectangleProjectionOverlays(ref a, ref b)) return false;
+            if (!IsRectangleProjectionOverlays(ref b, ref a)) return false;
             
             return true;
         }
@@ -208,18 +212,22 @@ namespace SimpleX.Collision2D.Engine
             return true;
         }
 
-        // 三角形（triangle）和圆形（circle）是否重叠
-        public static bool IsTriangleOverlayWithCircle(ref Triangle triangle, ref Circle circle)
+        // 三角形（polygon）和圆形（circle）是否重叠
+        public static bool IsPolygonOverlayWithCircle(ref Polygon polygon, ref Circle circle)
         {
-            var v = triangle.vertics;
+            var v = polygon.vertics;
             var p = circle.center;
             var r = circle.radius * circle.radius;
 
-            if (GeometryHelper.GetDistance2(ref v[0], ref v[1], ref p) <= r) return true;
-            if (GeometryHelper.GetDistance2(ref v[1], ref v[2], ref p) <= r) return true;
-            if (GeometryHelper.GetDistance2(ref v[2], ref v[0], ref p) <= r) return true;
+            int i = 0;
+            int n = v.Length;
+            for (; i < n - 1; i++)
+            {
+                if (GeometryHelper.GetDistance2(ref v[i], ref v[i + 1], ref p) <= r) return true;
+            }
+            if (GeometryHelper.GetDistance2(ref v[n - 1], ref v[0], ref p) <= r) return true;
 
-            return GeometryHelper.IsTriangleContains(ref triangle, ref circle.center);
+            return GeometryHelper.IsPolygonContains(ref polygon, ref circle.center);
         }
     }
 }

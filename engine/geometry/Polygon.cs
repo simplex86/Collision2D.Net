@@ -2,7 +2,8 @@
 
 namespace SimpleX.Collision2D.Engine
 {
-    struct Triangle
+    // 凸多边形
+    struct Polygon
     {
         public Vector[] vertics;
     }
