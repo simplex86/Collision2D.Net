@@ -213,7 +213,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 三角形（polygon）和圆形（circle）是否重叠
-        public static bool IsPolygonOverlayWithCircle(ref Polygon polygon, ref Circle circle)
+        public static bool IsPolygonOverlapsWithCircle(ref Polygon polygon, ref Circle circle)
         {
             var v = polygon.vertics;
             var p = circle.center;

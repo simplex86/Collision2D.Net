@@ -117,7 +117,7 @@ namespace SimpleX.Collision2D.Engine
                 //var p2 = b.position;
                 //return GJK.Overlaps(ref p1, a.points, ref p2, b.radius);
 
-                return GeometryHelper.IsPolygonOverlayWithCircle(ref a.geometry, ref b.geometry);
+                return GeometryHelper.IsPolygonOverlapsWithCircle(ref a.geometry, ref b.geometry);
             }
             return false;
         }
@@ -146,14 +146,14 @@ namespace SimpleX.Collision2D.Engine
                     center = b.points[0],
                     radius = b.radius,
                 };
-                if (GeometryHelper.IsPolygonOverlayWithCircle(ref polygon, ref c1)) return true;
+                if (GeometryHelper.IsPolygonOverlapsWithCircle(ref polygon, ref c1)) return true;
 
                 var c2 = new Circle()
                 {
                     center = b.points[1],
                     radius = b.radius,
                 };
-                if (GeometryHelper.IsPolygonOverlayWithCircle(ref polygon, ref c2)) return true;
+                if (GeometryHelper.IsPolygonOverlapsWithCircle(ref polygon, ref c2)) return true;
                 
                 var p1 = b.position;
                 var v1 = GeometryHelper.GetRectanglePoints(ref p1, b.length, b.radius * 2, b.angle);
