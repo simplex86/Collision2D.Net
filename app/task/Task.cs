@@ -13,7 +13,7 @@ namespace SimpleX.Collision2D.App
         private CollideTask collide;
         private RenderTask render;
 
-        private Random random = new Random();
+        private Random random = new Random(1);
 
         private readonly int width;
         private readonly int height;

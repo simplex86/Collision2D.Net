@@ -119,20 +119,16 @@ namespace SimpleX.Collision2D.Engine
 
         // 向量叉乘
         // 在2D中，向量叉乘没有意义。但为了方便某些计算，定义了叉乘。由W分量表示Z轴
-        public Vector Cross(ref Vector v)
+        public float Cross(ref Vector v)
         {
             return Cross(ref this, ref v);
         }
 
         // 向量叉乘
         // 在2D中，向量叉乘没有意义。但为了方便某些计算，定义了叉乘。由W分量表示Z轴
-        public static Vector Cross(ref Vector a, ref Vector b)
+        public static float Cross(ref Vector a, ref Vector b)
         {
-            var x = a.y * b.w - a.w * b.y;
-            var y = a.w * b.x - a.x * b.w;
-            var w = a.x * b.y - a.y * b.x;
-
-            return new Vector(x, y, w);
+            return a.x * b.y - a.y * b.x;
         }
 
         // 向量夹角，度

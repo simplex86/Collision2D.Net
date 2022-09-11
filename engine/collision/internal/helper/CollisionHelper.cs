@@ -96,33 +96,72 @@ namespace SimpleX.Collision2D.Engine
             return false;
         }
 
-        //
+        // 两个三角形是否碰撞
         public static bool Overlays(TriangleCollision a, TriangleCollision b)
         {
-            var p1 = a.position;
-            var p2 = b.position;
-            return GJK.Overlays(ref p1, a.points, ref p2, b.points);
+            if (IsAABBOverlays(a, b))
+            {
+                var p1 = a.position;
+                var p2 = b.position;
+                return GJK.Overlays(ref p1, a.points, ref p2, b.points);
+            }
+            return false;
         }
 
-        //
+        // 三角形和圆形是否碰撞
         public static bool Overlays(TriangleCollision a, CircleCollision b)
         {
-            var p1 = a.position;
-            var p2 = b.position;
-            return GJK.Overlays(ref p1, a.points, ref p2, b.radius);
+            if (IsAABBOverlays(a, b))
+            {
+                //var p1 = a.position;
+                //var p2 = b.position;
+                //return GJK.Overlays(ref p1, a.points, ref p2, b.radius);
+
+                return GeometryHelper.IsTriangleOverlayWithCircle(ref a.geometry, ref b.geometry);
+            }
+            return false;
         }
 
-        //
+        // 三角形和矩形是否碰撞
         public static bool Overlays(TriangleCollision a, RectangleCollision b)
         {
-            var p1 = a.position;
-            var p2 = b.position;
-            return GJK.Overlays(ref p1, a.points, ref p2, b.points);
+            if (IsAABBOverlays(a, b))
+            {
+                var p1 = a.position;
+                var p2 = b.position;
+                return GJK.Overlays(ref p1, a.points, ref p2, b.points);
+            }
+            return false;
         }
 
-        //
+        // 三角形和胶囊是否碰撞
         public static bool Overlays(TriangleCollision a, CapsuleCollision b)
         {
+            if (IsAABBOverlays(a, b))
+            {
+                var triangle = a.geometry;
+
+                var c1 = new Circle()
+                {
+                    center = b.points[0],
+                    radius = b.radius,
+                };
+                if (GeometryHelper.IsTriangleOverlayWithCircle(ref triangle, ref c1)) return true;
+
+                var c2 = new Circle()
+                {
+                    center = b.points[1],
+                    radius = b.radius,
+                };
+                if (GeometryHelper.IsTriangleOverlayWithCircle(ref triangle, ref c2)) return true;
+                
+                var p1 = b.position;
+                var v1 = GeometryHelper.GetRectanglePoints(ref p1, b.length, b.radius * 2, b.angle);
+                var v2 = triangle.vertics;
+                var p2 = (v2[0] + v2[1] + v2[2]) / 3.0f;
+
+                return GJK.Overlays(ref p1, v1, ref p2, v2);
+            }
             return false;
         }
 

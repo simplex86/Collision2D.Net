@@ -117,10 +117,21 @@ namespace SimpleX.Collision2D.Engine
         // 三角形（triangle）是否包含点（pt）
         public static bool IsTriangleContains(ref Triangle triangle, ref Vector pt)
         {
+            var pa = triangle.vertics[0] - pt;
+            var pb = triangle.vertics[1] - pt;
+            var pc = triangle.vertics[2] - pt;
+
+            var w1 = Vector.Cross(ref pa, ref pb);
+            var w2 = Vector.Cross(ref pb, ref pc);
+            var w3 = Vector.Cross(ref pc, ref pa);
+
+            if (w1 > 0 && w2 > 0 && w3 > 0) return true;
+            if (w1 < 0 && w2 < 0 && w3 < 0) return true;
+
             return false;
         }
 
-        // 圆（pa, ra)是否和圆（pb, rb）碰撞
+        // 圆（pa, ra)是否和圆（pb, rb）重叠
         public static bool IsCircleOverlayWithCircle(ref Circle a, ref Circle b)
         {
             var dist2 = GetDistance2(ref a.center, ref b.center);
@@ -149,7 +160,7 @@ namespace SimpleX.Collision2D.Engine
             return u.magnitude2 <= circle.radius * circle.radius;
         }
 
-        // 矩形（p1, w1, h1, a1)和矩形（p2, w2, h2, a2）是否碰撞
+        // 矩形（p1, w1, h1, a1)和矩形（p2, w2, h2, a2）是否重叠
         public static bool IsRectangleOverlayWithRectangle(ref Rectangle a, ref Rectangle b)
         {
             if (!IsRectangleProjectionOverlays(ref a, ref b)) return false;
@@ -189,12 +200,26 @@ namespace SimpleX.Collision2D.Engine
         public static bool IsSegmentIntersected(ref Vector p1, ref Vector p2, ref Vector q1, ref Vector q2)
         {
             Vector a1 = p1 - q2, b1 = p2 - p2, c1 = q1 - q2;
-            if (Vector.Cross(ref a1, ref c1).w * Vector.Cross(ref b1, ref c1).w > 0) return false;
+            if (Vector.Cross(ref a1, ref c1) * Vector.Cross(ref b1, ref c1) > 0) return false;
 
             Vector a2 = q2 - p2, b2 = q1 - p2, c2 = p1 - p2;
-            if (Vector.Cross(ref a2, ref c2).w * Vector.Cross(ref b2, ref c2).w > 0) return false;
+            if (Vector.Cross(ref a2, ref c2) * Vector.Cross(ref b2, ref c2) > 0) return false;
 
             return true;
+        }
+
+        // 三角形（triangle）和圆形（circle）是否重叠
+        public static bool IsTriangleOverlayWithCircle(ref Triangle triangle, ref Circle circle)
+        {
+            var v = triangle.vertics;
+            var p = circle.center;
+            var r = circle.radius * circle.radius;
+
+            if (GeometryHelper.GetDistance2(ref v[0], ref v[1], ref p) <= r) return true;
+            if (GeometryHelper.GetDistance2(ref v[1], ref v[2], ref p) <= r) return true;
+            if (GeometryHelper.GetDistance2(ref v[2], ref v[0], ref p) <= r) return true;
+
+            return GeometryHelper.IsTriangleContains(ref triangle, ref circle.center);
         }
     }
 }
