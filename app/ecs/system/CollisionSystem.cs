@@ -22,11 +22,8 @@ namespace SimpleX.Collision2D.App
                 if (collision1.Overlaps(collision2))
                 {
                     var direction = Vector.Normalize(collision1.position - collision2.position);
-
-                    var dir1 = a.movementComponent.direction;
-                    if (dir1.magnitude2 > 0) a.movementComponent.direction = direction;
-                    var dir2 = b.movementComponent.direction;
-                    if (dir2.magnitude2 > 0) b.movementComponent.direction = direction * -1;
+                    a.movementComponent.direction = direction;
+                    b.movementComponent.direction = direction * -1;
                 }
             });
         }

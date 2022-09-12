@@ -55,16 +55,16 @@ namespace SimpleX.Collision2D.App
                 var cap = new AdjustableArrowCap(6, 6, true)   //设置一个线头	
                 {
                     Filled = true,
-                    MiddleInset = 2.0f, //设置箭头中间的缩进
+                    MiddleInset = 1.5f, //设置箭头中间的缩进
                 };
                 var pen = new Pen(Color.Black)
                 {
                     CustomStartCap = new AdjustableArrowCap(1, 1, true),
-                    CustomEndCap = (CustomLineCap)cap,
+                    CustomEndCap = cap,
                 };
 
                 var sp = position;
-                var ep = position + (dir * 30);
+                var ep = position + (dir * 0.8f);
 
                 grap.DrawLine(pen, sp.x, sp.y, ep.x, ep.y);
             }

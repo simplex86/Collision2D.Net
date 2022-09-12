@@ -41,9 +41,11 @@ namespace SimpleX.Collision2D.App
         {
             var collision = entity.collisionComponent.collision;
             var direction = entity.movementComponent.direction;
+            var speed = entity.movementComponent.speed;
             var color = entity.colorComponent.color;
             var renderer = entity.renderComponent.renderer;
 
+            direction *= speed;
             renderer.Render(grap, collision, ref direction, ref color);
         }
 
