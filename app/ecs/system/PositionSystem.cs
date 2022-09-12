@@ -25,7 +25,7 @@ namespace SimpleX.Collision2D.App
                     var direction = movementComponent.direction;
                     var delta = direction * (speed * dt);
 
-                    entity.collisionComponent.collision.Move(delta);
+                    entity.collisionComponent.collision.Move(ref delta);
                 }
             });
         }

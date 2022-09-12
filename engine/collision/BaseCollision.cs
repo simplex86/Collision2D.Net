@@ -31,13 +31,19 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 移动
-        public virtual void Move(Vector delta)
+        public virtual void Move(ref Vector delta)
         {
             for (int i = 0; i < points.Length; i++)
             {
                 points[i] += delta;
             }
             dirty |= DirtyFlag.Position;
+        }
+
+        public void MoveTo(ref Vector position)
+        {
+            var delta = position - this.position;
+            Move(ref delta);
         }
 
         // 旋转

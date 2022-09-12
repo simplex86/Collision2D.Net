@@ -24,7 +24,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 移动
-        public override void Move(Vector delta)
+        public override void Move(ref Vector delta)
         {
             geometry.center += delta;
             dirty |= DirtyFlag.Position;

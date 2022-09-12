@@ -34,14 +34,14 @@ namespace SimpleX.Collision2D.Engine
             };
         }
 
-        public override void Move(Vector delta)
+        public override void Move(ref Vector delta)
         {   
             for (int i=0; i< rectangle.vertics.Length; i++)
             {
                 rectangle.vertics[i] += delta;
             }
 
-            base.Move(delta);
+            base.Move(ref delta);
         }
 
         // 旋转

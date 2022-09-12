@@ -28,13 +28,16 @@ namespace SimpleX.Collision2D.App
             var position = collision.position;
             var bounding = collision.boundingBox;
 
-            var w = bounding.width * 0.5f;
-            var h = bounding.height * 0.5f;
+            var w1 = position.x - bounding.minx;
+            var w2 = bounding.maxx - position.x;
+            var h1 = position.y - bounding.miny;
+            var h2 = bounding.maxy - position.y;
 
-            var dx = MathX.Clamp(position.x, world.left.x + w, world.right.x - w) - position.x;
-            var dy = MathX.Clamp(position.y, world.top.y + h, world.bottom.y - h) - position.y;
+            var dx = MathX.Clamp(position.x, world.left.x + w1, world.right.x - w2);
+            var dy = MathX.Clamp(position.y, world.top.y + h1, world.bottom.y - h2);
 
-            collision.Move(new Vector(dx, dy));
+            position = new Vector(dx, dy);
+            collision.MoveTo(ref position);
         }
     }
 }
