@@ -3,14 +3,12 @@ using System.Threading;
 
 namespace SimpleX.Collision2D.App
 {
-    using SimpleX.Collision2D.Engine;
-
     class CollideTask
     {
         private Thread thread = null;
         private World world = null;
         private Stats stats = null;
-        private long previousTime = 0;
+        private DeltaTime deltaTime = new DeltaTime();
 
         public CollideTask(World world, Stats stats)
         {
@@ -21,7 +19,7 @@ namespace SimpleX.Collision2D.App
         // 开始
         public void Start()
         {
-            previousTime = GMT.now;
+            deltaTime.Init();
 
             thread = new Thread(OnTick);
             thread.Start();
@@ -55,23 +53,14 @@ namespace SimpleX.Collision2D.App
         {
             while (true)
             {
-                var deltaTime = GetDeltaTime();
+                var dt = deltaTime.Get();
                 // 刷新数据
-                world.Update(deltaTime);
+                world.Update(dt);
                 // 碰撞检测
-                world.LateUpdate(deltaTime);
+                world.LateUpdate(dt);
                 // 刷新统计数据
-                stats.OnCollideFrame(deltaTime);
+                stats.OnCollideFrame(dt);
             }
-        }
-
-        private float GetDeltaTime()
-        {
-            var currentTime = GMT.now;
-            var deltaTime = (currentTime - previousTime) / 1000.0f;
-            previousTime = currentTime;
-
-            return deltaTime;
         }
     }
 }

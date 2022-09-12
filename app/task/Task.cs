@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -85,6 +84,8 @@ namespace SimpleX.Collision2D.App
 
         public void Destroy()
         {
+            timer.Stop();
+
             collide.Destroy();
             render.Destroy();
         }
@@ -143,7 +144,7 @@ namespace SimpleX.Collision2D.App
                 }
             }
 
-            // 不能移动(同时即不能旋转）的渲染成灰色
+            // 不能移动(同时不能旋转）的渲染成灰色
             if (!movable)
             {
                 entity.colorComponent.color = Color.Gray;
@@ -167,7 +168,7 @@ namespace SimpleX.Collision2D.App
         // 是否可旋转
         public bool IsRotatable()
         {
-            return random.Next(0, 10) > 4;
+            return random.Next(0, 10) > 3;
         }
 
         // 创建圆形碰撞体

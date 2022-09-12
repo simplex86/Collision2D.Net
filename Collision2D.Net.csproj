@@ -73,7 +73,7 @@
     <Compile Include="app\render\CircleRenderer.cs" />
     <Compile Include="app\render\RectangleRenderer.cs" />
     <Compile Include="app\render\PolygonRenderer.cs" />
-    <Compile Include="app\task\internal\Const.cs" />
+    <Compile Include="app\task\internal\Time.cs" />
     <Compile Include="app\task\internal\CollideTask.cs" />
     <Compile Include="app\task\internal\convex\ConvexGenerator.cs" />
     <Compile Include="app\task\internal\RenderTask.cs" />

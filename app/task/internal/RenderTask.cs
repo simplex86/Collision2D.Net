@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -10,11 +9,10 @@ namespace SimpleX.Collision2D.App
         private Thread thread = null;
         private World world = null;
         private Stats stats = null;
-
-        private long previousTime = 0;
-        private float canvasTime = 0;
-
+        private DeltaTime deltaTime = new DeltaTime();
+        
         private Control canvas = null;
+        private float canvasTime = 0;
         // 子线程刷新画布的委托
         public Action OnRefreshCanvasHandler;
 
@@ -28,7 +26,7 @@ namespace SimpleX.Collision2D.App
         // 开始
         public void Start()
         {
-            previousTime = GMT.now;
+            deltaTime.Init();
 
             thread = new Thread(OnTick);
             thread.Start();
@@ -62,9 +60,8 @@ namespace SimpleX.Collision2D.App
         {
             while (true)
             {
-                var deltaTime = GetDeltaTime();
-                // 统计数据
-                UpdateStats(deltaTime);
+                var dt = deltaTime.Get();
+                UpdateStats(dt);
             }
         }
 
@@ -80,15 +77,6 @@ namespace SimpleX.Collision2D.App
                 canvas.Invoke(OnRefreshCanvasHandler);
                 canvasTime = 0;
             }
-        }
-
-        private float GetDeltaTime()
-        {
-            var currentTime = GMT.now;
-            var deltaTime = (currentTime - previousTime) / 1000.0f;
-            previousTime = currentTime;
-
-            return deltaTime;
         }
     }
 }

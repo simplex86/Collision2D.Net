@@ -17,4 +17,24 @@ namespace SimpleX.Collision2D.App
             }
         }
     }
+
+    // 变化时间
+    public class DeltaTime
+    {
+        private long previous = 0;
+
+        public void Init()
+        {
+            previous = GMT.now;
+        }
+
+        public float Get()
+        {
+            var current = GMT.now;
+            var deltaTime = (current - previous) / 1000.0f;
+            previous = current;
+
+            return deltaTime;
+        }
+    }
 }

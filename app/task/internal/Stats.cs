@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SimpleX.Collision2D.App
+﻿namespace SimpleX.Collision2D.App
 {
     class Stats
     {
