@@ -8,29 +8,21 @@ namespace SimpleX.Collision2D.App
     class RenderTask
     {
         private Thread thread = null;
-        private long previousTime = 0;
-
         private World world = null;
+        private Stats stats = null;
 
+        private long previousTime = 0;
         private float canvasTime = 0;
-        private float statsTime = 0;
-        private int frameCount = 0;
 
         private Control canvas = null;
-        private Control stats = null;
-
         // 子线程刷新画布的委托
         public Action OnRefreshCanvasHandler;
-        // 子线程刷新Stats的委托
-        public Action OnRefreshStatsHandler;
-        
-        public float cost { get; private set; } = 1.0f;
 
-        public RenderTask(World world, Control canvas, Control stats)
+        public RenderTask(World world, Stats stats, Control canvas)
         {
             this.world = world;
-            this.canvas = canvas;
             this.stats = stats;
+            this.canvas = canvas;
         }
 
         // 开始
@@ -79,23 +71,14 @@ namespace SimpleX.Collision2D.App
         // 刷新统计数据
         private void UpdateStats(float dt)
         {
-            statsTime += dt;
             canvasTime += dt;
 
             if (canvasTime >= 0.016f)
             {
+                stats.OnRenderFrame(canvasTime);
+
                 canvas.Invoke(OnRefreshCanvasHandler);
                 canvasTime = 0;
-
-                frameCount++;
-                if (statsTime >= 1.0f)
-                {
-                    cost = statsTime / frameCount;
-                    stats.Invoke(OnRefreshStatsHandler);
-
-                    statsTime = 0;
-                    frameCount = 0;
-                }
             }
         }
 

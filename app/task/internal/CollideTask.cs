@@ -8,17 +8,14 @@ namespace SimpleX.Collision2D.App
     class CollideTask
     {
         private Thread thread = null;
-        
-        private long previousTime = 0;
-        private float runtimeAcc = 0;
-        private int frameCount = 0;
         private World world = null;
+        private Stats stats = null;
+        private long previousTime = 0;
 
-        public float cost { get; private set; } = 1.0f;
-
-        public CollideTask(World world)
+        public CollideTask(World world, Stats stats)
         {
             this.world = world;
+            this.stats = stats;
         }
 
         // 开始
@@ -64,22 +61,7 @@ namespace SimpleX.Collision2D.App
                 // 碰撞检测
                 world.LateUpdate(deltaTime);
                 // 刷新统计数据
-                UpdateStats(deltaTime);
-            }
-        }
-
-        // 统计数据
-        private void UpdateStats(float dt)
-        {
-            runtimeAcc += dt;
-            frameCount++;
-
-            if (runtimeAcc >= 1.0f)
-            {
-                cost = runtimeAcc / frameCount;
-
-                runtimeAcc = 0;
-                frameCount = 0;
+                stats.OnCollideFrame(deltaTime);
             }
         }
 

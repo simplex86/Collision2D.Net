@@ -14,7 +14,9 @@ namespace SimpleX.Collision2D.App
         private CollideTask collide;
         private RenderTask render;
 
-        private Random random = new Random(1);
+        private Random random = new Random();
+        private Stats stats = new Stats();
+        private Timer timer = new Timer();
 
         private readonly int width;
         private readonly int height;
@@ -22,7 +24,7 @@ namespace SimpleX.Collision2D.App
         // 实体数量
         private const int ENTITY_COUNT = 100;
 
-        public Task(Control canvas, Control stats)
+        public Task(Control canvas, Control detail)
         {
             this.world = new World()
             {
@@ -52,16 +54,15 @@ namespace SimpleX.Collision2D.App
                 },
             };
 
-            collide = new CollideTask(world);
-            render = new RenderTask(world, canvas, stats);
-
-            render.OnRefreshCanvasHandler = () => canvas.Refresh();
-            render.OnRefreshStatsHandler = () => {
-                var countText  = string.Format("Collision Count: {0}", world.GetEntityCount());
-                var renderText = string.Format("Render\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / render.cost), render.cost * 1000);
-                var logicText  = string.Format("Collide\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / collide.cost), collide.cost * 1000);
-                stats.Text = $"{countText}\n{renderText}\n{logicText}";
+            collide = new CollideTask(world, stats);
+            render = new RenderTask(world, stats, canvas)
+            {
+                OnRefreshCanvasHandler = () => canvas.Refresh()
             };
+
+            timer.Interval = 500;
+            timer.Tag = detail;
+            timer.Tick += OnTimerHandler;
 
             width = canvas.Width;
             height = canvas.Height;
@@ -74,9 +75,12 @@ namespace SimpleX.Collision2D.App
                 var entity = CreateEntity();
                 world.AddEntity(entity);
             }
+            stats.collisionCount = ENTITY_COUNT;
 
             collide.Start();
             render.Start();
+
+            timer.Start();
         }
 
         public void Destroy()
@@ -284,14 +288,6 @@ namespace SimpleX.Collision2D.App
             return new Vector(x, y);
         }
 
-        // 获取在某点（o）附近指定范围(min, max)内的坐标
-        private Vector GetRandomPosition(ref Vector O, int min, int max)
-        {
-            var x = random.Next(min, max+1);
-            var y = random.Next(min, max+1);
-            return new Vector(O.x + x, O.y + y);
-        }
-
         // 计算三角形面积
         // 注：格林公式
         private float CalculatePolygonSize(Vector[] vertics)
@@ -320,6 +316,23 @@ namespace SimpleX.Collision2D.App
 
             var convex = new ConvexGenerator(random);
             return convex.Gen(ref position, 45, 45, count);
+        }
+
+        private void OnTimerHandler(object sender, EventArgs e)
+        {
+            var timer = sender as Timer;
+            var detail = timer.Tag as Control;
+
+            UpdateStats(detail);
+            stats.Reset();
+        }
+
+        private void UpdateStats(Control detail)
+        {
+            var countText = string.Format("Collision Count: {0}", stats.collisionCount);
+            var renderText = string.Format("Render\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.renderCost), stats.renderCost * 1000);
+            var logicText = string.Format("Collide\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.collideCost), stats.collideCost * 1000);
+            detail.Text = $"{countText}\n{renderText}\n{logicText}";
         }
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.canvas = new System.Windows.Forms.PictureBox();
-            this.stats = new System.Windows.Forms.Label();
+            this.detail = new System.Windows.Forms.Label();
             this.showBoundingBox = new System.Windows.Forms.CheckBox();
             this.showDirection = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
@@ -45,18 +45,18 @@
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintHandler);
             // 
-            // stats
+            // detail
             // 
-            this.stats.AutoSize = true;
-            this.stats.BackColor = System.Drawing.Color.Silver;
-            this.stats.Font = new System.Drawing.Font("微软雅黑", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.stats.Location = new System.Drawing.Point(9, 9);
-            this.stats.Name = "stats";
-            this.stats.Size = new System.Drawing.Size(131, 100);
-            this.stats.TabIndex = 1;
-            this.stats.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nCollide\r\n  FPS : -  Cost: - m" +
+            this.detail.AutoSize = true;
+            this.detail.BackColor = System.Drawing.Color.Silver;
+            this.detail.Font = new System.Drawing.Font("微软雅黑", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.detail.Location = new System.Drawing.Point(9, 9);
+            this.detail.Name = "detail";
+            this.detail.Size = new System.Drawing.Size(131, 100);
+            this.detail.TabIndex = 1;
+            this.detail.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nCollide\r\n  FPS : -  Cost: - m" +
     "s";
-            this.stats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.detail.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // showBoundingBox
             // 
@@ -87,7 +87,7 @@
             this.ClientSize = new System.Drawing.Size(1482, 953);
             this.Controls.Add(this.showDirection);
             this.Controls.Add(this.showBoundingBox);
-            this.Controls.Add(this.stats);
+            this.Controls.Add(this.detail);
             this.Controls.Add(this.canvas);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -107,7 +107,7 @@
 
         #endregion
         private System.Windows.Forms.PictureBox canvas;
-        private System.Windows.Forms.Label stats;
+        private System.Windows.Forms.Label detail;
         private System.Windows.Forms.CheckBox showBoundingBox;
         private System.Windows.Forms.CheckBox showDirection;
     }
