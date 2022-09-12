@@ -6,7 +6,7 @@ namespace SimpleX.Collision2D.App
 
     class MovementComponent
     {
-        public Vector direction = Vector.right;
+        public Vector direction = Vector.zero;
         public float speed = 0.0f;
     }
 }

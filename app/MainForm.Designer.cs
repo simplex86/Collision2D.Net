@@ -30,6 +30,8 @@
         {
             this.canvas = new System.Windows.Forms.PictureBox();
             this.stats = new System.Windows.Forms.Label();
+            this.showBoundingBox = new System.Windows.Forms.CheckBox();
+            this.showDirection = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,11 +58,35 @@
     "s";
             this.stats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // showBoundingBox
+            // 
+            this.showBoundingBox.AutoSize = true;
+            this.showBoundingBox.Location = new System.Drawing.Point(11, 116);
+            this.showBoundingBox.Name = "showBoundingBox";
+            this.showBoundingBox.Size = new System.Drawing.Size(104, 19);
+            this.showBoundingBox.TabIndex = 2;
+            this.showBoundingBox.Text = "显示包围盒";
+            this.showBoundingBox.UseVisualStyleBackColor = true;
+            this.showBoundingBox.CheckedChanged += new System.EventHandler(this.OnBoundingBoxVisibleChanged);
+            // 
+            // showDirection
+            // 
+            this.showDirection.AutoSize = true;
+            this.showDirection.Location = new System.Drawing.Point(11, 141);
+            this.showDirection.Name = "showDirection";
+            this.showDirection.Size = new System.Drawing.Size(89, 19);
+            this.showDirection.TabIndex = 3;
+            this.showDirection.Text = "显示方向";
+            this.showDirection.UseVisualStyleBackColor = true;
+            this.showDirection.CheckedChanged += new System.EventHandler(this.OnDirectionVisibleChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1482, 953);
+            this.Controls.Add(this.showDirection);
+            this.Controls.Add(this.showBoundingBox);
             this.Controls.Add(this.stats);
             this.Controls.Add(this.canvas);
             this.DoubleBuffered = true;
@@ -82,6 +108,8 @@
         #endregion
         private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.Label stats;
+        private System.Windows.Forms.CheckBox showBoundingBox;
+        private System.Windows.Forms.CheckBox showDirection;
     }
 }
 

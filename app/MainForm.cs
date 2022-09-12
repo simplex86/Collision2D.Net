@@ -40,10 +40,11 @@ namespace SimpleX.Collision2D.App
         private void DrawEntity(Graphics grap, Entity entity)
         {
             var collision = entity.collisionComponent.collision;
+            var direction = entity.movementComponent.direction;
             var color = entity.colorComponent.color;
             var renderer = entity.renderComponent.renderer;
 
-            renderer.Render(grap, collision, ref color);
+            renderer.Render(grap, collision, ref direction, ref color);
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)
@@ -53,6 +54,28 @@ namespace SimpleX.Collision2D.App
                 task.Destroy();
                 task = null;
             }
+        }
+
+        private void OnBoundingBoxVisibleChanged(object sender, EventArgs e)
+        {
+            var world = task.world;
+            world.Each((entity) =>
+            {
+                var renderer = entity.renderComponent.renderer;
+                var checkbox = sender as CheckBox;
+                renderer.showBoundingBox = checkbox.Checked;
+            });
+        }
+
+        private void OnDirectionVisibleChanged(object sender, EventArgs e)
+        {
+            var world = task.world;
+            world.Each((entity) =>
+            {
+                var renderer = entity.renderComponent.renderer;
+                var checkbox = sender as CheckBox;
+                renderer.showDirection = checkbox.Checked;
+            });
         }
     }
 }

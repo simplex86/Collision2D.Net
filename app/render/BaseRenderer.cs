@@ -11,18 +11,24 @@ namespace SimpleX.Collision2D.App
         protected SolidBrush brush = new SolidBrush(Color.Red);
 
         public bool showBoundingBox = false;
+        public bool showDirection = false;
 
         protected BaseRenderer()
         {
             pen.DashStyle = DashStyle.Dash;
         }
 
-        public void Render(Graphics grap, BaseCollision collision, ref Color color)
+        public void Render(Graphics grap, BaseCollision collision, ref Vector diretion, ref Color color)
         {
             DrawCollision(grap, collision, ref color);
             if (showBoundingBox)
             {
                 DrawBoundingBox(grap, ref collision.boundingBox, ref color);
+            }
+            if (showDirection)
+            {
+                var position = collision.position;
+                DrawDirection(grap, ref position, ref diretion);
             }
         }
 
@@ -39,6 +45,29 @@ namespace SimpleX.Collision2D.App
             var h = box.maxy - box.miny;
 
             grap.DrawRectangle(pen, x, y, w, h);
+        }
+
+        // 画方向
+        protected void DrawDirection(Graphics grap, ref Vector position, ref Vector dir)
+        {
+            if (dir.magnitude2 > 0)
+            {
+                var cap = new AdjustableArrowCap(6, 6, true)   //设置一个线头	
+                {
+                    Filled = true,
+                    MiddleInset = 2.0f, //设置箭头中间的缩进
+                };
+                var pen = new Pen(Color.Black)
+                {
+                    CustomStartCap = new AdjustableArrowCap(1, 1, true),
+                    CustomEndCap = (CustomLineCap)cap,
+                };
+
+                var sp = position;
+                var ep = position + (dir * 30);
+
+                grap.DrawLine(pen, sp.x, sp.y, ep.x, ep.y);
+            }
         }
 
         // 画矩形

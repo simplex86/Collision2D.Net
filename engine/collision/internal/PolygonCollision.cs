@@ -11,8 +11,8 @@ namespace SimpleX.Collision2D.Engine
         {
             get
             {
-                var p = points[0];
-                for (int i=1; i<points.Length; i++)
+                var p = Vector.zero;
+                for (int i=0; i<points.Length; i++)
                 {
                     p += points[i];
                 }
@@ -62,7 +62,7 @@ namespace SimpleX.Collision2D.Engine
         {
             if (IsAABBContains(ref pt))
             {
-
+                return GeometryHelper.IsPolygonContains(ref geometry, ref pt);
             }
             return false;
         }
