@@ -2,17 +2,22 @@
 
 namespace SimpleX.Collision2D.Engine
 {
-    public abstract class BaseCollision
+    public abstract class BaseCollision : IQuadObject
     {
         // 类型
         public CollisionType type { get; private set; }
         // 包围盒
         public AABB boundingBox;
 
+        public float x => position.x;
+        public float y => position.y;
+        public float w => boundingBox.width;
+        public float h => boundingBox.height;
+
         // 位置
-        internal abstract Vector position { get; }
+        internal virtual Vector position { get; set; } = Vector.zero;
         // 顶点
-        internal abstract Vector[] points { get; }
+        internal virtual Vector[] points { get; } = null;
 
         protected static class DirtyFlag
         {
@@ -40,6 +45,7 @@ namespace SimpleX.Collision2D.Engine
             dirty |= DirtyFlag.Position;
         }
 
+        // 移动到指定位置（position）
         public void MoveTo(ref Vector position)
         {
             var delta = position - this.position;

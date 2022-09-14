@@ -52,6 +52,7 @@ namespace SimpleX.Collision2D.App
                     normal = Vector.up
                 },
             };
+            world.Init();
 
             collide = new CollideTask(world, stats);
             render = new RenderTask(world, stats, canvas)

@@ -5,25 +5,7 @@ namespace SimpleX.Collision2D.Engine
     class PolygonCollision : BaseCollision
     {
         internal Polygon geometry;
-
-        //
-        internal override Vector position
-        {
-            get
-            {
-                var p = Vector.zero;
-                for (int i=0; i<points.Length; i++)
-                {
-                    p += points[i];
-                }
-                return p / points.Length;
-            }
-        }
-        //
         internal override Vector[] points => geometry.vertics;
-
-        //
-        public float angle { get; private set; } = 0;
 
         public PolygonCollision(Vector[] vertics)
             : base(CollisionType.Polygon)
@@ -36,8 +18,7 @@ namespace SimpleX.Collision2D.Engine
 
         public override void Rotate(float delta)
         {
-            //angle += delta;
-            //dirty |= DirtyFlag.Rotation;
+            
         }
 
         public override void RefreshGeometry()
@@ -48,6 +29,13 @@ namespace SimpleX.Collision2D.Engine
                 {
 
                 }
+
+                var p = Vector.zero;
+                for (int i = 0; i < points.Length; i++)
+                {
+                    p += points[i];
+                }
+                this.position = p / points.Length;
 
                 boundingBox.minx = MinX();
                 boundingBox.miny = MinY();

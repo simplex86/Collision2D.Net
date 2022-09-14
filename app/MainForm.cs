@@ -30,6 +30,7 @@ namespace SimpleX.Collision2D.App
             grap.SmoothingMode = SmoothingMode.HighQuality;
 
             var world = task.world;
+            //
             world.Each((entity) =>
             {
                 DrawEntity(grap, entity);

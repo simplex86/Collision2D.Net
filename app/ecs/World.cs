@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 namespace SimpleX.Collision2D.App
 {
+    using SimpleX.Collision2D.Engine;
+
     class World
     {
         private List<BaseSystem> systems = new List<BaseSystem>();
         private List<BaseSystem> lateSystems = new List<BaseSystem>();
 
-        private List<Entity> entities = new List<Entity>(20);
+        private List<Entity> entities = new List<Entity>(100);
         private object mutex = new object();
 
         public Boundary left;
@@ -26,6 +28,12 @@ namespace SimpleX.Collision2D.App
             lateSystems.Add(new BoundarySystem(this));
             // 最后执行的一个LateSystem
             lateSystems.Add(new LatePostSystem(this));
+        }
+
+        public void Init()
+        {
+            var w = right.x - left.x;
+            var h = bottom.y - top.y;
         }
 
         public void AddEntity(Entity entity)

@@ -5,8 +5,6 @@ namespace SimpleX.Collision2D.Engine
     internal class CapsuleCollision : BaseCollision
     {
         internal Capsule geometry;
-
-        internal override Vector position => (geometry.points[0] + geometry.points[1]) * 0.5f;
         internal override Vector[] points => geometry.points;
 
         private Rectangle rectangle;
@@ -57,13 +55,15 @@ namespace SimpleX.Collision2D.Engine
         {
             if (dirty != DirtyFlag.None)
             {
+                this.position = (geometry.points[0] + geometry.points[1]) * 0.5f;
+
                 if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
                 {
                     var position = this.position;
                     geometry.points = GeometryHelper.GetCapsulePoints(ref position, length, angle);
                     rectangle.vertics = GeometryHelper.GetRectanglePoints(ref position, rectangle.width, rectangle.height, angle);
                 }
-
+                
                 var p1 = rectangle.vertics[0];
                 var p2 = rectangle.vertics[1];
                 var p3 = rectangle.vertics[2];

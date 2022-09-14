@@ -6,9 +6,11 @@ namespace SimpleX.Collision2D.Engine
     {
         internal Circle geometry;
         //
-        internal override Vector position => geometry.center;
-        //
-        internal override Vector[] points => null;
+        internal override Vector position
+        {
+            set { ; }
+            get { return geometry.center; }
+        }
 
         //半径
         public float radius => geometry.radius;

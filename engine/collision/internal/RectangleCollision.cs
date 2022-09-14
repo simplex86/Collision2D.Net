@@ -5,22 +5,11 @@ namespace SimpleX.Collision2D.Engine
     internal class RectangleCollision : BaseCollision
     {
         internal Rectangle geometry;
-
-        internal override Vector position => (geometry.vertics[0] + geometry.vertics[2]) * 0.5f;
         internal override Vector[] points => geometry.vertics;
 
-        public float width
-        {
-            get => geometry.width;
-        }
-        public float height
-        {
-            get => geometry.height;
-        }
-        public float angle
-        {
-            get => geometry.angle;
-        }
+        public float width => geometry.width;
+        public float height => geometry.height;
+        public float angle => geometry.angle;
 
         public RectangleCollision(Vector position, float width, float height, float angle)
             : base(CollisionType.Rectangle)
@@ -45,6 +34,8 @@ namespace SimpleX.Collision2D.Engine
         {
             if (dirty != DirtyFlag.None)
             {
+                this.position = (geometry.vertics[0] + geometry.vertics[2]) * 0.5f;
+
                 if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
                 {
                     var position = this.position;
