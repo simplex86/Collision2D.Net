@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     static class GJK
     {
         // 检测凸多边形（position1, points1）与凸多边形（position2, points2）是否重叠
-        public static bool Overlaps(ref Vector position1, Vector[] points1, ref Vector position2, Vector[] points2)
+        public static bool Overlaps(ref Vector2 position1, Vector2[] points1, ref Vector2 position2, Vector2[] points2)
         {
             var simplex = new Simplex()
             {
-                vertics = new List<Vector>(3)
+                vertics = new List<Vector2>(3)
             };
             var dir = position1 - position2;
 
@@ -38,11 +38,11 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 检测凸多边形（position1, points）与圆（position2，radius）是否重叠
-        public static bool Overlaps(ref Vector position1, Vector[] points, ref Vector position2, float radius)
+        public static bool Overlaps(ref Vector2 position1, Vector2[] points, ref Vector2 position2, float radius)
         {
             var simplex = new Simplex()
             {
-                vertics = new List<Vector>(3)
+                vertics = new List<Vector2>(3)
             };
             var dir = position1 - position2;
 
@@ -71,7 +71,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 两个多边形的闵可夫斯基差
-        private static Vector Support(Vector[] a, Vector[] b, ref Vector dir)
+        private static Vector2 Support(Vector2[] a, Vector2[] b, ref Vector2 dir)
         {
             var p1 = Support(a, ref dir);
             var neg = -dir;
@@ -81,7 +81,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 闵可夫斯基差
-        private static Vector Support(Vector[] vertics, ref Vector position, float radius, ref Vector dir)
+        private static Vector2 Support(Vector2[] vertics, ref Vector2 position, float radius, ref Vector2 dir)
         {
             var p1 = Support(vertics, ref dir);
             var neg = -dir;
@@ -91,14 +91,14 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 获取顶点集合（vertics）中在方向（dir）上最大投影的点
-        private static Vector Support(Vector[] vertics, ref Vector dir)
+        private static Vector2 Support(Vector2[] vertics, ref Vector2 dir)
         {
             var point = vertics[0];
-            var max = Vector.Dot(ref point, ref dir);
+            var max = Vector2.Dot(ref point, ref dir);
             
             for (int i=1; i<vertics.Length; i++)
             {
-                var dot = Vector.Dot(ref vertics[i], ref dir);
+                var dot = Vector2.Dot(ref vertics[i], ref dir);
                 if (dot > max)
                 {
                     max = dot;
@@ -110,13 +110,13 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 获取圆（）在方向（dir）上最大投影的点
-        private static Vector Support(ref Vector position, float radius, ref Vector dir)
+        private static Vector2 Support(ref Vector2 position, float radius, ref Vector2 dir)
         {
             return position + radius * dir.normalized;
         }
 
         // 简单形是否包含原点
-        private static bool IsContainsOrigin(ref Simplex simplex, ref Vector dir)
+        private static bool IsContainsOrigin(ref Simplex simplex, ref Vector2 dir)
         {
             var a = simplex.a;
             var ao = -a;
@@ -128,17 +128,17 @@ namespace SimpleX.Collision2D.Engine
                 var c = simplex.c;
                 var ac = c - a;
 
-                var u = Vector.Mul3(ref ac, ref ab, ref ab);
-                var v = Vector.Mul3(ref ab, ref ac, ref ac);
+                var u = Vector2.Mul3(ref ac, ref ab, ref ab);
+                var v = Vector2.Mul3(ref ab, ref ac, ref ac);
 
-                if (Vector.Dot(ref u, ref ao) > 0.0f)
+                if (Vector2.Dot(ref u, ref ao) > 0.0f)
                 {
                     simplex.Remove('c');
                     dir = u;
                 }
                 else
                 {
-                    if (Vector.Dot(ref v, ref ao) <= 0.0f)
+                    if (Vector2.Dot(ref v, ref ao) <= 0.0f)
                     {
                         return true;
                     }
@@ -149,7 +149,7 @@ namespace SimpleX.Collision2D.Engine
             }
             else
             {
-                dir = Vector.Mul3(ref ab, ref ao, ref ab);
+                dir = Vector2.Mul3(ref ab, ref ao, ref ab);
             }
 
             return false;

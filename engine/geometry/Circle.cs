@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 {
     struct Circle
     {
-        public Vector center;
+        public Vector2 center;
         public float radius;
     }
 }

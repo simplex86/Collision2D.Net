@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     class CollisionSystem : BaseSystem
     {
@@ -21,7 +21,7 @@ namespace SimpleX.Collision2D.App
 
                 if (collision1.Overlaps(collision2))
                 {
-                    var direction = Vector.Normalize(collision1.position - collision2.position);
+                    var direction = Vector2.Normalize(collision1.position - collision2.position);
                     a.movementComponent.direction = direction;
                     b.movementComponent.direction = direction * -1;
                 }

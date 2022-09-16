@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     internal class CapsuleCollision : BaseCollision
     {
         internal Capsule geometry;
 
-        internal override Vector position => (geometry.points[0] + geometry.points[1]) * 0.5f;
-        internal override Vector[] points => geometry.points;
+        internal override Vector2 position => (geometry.points[0] + geometry.points[1]) * 0.5f;
+        internal override Vector2[] points => geometry.points;
 
         private Rectangle rectangle;
 
@@ -15,7 +15,7 @@ namespace SimpleX.Collision2D.Engine
         public float radius => geometry.radius;
         public float angle => geometry.angle;
 
-        public CapsuleCollision(Vector position, float length, float radius, float angle)
+        public CapsuleCollision(Vector2 position, float length, float radius, float angle)
             : base(CollisionType.Capsule)
         {
             geometry = new Capsule()
@@ -34,7 +34,7 @@ namespace SimpleX.Collision2D.Engine
             };
         }
 
-        public override void Move(ref Vector delta)
+        public override void Move(ref Vector2 delta)
         {   
             for (int i=0; i< rectangle.vertics.Length; i++)
             {
@@ -78,7 +78,7 @@ namespace SimpleX.Collision2D.Engine
             }
         }
 
-        public override bool Contains(ref Vector pt)
+        public override bool Contains(ref Vector2 pt)
         {
             if (IsAABBContains(ref pt))
             {

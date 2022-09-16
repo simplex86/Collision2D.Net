@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     class MovementComponent
     {
-        public Vector direction = Vector.zero;
+        public Vector2 direction = Vector2.zero;
         public float speed = 0.0f;
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     class BoundarySystem : BaseSystem
     {
@@ -24,19 +24,19 @@ namespace SimpleX.Collision2D.App
 
                 if (aabb.minx <= world.left.x)
                 {
-                    movementComponent.direction = Vector.Reflect(ref direction, ref world.left.normal);
+                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.left.normal);
                 }
                 else if (aabb.maxx >= world.right.x)
                 {
-                    movementComponent.direction = Vector.Reflect(ref direction, ref world.right.normal);
+                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.right.normal);
                 }
                 else if (aabb.miny <= world.top.y)
                 {
-                    movementComponent.direction = Vector.Reflect(ref direction, ref world.top.normal);
+                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.top.normal);
                 }
                 else if(aabb.maxy >= world.bottom.y)
                 {
-                    movementComponent.direction = Vector.Reflect(ref direction, ref world.bottom.normal);
+                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.bottom.normal);
                 }
             });
         }

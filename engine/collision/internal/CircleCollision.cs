@@ -1,19 +1,19 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     internal class CircleCollision : BaseCollision
     {
         internal Circle geometry;
         //
-        internal override Vector position => geometry.center;
+        internal override Vector2 position => geometry.center;
         //
-        internal override Vector[] points => null;
+        internal override Vector2[] points => null;
 
         //半径
         public float radius => geometry.radius;
 
-        public CircleCollision(Vector position, float radius)
+        public CircleCollision(Vector2 position, float radius)
             : base(CollisionType.Circle)
         {
             geometry = new Circle()
@@ -24,7 +24,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 移动
-        public override void Move(ref Vector delta)
+        public override void Move(ref Vector2 delta)
         {
             geometry.center += delta;
             dirty |= DirtyFlag.Position;
@@ -49,7 +49,7 @@ namespace SimpleX.Collision2D.Engine
             }
         }
 
-        public override bool Contains(ref Vector pt)
+        public override bool Contains(ref Vector2 pt)
         {
             if (IsAABBContains(ref pt))
             {

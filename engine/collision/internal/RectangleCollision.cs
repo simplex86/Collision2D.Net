@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     internal class RectangleCollision : BaseCollision
     {
         internal Rectangle geometry;
 
-        internal override Vector position => (geometry.vertics[0] + geometry.vertics[2]) * 0.5f;
-        internal override Vector[] points => geometry.vertics;
+        internal override Vector2 position => (geometry.vertics[0] + geometry.vertics[2]) * 0.5f;
+        internal override Vector2[] points => geometry.vertics;
 
         public float width
         {
@@ -22,7 +22,7 @@ namespace SimpleX.Collision2D.Engine
             get => geometry.angle;
         }
 
-        public RectangleCollision(Vector position, float width, float height, float angle)
+        public RectangleCollision(Vector2 position, float width, float height, float angle)
             : base(CollisionType.Rectangle)
         {
             geometry = new Rectangle()
@@ -65,7 +65,7 @@ namespace SimpleX.Collision2D.Engine
             }
         }
 
-        public override bool Contains(ref Vector pt)
+        public override bool Contains(ref Vector2 pt)
         {
             if (IsAABBContains(ref pt))
             {

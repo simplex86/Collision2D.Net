@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
     class World
     {

@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     abstract class BaseRenderer
     {
@@ -18,7 +18,7 @@ namespace SimpleX.Collision2D.App
             pen.DashStyle = DashStyle.Dash;
         }
 
-        public void Render(Graphics grap, BaseCollision collision, ref Vector diretion, ref Color color)
+        public void Render(Graphics grap, BaseCollision collision, ref Vector2 diretion, ref Color color)
         {
             DrawCollision(grap, collision, ref color);
             if (showBoundingBox)
@@ -48,7 +48,7 @@ namespace SimpleX.Collision2D.App
         }
 
         // 画方向
-        protected void DrawDirection(Graphics grap, ref Vector position, ref Vector dir)
+        protected void DrawDirection(Graphics grap, ref Vector2 position, ref Vector2 dir)
         {
             if (dir.magnitude2 > 0)
             {
@@ -71,7 +71,7 @@ namespace SimpleX.Collision2D.App
         }
 
         // 画矩形
-        protected void DrawRectangle(Graphics grap, Vector[] vertics)
+        protected void DrawRectangle(Graphics grap, Vector2[] vertics)
         {
             var points = new PointF[]
             {

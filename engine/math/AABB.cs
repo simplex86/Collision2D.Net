@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     public struct AABB
     {

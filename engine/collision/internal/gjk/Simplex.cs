@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     struct Simplex
     {
-        public List<Vector> vertics;
+        public List<Vector2> vertics;
 
         public int count
         {
             get => vertics.Count;
         }
 
-        public Vector a { get => vertics[count - 1]; }
-        public Vector b { get => vertics[count - 2]; }
-        public Vector c { get => vertics[count - 3]; }
+        public Vector2 a { get => vertics[count - 1]; }
+        public Vector2 b { get => vertics[count - 2]; }
+        public Vector2 c { get => vertics[count - 3]; }
 
-        public void Add(ref Vector point)
+        public void Add(ref Vector2 point)
         {
             vertics.Add(point);
         }

@@ -2,9 +2,9 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     class Task
     {
@@ -31,25 +31,25 @@ namespace SimpleX.Collision2D.App
                 {
                     x = canvas.Location.X,
                     y = canvas.Location.Y,
-                    normal = Vector.right
+                    normal = Vector2.right
                 },
                 right = new Boundary()
                 {
                     x = canvas.Location.X + canvas.Width,
                     y = canvas.Location.Y,
-                    normal = Vector.left
+                    normal = Vector2.left
                 },
                 top = new Boundary()
                 {
                     x = canvas.Location.X,
                     y = canvas.Location.Y,
-                    normal = Vector.down
+                    normal = Vector2.down
                 },
                 bottom = new Boundary()
                 {
                     x = canvas.Location.X,
                     y = canvas.Location.Y + canvas.Height,
-                    normal = Vector.up
+                    normal = Vector2.up
                 },
             };
 
@@ -132,7 +132,7 @@ namespace SimpleX.Collision2D.App
                     x = random.Next(-99, 100);
                     y = random.Next(-99, 100);
                 }
-                entity.movementComponent.direction = Vector.Normalize(x, y);
+                entity.movementComponent.direction = Vector2.Normalize(x, y);
                 entity.movementComponent.speed = random.Next(20, 80);
 
                 var rotatable = IsRotatable(); // 能移动的才有可能旋转
@@ -282,16 +282,16 @@ namespace SimpleX.Collision2D.App
         }
 
         // 获取随机坐标
-        private Vector GetRandomPosition()
+        private Vector2 GetRandomPosition()
         {
             var x = random.Next(50, width - 50);
             var y = random.Next(50, height - 50);
-            return new Vector(x, y);
+            return new Vector2(x, y);
         }
 
         // 计算三角形面积
         // 注：格林公式
-        private float CalculatePolygonSize(Vector[] vertics)
+        private float CalculatePolygonSize(Vector2[] vertics)
         {
             var s = 0.0f;
             var i = 0;
@@ -310,7 +310,7 @@ namespace SimpleX.Collision2D.App
 
         // 生成随机的凸多边形
         // 注：顶点数[3, 9]
-        private Vector[] GetRandomConvexPoints()
+        private Vector2[] GetRandomConvexPoints()
         {
             var count = random.Next(3, 10);
             var position = GetRandomPosition();

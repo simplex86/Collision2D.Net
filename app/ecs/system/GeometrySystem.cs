@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     class GeometrySystem : BaseSystem
     {

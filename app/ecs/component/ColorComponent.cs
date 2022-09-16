@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
     class ColorComponent
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 {
     public struct Matrix
     {
@@ -78,13 +76,13 @@ namespace SimpleX.Collision2D.Engine
             return matrix;
         }
 
-        public static Vector Transform(ref Vector position, ref Matrix matrix)
+        public static Vector2 Transform(ref Vector2 position, ref Matrix matrix)
         {
             var x = ((position.x * matrix.m11) + (position.y * matrix.m21)) + (position.w * matrix.m31);
             var y = ((position.x * matrix.m12) + (position.y * matrix.m22)) + (position.w * matrix.m32);
             var z = ((position.x * matrix.m13) + (position.y * matrix.m23)) + (position.w * matrix.m33);
 
-            return new Vector(x, y);
+            return new Vector2(x, y);
 
         }
     }

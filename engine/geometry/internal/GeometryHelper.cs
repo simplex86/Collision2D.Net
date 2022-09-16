@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 { 
     internal static class GeometryHelper
     {
         // 获取两点间距离的平方
-        public static float GetDistance2(ref Vector a, ref Vector b)
+        public static float GetDistance2(ref Vector2 a, ref Vector2 b)
         {
             var dx = a.x - b.x;
             var dy = a.y - b.y;
@@ -14,7 +12,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 获取点（pt）到线段（pa，pb）的最小距离的平方
-        public static float GetDistance2(ref Vector pa, ref Vector pb, ref Vector pt)
+        public static float GetDistance2(ref Vector2 pa, ref Vector2 pb, ref Vector2 pt)
         {
             float px = pt.x - pa.x, py = pt.y - pa.y;
             float xx = pb.x - pa.x, yy = pb.y - pa.y;
@@ -25,21 +23,21 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 获取矩形（x, y, width, height, angle）的顶点
-        private static Vector[] GetRectanglePoints(float x, float y, float width, float height, float angle)
+        private static Vector2[] GetRectanglePoints(float x, float y, float width, float height, float angle)
         {
             var w = width * 0.5f;
             var h = height * 0.5f;
 
-            var p1 = new Vector(-w, -h);
-            var p2 = new Vector(w, -h);
-            var p3 = new Vector(w, h);
-            var p4 = new Vector(-w, h);
+            var p1 = new Vector2(-w, -h);
+            var p2 = new Vector2(w, -h);
+            var p3 = new Vector2(w, h);
+            var p4 = new Vector2(-w, h);
 
             var m1 = Matrix.CreateRotationMatrix(angle * MathX.DEG2RAD);
             var m2 = Matrix.CreateTranslationMatrix(x, y);
             var mt = m1 * m2;
 
-            var points = new Vector[] {
+            var points = new Vector2[] {
                 Matrix.Transform(ref p1, ref mt),
                 Matrix.Transform(ref p2, ref mt),
                 Matrix.Transform(ref p3, ref mt),
@@ -50,35 +48,35 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 获取矩形（pos, width, height, angle）的顶点
-        public static Vector[] GetRectanglePoints(ref Vector pos, float width, float height, float angle)
+        public static Vector2[] GetRectanglePoints(ref Vector2 pos, float width, float height, float angle)
         {
             return GetRectanglePoints(pos.x, pos.y, width, height, angle);
         }
 
         // 获取胶囊（x, y, length, angle）的端点
-        private static Vector[] GetCapsulePoints(float x, float y, float length, float angle)
+        private static Vector2[] GetCapsulePoints(float x, float y, float length, float angle)
         {
             var m1 = Matrix.CreateRotationMatrix(angle * MathX.DEG2RAD);
             var m2 = Matrix.CreateTranslationMatrix(x, y);
             var mt = m1 * m2;
 
-            var p1 = new Vector(length * 0.5f, 0);
+            var p1 = new Vector2(length * 0.5f, 0);
             p1 = Matrix.Transform(ref p1, ref mt);
 
-            var p2 = new Vector(length * -0.5f, 0);
+            var p2 = new Vector2(length * -0.5f, 0);
             p2 = Matrix.Transform(ref p2, ref mt);
 
-            return new Vector[] { p1, p2, };
+            return new Vector2[] { p1, p2, };
         }
 
         // 获取胶囊（pos, length, angle）的端点
-        public static Vector[] GetCapsulePoints(ref Vector pos, float length, float angle)
+        public static Vector2[] GetCapsulePoints(ref Vector2 pos, float length, float angle)
         {
             return GetCapsulePoints(pos.x, pos.y, length, angle);
         }
 
         // 圆（circle）是否包含点（pt）
-        public static bool IsCircleContains(ref Circle circle, ref Vector pt)
+        public static bool IsCircleContains(ref Circle circle, ref Vector2 pt)
         {
             var d = circle.center - pt;
             var r = circle.radius;
@@ -87,7 +85,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 矩形（rectangle)是否包含点（pt)
-        public static bool IsRectangleContains(ref Rectangle rectangle, ref Vector pt)
+        public static bool IsRectangleContains(ref Rectangle rectangle, ref Vector2 pt)
         {
             var p = (rectangle.vertics[0] + rectangle.vertics[2]) * 0.5f;
             var m1 = Matrix.CreateTranslationMatrix(-p.x, -p.y);
@@ -106,7 +104,7 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 胶囊（pa，pb，radius）是否包含点（pt）
-        public static bool IsCapsuleContains(ref Capsule capsule, ref Vector pt)
+        public static bool IsCapsuleContains(ref Capsule capsule, ref Vector2 pt)
         {
             var dist2 = GetDistance2(ref capsule.points[0], ref capsule.points[1], ref pt);
             var radius2 = capsule.radius * capsule.radius;
@@ -115,19 +113,19 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 三角形（polygon）是否包含点（pt）
-        public static bool IsPolygonContains(ref Polygon polygon, ref Vector pt)
+        public static bool IsPolygonContains(ref Polygon polygon, ref Vector2 pt)
         {
             int n = polygon.vertics.Length;
 
             var u = polygon.vertics[n-1] - pt;
             var v = polygon.vertics[0] - pt;
-            var z = Vector.Cross(ref u, ref v);
+            var z = Vector2.Cross(ref u, ref v);
 
             for (int i=0; i<n-1; i++)
             {
                 u = polygon.vertics[i] - pt;
                 v = polygon.vertics[i+1] - pt;
-                var w = Vector.Cross(ref u, ref v);
+                var w = Vector2.Cross(ref u, ref v);
 
                 if (z * w < 0) return false;
             }
@@ -155,7 +153,7 @@ namespace SimpleX.Collision2D.Engine
             v.x = MathX.Abs(v.x);
             v.y = MathX.Abs(v.y);
 
-            var h = new Vector(rectangle.width * 0.5f, rectangle.height * 0.5f);
+            var h = new Vector2(rectangle.width * 0.5f, rectangle.height * 0.5f);
             var u = v - h;
 
             u.x = MathX.Max(0, u.x);
@@ -201,13 +199,13 @@ namespace SimpleX.Collision2D.Engine
         }
 
         // 线段（p1, p2）是否和线段（q1, q2）相交
-        public static bool IsSegmentIntersected(ref Vector p1, ref Vector p2, ref Vector q1, ref Vector q2)
+        public static bool IsSegmentIntersected(ref Vector2 p1, ref Vector2 p2, ref Vector2 q1, ref Vector2 q2)
         {
-            Vector a1 = p1 - q2, b1 = p2 - p2, c1 = q1 - q2;
-            if (Vector.Cross(ref a1, ref c1) * Vector.Cross(ref b1, ref c1) > 0) return false;
+            Vector2 a1 = p1 - q2, b1 = p2 - p2, c1 = q1 - q2;
+            if (Vector2.Cross(ref a1, ref c1) * Vector2.Cross(ref b1, ref c1) > 0) return false;
 
-            Vector a2 = q2 - p2, b2 = q1 - p2, c2 = p1 - p2;
-            if (Vector.Cross(ref a2, ref c2) * Vector.Cross(ref b2, ref c2) > 0) return false;
+            Vector2 a2 = q2 - p2, b2 = q1 - p2, c2 = p1 - p2;
+            if (Vector2.Cross(ref a2, ref c2) * Vector2.Cross(ref b2, ref c2) > 0) return false;
 
             return true;
         }

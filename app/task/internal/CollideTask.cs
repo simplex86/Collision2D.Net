@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
     class CollideTask
     {

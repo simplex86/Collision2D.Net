@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
     class RenderTask
     {

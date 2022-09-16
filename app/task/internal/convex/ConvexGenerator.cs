@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     // 生成随机的凸多边形
     // https://kingins.cn/2022/02/18/%E9%9A%8F%E6%9C%BA%E5%87%B8%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95/
@@ -31,7 +31,7 @@ namespace SimpleX.Collision2D.App
         }
 
         // 生成随机的凸多边形
-        public Vector[] Gen(ref Vector position, int width, int height, int count)
+        public Vector2[] Gen(ref Vector2 position, int width, int height, int count)
         {
             List<int> xlist = new List<int>(count);
             List<int> ylist = new List<int>(count);
@@ -92,10 +92,10 @@ namespace SimpleX.Collision2D.App
 
             Shuffle(yv);
 
-            var vectors = new List<Vector>(count);
+            var vectors = new List<Vector2>(count);
             for (int i = 0; i < count; i++)
             {
-                vectors.Add(new Vector(xv[i], yv[i]));
+                vectors.Add(new Vector2(xv[i], yv[i]));
             }
             vectors.Sort((a, b) =>
             {
@@ -107,11 +107,11 @@ namespace SimpleX.Collision2D.App
                 return (u < v) ? -1 : 1;
             });
 
-            var p = new Vector(0, 0);
+            var p = new Vector2(0, 0);
             var minPolygonX = 0.0f;
             var minPolygonY = 0.0f;
-            var points = new List<Vector>(count);
-            var result = new List<Vector>(count);
+            var points = new List<Vector2>(count);
+            var result = new List<Vector2>(count);
 
             for (int i = 0; i < count; i++)
             {
@@ -121,7 +121,7 @@ namespace SimpleX.Collision2D.App
                 minPolygonY = MathX.Min(minPolygonY, p.y);
             }
 
-            var translation = new Vector(minX - minPolygonX, minY - minPolygonY);
+            var translation = new Vector2(minX - minPolygonX, minY - minPolygonY);
             for (int i = 0; i < count; i++)
             {
                 points[i] += translation;

@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     class PolygonCollision : BaseCollision
     {
         internal Polygon geometry;
 
         //
-        internal override Vector position
+        internal override Vector2 position
         {
             get
             {
-                var p = Vector.zero;
+                var p = Vector2.zero;
                 for (int i=0; i<points.Length; i++)
                 {
                     p += points[i];
@@ -20,12 +20,12 @@ namespace SimpleX.Collision2D.Engine
             }
         }
         //
-        internal override Vector[] points => geometry.vertics;
+        internal override Vector2[] points => geometry.vertics;
 
         //
         public float angle { get; private set; } = 0;
 
-        public PolygonCollision(Vector[] vertics)
+        public PolygonCollision(Vector2[] vertics)
             : base(CollisionType.Polygon)
         {
             geometry = new Polygon()
@@ -58,7 +58,7 @@ namespace SimpleX.Collision2D.Engine
             }
         }
 
-        public override bool Contains(ref Vector pt)
+        public override bool Contains(ref Vector2 pt)
         {
             if (IsAABBContains(ref pt))
             {

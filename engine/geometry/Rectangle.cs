@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 {
     struct Rectangle
     {
@@ -8,6 +6,6 @@ namespace SimpleX.Collision2D.Engine
         public float height;
         public float angle;
 
-        public Vector[] vertics;
+        public Vector2[] vertics;
     }
 }

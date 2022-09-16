@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.Engine
+namespace SimpleX.Collision2D
 {
     internal static class CollisionHelper
     {
@@ -56,7 +56,7 @@ namespace SimpleX.Collision2D.Engine
                 {
                     length = a.length,
                     radius = a.radius + b.radius,
-                    points = new Vector[] { a.points[0], a.points[1] },
+                    points = new Vector2[] { a.points[0], a.points[1] },
                 };
                 var position = b.position;
                 return GeometryHelper.IsCapsuleContains(ref capsule, ref position);

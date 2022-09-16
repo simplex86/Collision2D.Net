@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 {
+    using Math = System.Math;
+
     public static class MathX
     {
-        // 圆周率
-        public const float PI = 3.1415927f;
+        // Π
+        public const float PI = (float)Math.PI;
         // 角度转弧度的参数
         public const float DEG2RAD = PI / 180.0f;
 

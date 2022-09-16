@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 {
     // 凸多边形
     struct Polygon
     {
-        public Vector[] vertics;
+        public Vector2[] vertics;
     }
 }

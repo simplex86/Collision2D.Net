@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
     class Entity
     {

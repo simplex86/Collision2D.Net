@@ -1,4 +1,4 @@
-﻿namespace SimpleX.Collision2D.App
+﻿namespace SimpleX
 {
     partial class MainForm
     {

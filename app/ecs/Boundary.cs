@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace SimpleX.Collision2D.App
+namespace SimpleX
 {
-    using SimpleX.Collision2D.Engine;
+    using SimpleX.Collision2D;
 
     struct Boundary
     {
         public float x;
         public float y;
         // 法线向量
-        public Vector normal;
+        public Vector2 normal;
     }
 }

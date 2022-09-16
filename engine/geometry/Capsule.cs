@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimpleX.Collision2D.Engine
+﻿namespace SimpleX.Collision2D
 {
     struct Capsule
     {
@@ -8,6 +6,6 @@ namespace SimpleX.Collision2D.Engine
         public float radius;
         public float angle;
 
-        public Vector[] points;
+        public Vector2[] points;
     }
 }
