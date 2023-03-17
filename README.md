@@ -20,7 +20,7 @@
 ## 示例
 在我破旧的电脑上（双核CPU，4G内存）检测100个图形大概耗时**1ms**。如果去掉渲染的话，这个数值可能更低一些。运行结果如下图
 
-![collision](https://github.com/simplex86/Collision2D.Net/blob/main/doc/collision.gif)
+![collision](./doc/collision.gif)
 
 ## 说明
 1. 这个项目仅仅是因为突然对凸多边形的碰撞检测算法感兴趣而写的，所以目前只打算实现离散碰撞。有想过实现连续碰撞，但暂时没有知识储备，短时间内这部分内容应该不会有推进。
