@@ -76,11 +76,11 @@
             return matrix;
         }
 
-        public static Vector2 Transform(ref Vector2 position, ref Matrix matrix)
+        public static Vector2 Transform(ref Vector2 vector, ref Matrix matrix)
         {
-            var x = ((position.x * matrix.m11) + (position.y * matrix.m21)) + (position.w * matrix.m31);
-            var y = ((position.x * matrix.m12) + (position.y * matrix.m22)) + (position.w * matrix.m32);
-            var z = ((position.x * matrix.m13) + (position.y * matrix.m23)) + (position.w * matrix.m33);
+            var x = ((vector.x * matrix.m11) + (vector.y * matrix.m21)) + (vector.w * matrix.m31);
+            var y = ((vector.x * matrix.m12) + (vector.y * matrix.m22)) + (vector.w * matrix.m32);
+            //var z = ((vector.x * matrix.m13) + (vector.y * matrix.m23)) + (vector.w * matrix.m33);
 
             return new Vector2(x, y);
 

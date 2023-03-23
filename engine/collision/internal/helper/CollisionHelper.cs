@@ -7,8 +7,11 @@ namespace SimpleX.Collision2D
         // 两个圆是否碰撞
         public static bool Overlaps(CircleCollision a, CircleCollision b)
         {
-            if (!IsAABBOverlaps(a, b)) return false;
-            return GeometryHelper.IsCircleOverlapsWithCircle(ref a.geometry, ref b.geometry);
+            if (IsAABBOverlaps(a, b))
+            {
+                return GeometryHelper.IsCircleOverlapsWithCircle(ref a.geometry, ref b.geometry);
+            }
+            return false;
         }
 
         // 两个矩形是否碰撞
@@ -36,13 +39,9 @@ namespace SimpleX.Collision2D
         {
             if (IsAABBOverlaps(a, b))
             {
-                var pas = a.points;
-                var pbs = b.points;
-
-                var dr = a.radius + b.radius;
-                if (GeometryHelper.GetDistance2(ref pas[0], ref pas[1], ref pbs[0]) <= dr * dr) return true;
-                if (GeometryHelper.GetDistance2(ref pas[0], ref pas[1], ref pbs[1]) <= dr * dr) return true;
-                if (GeometryHelper.IsSegmentIntersected(ref pas[0], ref pas[1], ref pbs[0], ref pbs[1])) return true;
+                var p1 = a.position;
+                var p2 = b.position;
+                return GJK.Overlaps(ref p1, a.length, a.radius, a.angle, ref p2, b.length, b.radius, b.angle);
             }
             return false;
         }
@@ -69,34 +68,15 @@ namespace SimpleX.Collision2D
         {
             if (IsAABBOverlaps(a, b))
             {
-                var circle = new Circle()
-                {
-                    center = a.points[0],
-                    radius = a.radius,
-                };
-                if (GeometryHelper.IsCircleOverlapsWithRectangle(ref circle, ref b.geometry)) return true;
+                var p1 = b.position;
+                var p2 = a.position;
 
-                circle = new Circle()
-                {
-                    center = a.points[1],
-                    radius = a.radius,
-                };
-                if (GeometryHelper.IsCircleOverlapsWithRectangle(ref circle, ref b.geometry)) return true;
-
-                var position = (a.points[0] + a.points[1]) * 0.5f;
-                var rectangle = new Rectangle()
-                {
-                    width = a.length,
-                    height = a.radius * 2,
-                    angle = a.angle,
-                    vertics = GeometryHelper.GetRectanglePoints(ref position, a.length, a.radius * 2, a.angle),
-                };
-                if (GeometryHelper.IsRectangleOverlapsWithRectangle(ref rectangle, ref b.geometry)) return true;
+                return GJK.Overlaps(ref p1, b.points, ref p2, a.length, a.radius, a.angle);
             }
             return false;
         }
 
-        // 两个三角形是否碰撞
+        // 两个多边形是否碰撞
         public static bool Overlaps(PolygonCollision a, PolygonCollision b)
         {
             if (IsAABBOverlaps(a, b))
@@ -108,21 +88,20 @@ namespace SimpleX.Collision2D
             return false;
         }
 
-        // 三角形和圆形是否碰撞
+        // 多边形和圆形是否碰撞
         public static bool Overlaps(PolygonCollision a, CircleCollision b)
         {
             if (IsAABBOverlaps(a, b))
             {
-                //var p1 = a.position;
-                //var p2 = b.position;
-                //return GJK.Overlaps(ref p1, a.points, ref p2, b.radius);
-
-                return GeometryHelper.IsPolygonOverlapsWithCircle(ref a.geometry, ref b.geometry);
+                //return GeometryHelper.IsPolygonOverlapsWithCircle(ref a.geometry, ref b.geometry);
+                var p1 = a.position;
+                var p2 = b.position;
+                return GJK.Overlaps(ref p1, a.points, ref p2, b.radius);
             }
             return false;
         }
 
-        // 三角形和矩形是否碰撞
+        // 多边形和矩形是否碰撞
         public static bool Overlaps(PolygonCollision a, RectangleCollision b)
         {
             if (IsAABBOverlaps(a, b))
@@ -134,33 +113,15 @@ namespace SimpleX.Collision2D
             return false;
         }
 
-        // 三角形和胶囊是否碰撞
+        // 多边形和胶囊是否碰撞
         public static bool Overlaps(PolygonCollision a, CapsuleCollision b)
         {
             if (IsAABBOverlaps(a, b))
             {
-                var polygon = a.geometry;
+                var p1 = a.position;
+                var p2 = b.position;
 
-                var c1 = new Circle()
-                {
-                    center = b.points[0],
-                    radius = b.radius,
-                };
-                if (GeometryHelper.IsPolygonOverlapsWithCircle(ref polygon, ref c1)) return true;
-
-                var c2 = new Circle()
-                {
-                    center = b.points[1],
-                    radius = b.radius,
-                };
-                if (GeometryHelper.IsPolygonOverlapsWithCircle(ref polygon, ref c2)) return true;
-                
-                var p1 = b.position;
-                var v1 = GeometryHelper.GetRectanglePoints(ref p1, b.length, b.radius * 2, b.angle);
-                var v2 = polygon.vertics;
-                var p2 = (v2[0] + v2[1] + v2[2]) / 3.0f;
-
-                return GJK.Overlaps(ref p1, v1, ref p2, v2);
+                return GJK.Overlaps(ref p1, a.points, ref p2, b.length, b.radius, b.angle);
             }
             return false;
         }

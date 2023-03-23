@@ -103,7 +103,7 @@
             return true;
         }
 
-        // 胶囊（pa，pb，radius）是否包含点（pt）
+        // 胶囊（capsule）是否包含点（pt）
         public static bool IsCapsuleContains(ref Capsule capsule, ref Vector2 pt)
         {
             var dist2 = GetDistance2(ref capsule.points[0], ref capsule.points[1], ref pt);
@@ -112,7 +112,7 @@
             return dist2 <= radius2;
         }
 
-        // 三角形（polygon）是否包含点（pt）
+        // 多边形（polygon）是否包含点（pt）
         public static bool IsPolygonContains(ref Polygon polygon, ref Vector2 pt)
         {
             int n = polygon.vertics.Length;
@@ -142,7 +142,7 @@
             return dist2 <= radius2;
         }
 
-        // 圆（cp，radius）是否和矩形（rp，width, height, angle)重叠
+        // 圆（circle）是否和矩形（rectangle)重叠
         public static bool IsCircleOverlapsWithRectangle(ref Circle circle, ref Rectangle rectangle)
         {
             var p = (rectangle.vertics[0] + rectangle.vertics[2]) * 0.5f;
@@ -162,7 +162,7 @@
             return u.magnitude2 <= circle.radius * circle.radius;
         }
 
-        // 矩形（p1, w1, h1, a1)和矩形（p2, w2, h2, a2）是否重叠
+        // 两个矩形是否重叠
         public static bool IsRectangleOverlapsWithRectangle(ref Rectangle a, ref Rectangle b)
         {
             if (!IsRectangleProjectionOverlaps(ref a, ref b)) return false;
@@ -210,20 +210,18 @@
             return true;
         }
 
-        // 三角形（polygon）和圆形（circle）是否重叠
+        // 多边形（polygon）和圆形（circle）是否重叠
         public static bool IsPolygonOverlapsWithCircle(ref Polygon polygon, ref Circle circle)
         {
             var v = polygon.vertics;
             var p = circle.center;
             var r = circle.radius * circle.radius;
 
-            int i = 0;
             int n = v.Length;
-            for (; i < n - 1; i++)
+            for (int i = 0; i < n; i++)
             {
-                if (GeometryHelper.GetDistance2(ref v[i], ref v[i + 1], ref p) <= r) return true;
+                if (GeometryHelper.GetDistance2(ref v[i], ref v[(i + 1) % n], ref p) <= r) return true;
             }
-            if (GeometryHelper.GetDistance2(ref v[n - 1], ref v[0], ref p) <= r) return true;
 
             return GeometryHelper.IsPolygonContains(ref polygon, ref circle.center);
         }
