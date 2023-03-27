@@ -27,7 +27,7 @@ namespace SimpleX
             }
             if (showDirection)
             {
-                var position = collision.position;
+                var position = collision.transform.position;
                 DrawDirection(grap, ref position, ref diretion);
             }
         }

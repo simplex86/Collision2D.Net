@@ -21,7 +21,7 @@ namespace SimpleX
         private readonly int height;
 
         // 实体数量
-        private const int ENTITY_COUNT = 100;
+        private const int ENTITY_COUNT = 50;
 
         public Task(Control canvas, Control detail)
         {
@@ -118,6 +118,11 @@ namespace SimpleX
                     entity.colorComponent.color = Color.Orange;
                     entity.renderComponent.renderer = new PolygonRenderer();
                     break;
+                case CollisionType.Ellipse:
+                    entity.collisionComponent.collision = CreateEllipseCollision();
+                    entity.colorComponent.color = Color.Cyan;
+                    entity.renderComponent.renderer = new EllipseRenderer();
+                    break;
                 default:
                     break;
             }
@@ -168,7 +173,7 @@ namespace SimpleX
         // 是否可旋转
         public bool IsRotatable()
         {
-            return random.Next(0, 10) > 3;
+            return true;
         }
 
         // 创建圆形碰撞体
@@ -262,10 +267,11 @@ namespace SimpleX
 
             while (true)
             {
+                var position = GetRandomPosition();
                 var vertics = GetRandomConvexPoints();
                 if (CalculatePolygonSize(vertics) < 300) continue;
 
-                collision = CollisionFactory.CreatePolygonCollision(vertics);
+                collision = CollisionFactory.CreatePolygonCollision(ref position, vertics);
                 world.Each((entity) =>
                 {
                     var overlap = entity.collisionComponent.collision.Overlaps(collision);
@@ -278,6 +284,35 @@ namespace SimpleX
 
                 if (collision != null) break;
             }
+            return collision;
+        }
+
+        // 创建椭圆碰撞体
+        private BaseCollision CreateEllipseCollision()
+        {
+            BaseCollision collision = null;
+
+            while (true)
+            {
+                var position = GetRandomPosition();
+                var width = random.Next(20, 50);
+                var height = random.Next(20, 50);
+                var angle = random.Next(0, 360);
+
+                collision = CollisionFactory.CreateEllipseCollision(ref position, width, height, angle);
+                world.Each((entity) =>
+                {
+                    var overlap = entity.collisionComponent.collision.Overlaps(collision);
+                    if (overlap)
+                    {
+                        collision = null;
+                    }
+                    return !overlap;
+                });
+
+                if (collision != null) break;
+            }
+
             return collision;
         }
 
@@ -313,7 +348,7 @@ namespace SimpleX
         private Vector2[] GetRandomConvexPoints()
         {
             var count = random.Next(3, 10);
-            var position = GetRandomPosition();
+            var position = Vector2.zero;
 
             var convex = new ConvexGenerator(random);
             return convex.Gen(ref position, 45, 45, count);

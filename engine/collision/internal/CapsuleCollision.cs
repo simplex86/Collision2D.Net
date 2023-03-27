@@ -6,15 +6,6 @@ namespace SimpleX.Collision2D
     {
         internal Capsule geometry;
 
-        internal override Vector2 position => (geometry.points[0] + geometry.points[1]) * 0.5f;
-        internal override Vector2[] points => geometry.points;
-
-        private Rectangle rectangle;
-
-        public float length => geometry.length;
-        public float radius => geometry.radius;
-        public float angle => geometry.angle;
-
         public CapsuleCollision(Vector2 position, float length, float radius, float angle)
             : base(CollisionType.Capsule)
         {
@@ -23,51 +14,24 @@ namespace SimpleX.Collision2D
                 length = length,
                 radius = radius,
                 angle = angle,
-                points = GeometryHelper.GetCapsulePoints(ref position, length, angle),
             };
-            rectangle = new Rectangle()
-            {
-                width = length + radius * 2,
-                height = radius * 2,
-                angle = angle,
-                vertics = GeometryHelper.GetRectanglePoints(ref position, length + radius * 2, radius * 2, angle),
-            };
-        }
-
-        public override void Move(ref Vector2 delta)
-        {   
-            for (int i=0; i< rectangle.vertics.Length; i++)
-            {
-                rectangle.vertics[i] += delta;
-            }
-
-            base.Move(ref delta);
-        }
-
-        // 旋转
-        public override void Rotate(float delta)
-        {
-            geometry.angle += delta;
-            rectangle.angle += delta;
-
-            dirty |= DirtyFlag.Rotation;
+            transform.position = position;
         }
 
         public override void RefreshGeometry()
         {
             if (dirty != DirtyFlag.None)
             {
-                if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
-                {
-                    var position = this.position;
-                    geometry.points = GeometryHelper.GetCapsulePoints(ref position, length, angle);
-                    rectangle.vertics = GeometryHelper.GetRectanglePoints(ref position, rectangle.width, rectangle.height, angle);
-                }
+                //if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
+                //{
+                    var position = transform.position;
+                    var vertics = GeometryHelper.GetRectanglePoints(ref position, geometry.length + geometry.radius * 2, geometry.radius * 2, transform.rotation);
+                //}
 
-                var p1 = rectangle.vertics[0];
-                var p2 = rectangle.vertics[1];
-                var p3 = rectangle.vertics[2];
-                var p4 = rectangle.vertics[3];
+                var p1 = vertics[0];
+                var p2 = vertics[1];
+                var p3 = vertics[2];
+                var p4 = vertics[3];
 
                 boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
                 boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
@@ -82,7 +46,7 @@ namespace SimpleX.Collision2D
         {
             if (IsAABBContains(ref pt))
             {
-                return GeometryHelper.IsCapsuleContains(ref geometry, ref pt);
+                return GeometryHelper.IsCapsuleContains(ref geometry, ref transform, ref pt);
             }
             return false;
         }
@@ -104,6 +68,21 @@ namespace SimpleX.Collision2D
             }
 
             return false;
+        }
+
+        public override Vector2 GetFarthestProjectionPoint(ref Vector2 dir)
+        {
+            var m1 = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
+            var d1 = Matrix.Transform(ref dir, ref m1);
+
+            var p1 = geometry.radius * d1.normalized;
+            var dx = d1.x >= 0 ? geometry.length * 0.5f : -geometry.length * 0.5f;
+            p1.x += dx;
+
+            var m2 = Matrix.CreateRotationMatrix(transform.rotation * MathX.DEG2RAD);
+            var p2 = Matrix.Transform(ref p1, ref m2);
+
+            return p2 + transform.position;
         }
     }
 }

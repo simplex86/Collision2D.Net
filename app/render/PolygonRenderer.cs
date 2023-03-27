@@ -14,7 +14,7 @@ namespace SimpleX
 
         private void DrawCollision(Graphics grap, PolygonCollision collision)
         {
-            var vertics = collision.points;
+            var vertics = collision.vertics;
             var n = vertics.Length;
 
             var points = new PointF[n + 1];

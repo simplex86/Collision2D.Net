@@ -9,17 +9,16 @@ namespace SimpleX
         public override void DrawCollision(Graphics grap, BaseCollision collision, ref Color color)
         {
             brush.Color = color;
-            DrawCollision(grap, collision as CircleCollision);
+
+            var geometry = (collision as CircleCollision).geometry;
+            var transform = collision.transform;
+            DrawCollision(grap, ref geometry, ref transform);
         }
 
-        private void DrawCollision(Graphics grap, CircleCollision collision)
+        private void DrawCollision(Graphics grap, ref Circle circle, ref Transform transform)
         {
-            var x = collision.position.x - collision.radius;
-            var y = collision.position.y - collision.radius;
-            var w = collision.radius * 2;
-            var h = collision.radius * 2;
-
-            grap.FillEllipse(brush, x, y, w, h);
+            var position = transform.position;
+            grap.FillEllipse(brush, position.x - circle.radius, position.y - circle.radius, circle.radius * 2, circle.radius * 2);
         }
     }
 }

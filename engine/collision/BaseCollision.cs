@@ -5,14 +5,16 @@ namespace SimpleX.Collision2D
     public abstract class BaseCollision
     {
         // 类型
-        public CollisionType type { get; private set; }
+        public CollisionType type { get; }
+        //
+        public Transform transform = new Transform()
+        {
+            position = Vector2.zero,
+            rotation = 0.0f,
+            scale = 1.0f,
+        };
         // 包围盒
-        public AABB boundingBox;
-
-        // 位置
-        internal abstract Vector2 position { get; }
-        // 顶点
-        internal abstract Vector2[] points { get; }
+        public AABB boundingBox = new AABB();
 
         protected static class DirtyFlag
         {
@@ -31,23 +33,24 @@ namespace SimpleX.Collision2D
         }
 
         // 移动
-        public virtual void Move(ref Vector2 delta)
+        public void Move(ref Vector2 delta)
         {
-            for (int i = 0; i < points.Length; i++)
-            {
-                points[i] += delta;
-            }
+            transform.position += delta;
             dirty |= DirtyFlag.Position;
         }
 
         public void MoveTo(ref Vector2 position)
         {
-            var delta = position - this.position;
-            Move(ref delta);
+            transform.position = position;
+            dirty |= DirtyFlag.Position;
         }
 
         // 旋转
-        public abstract void Rotate(float delta);
+        public void Rotate(float delta)
+        {
+            transform.rotation += delta;
+            dirty |= DirtyFlag.Rotation;
+        }
 
         // 刷新几何信息
         public abstract void RefreshGeometry();
@@ -57,6 +60,9 @@ namespace SimpleX.Collision2D
 
         // 是否与collision产生碰撞
         public abstract bool Overlaps(BaseCollision collision);
+
+        //
+        public abstract Vector2 GetFarthestProjectionPoint(ref Vector2 dir);
 
         // AABB是否包含点pt
         protected bool IsAABBContains(ref Vector2 pt)

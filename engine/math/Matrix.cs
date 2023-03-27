@@ -57,6 +57,11 @@
                               m31, m32, m33);
         }
 
+        public static Matrix CreateTranslationMatrix(ref Vector2 p)
+        {
+            return CreateTranslationMatrix(p.x, p.y);
+        }
+
         public static Matrix CreateTranslationMatrix(float x, float y)
         {
             var matrix = new Matrix(1, 0, 0,

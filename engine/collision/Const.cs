@@ -7,9 +7,11 @@
         Circle,
         // 矩形
         Rectangle,
-        // 胶囊
-        Capsule,
         // 凸多边形
         Polygon,
+        // 胶囊
+        Capsule,
+        // 椭圆
+        Ellipse,
     }
 }

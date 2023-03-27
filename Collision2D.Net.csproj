@@ -71,6 +71,7 @@
     <Compile Include="app\render\BaseRenderer.cs" />
     <Compile Include="app\render\CapsuleRenderer.cs" />
     <Compile Include="app\render\CircleRenderer.cs" />
+    <Compile Include="app\render\EllipseRenderer.cs" />
     <Compile Include="app\render\RectangleRenderer.cs" />
     <Compile Include="app\render\PolygonRenderer.cs" />
     <Compile Include="app\task\internal\Time.cs" />
@@ -83,12 +84,14 @@
     <Compile Include="engine\collision\internal\gjk\GJK.cs" />
     <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
     <Compile Include="engine\collision\internal\PolygonCollision.cs" />
+    <Compile Include="engine\collision\internal\EllipseCollision.cs" />
+    <Compile Include="engine\geometry\Ellipse.cs" />
     <Compile Include="engine\geometry\internal\GeometryHelper.cs" />
     <Compile Include="engine\geometry\Capsule.cs" />
     <Compile Include="engine\geometry\Circle.cs" />
     <Compile Include="engine\geometry\Rectangle.cs" />
     <Compile Include="engine\geometry\Polygon.cs" />
-    <Compile Include="engine\math\AABB.cs" />
+    <Compile Include="engine\AABB.cs" />
     <Compile Include="engine\collision\BaseCollision.cs" />
     <Compile Include="engine\collision\internal\CapsuleCollision.cs" />
     <Compile Include="engine\collision\internal\CircleCollision.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="engine\math\MathX.cs" />
     <Compile Include="engine\math\Matrix.cs" />
     <Compile Include="engine\math\Vector.cs" />
+    <Compile Include="engine\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="app\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

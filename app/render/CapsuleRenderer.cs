@@ -14,13 +14,13 @@ namespace SimpleX
 
         private void DrawCollision(Graphics grap, CapsuleCollision collision)
         {
-            var position = collision.position;
-            var vertics = GeometryHelper.GetRectanglePoints(ref position, collision.length, collision.radius * 2, collision.angle);
+            var position = collision.transform.position;
+            var vertics = GeometryHelper.GetRectanglePoints(ref position, collision.geometry.length, collision.geometry.radius * 2, collision.transform.rotation);
             DrawRectangle(grap, vertics);
 
-            var points = collision.points;
-            DrawSemicircle(grap, points[0].x, points[0].y, collision.radius, brush);
-            DrawSemicircle(grap, points[1].x, points[1].y, collision.radius, brush);
+            var points = GeometryHelper.GetCapsulePoints(ref position, collision.geometry.length, collision.transform.rotation);
+            DrawSemicircle(grap, points[0].x, points[0].y, collision.geometry.radius, brush);
+            DrawSemicircle(grap, points[1].x, points[1].y, collision.geometry.radius, brush);
         }
 
         private void DrawSemicircle(Graphics grap, float x, float y, float radius, Brush brush)

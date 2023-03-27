@@ -6,6 +6,6 @@
         public float height;
         public float angle;
 
-        public Vector2[] vertics;
+        //public Vector2[] vertics;
     }
 }

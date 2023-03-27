@@ -8,6 +8,8 @@
         public const float PI = (float)Math.PI;
         // 角度转弧度的参数
         public const float DEG2RAD = PI / 180.0f;
+        // 
+        public const float EPSILON = 0.00001f;
 
         // 绝对值
         public static int Abs(int v)
@@ -144,7 +146,7 @@
         // 两个浮点数是否相等
         public static bool Equals(float a, float b)
         {
-            return Abs(a - b) <= float.Epsilon;
+            return Abs(a - b) < EPSILON;
         }
 
         // 

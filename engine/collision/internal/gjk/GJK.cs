@@ -4,6 +4,74 @@ namespace SimpleX.Collision2D
 {
     static class GJK
     {
+        // 检测圆形（position1, radius1）与圆形（position2, radius2）是否重叠
+        public static bool Overlaps(ref Vector2 position1, float radius1,
+                                    ref Vector2 position2, float radius2)
+        {
+            var simplex = new Simplex()
+            {
+                vertics = new List<Vector2>(3)
+            };
+            var dir = position1 - position2;
+
+            var pt = Support(ref position1, radius1, ref position2, radius2, ref dir);
+            simplex.Add(ref pt);
+
+            dir.Negative();
+
+            while (true)
+            {
+                pt = Support(ref position1, radius1, ref position2, radius2, ref dir);
+                simplex.Add(ref pt);
+
+                if (simplex.a.Dot(ref dir) <= 0.0f)
+                {
+                    return false;
+                }
+
+                if (simplex.IsContainsOrigin(ref dir))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // 检测凸多边形（position1, vertics）与圆（position2，radius）是否重叠
+        public static bool Overlaps(ref Vector2 position1, Vector2[] vertics,
+                                    ref Vector2 position2, float radius)
+        {
+            var simplex = new Simplex()
+            {
+                vertics = new List<Vector2>(3)
+            };
+            var dir = position1 - position2;
+
+            var pt = Support(vertics, ref position2, radius, ref dir);
+            simplex.Add(ref pt);
+
+            dir.Negative();
+
+            while (true)
+            {
+                pt = Support(vertics, ref position2, radius, ref dir);
+                simplex.Add(ref pt);
+
+                if (simplex.a.Dot(ref dir) <= 0.0f)
+                {
+                    return false;
+                }
+
+                if (simplex.IsContainsOrigin(ref dir))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         // 检测凸多边形（position1, vertics1）与凸多边形（position2, vertics2）是否重叠
         public static bool Overlaps(ref Vector2 position1, Vector2[] vertics1, 
                                     ref Vector2 position2, Vector2[] vertics2)
@@ -29,41 +97,7 @@ namespace SimpleX.Collision2D
                     return false;
                 }
 
-                if (IsContainsOrigin(ref simplex, ref dir))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        // 检测凸多边形（position1, vertics）与圆（position2，radius）是否重叠
-        public static bool Overlaps(ref Vector2 position1, Vector2[] vertics, 
-                                    ref Vector2 position2, float radius)
-        {
-            var simplex = new Simplex()
-            {
-                vertics = new List<Vector2>(3)
-            };
-            var dir = position1 - position2;
-
-            var pt = Support(vertics, ref position2, radius, ref dir);
-            simplex.Add(ref pt);
-
-            dir.Negative();
-
-            while (true)
-            {
-                pt = Support(vertics, ref position2, radius, ref dir);
-                simplex.Add(ref pt);
-
-                if (simplex.a.Dot(ref dir) <= 0.0f)
-                {
-                    return false;
-                }
-
-                if (IsContainsOrigin(ref simplex, ref dir))
+                if (simplex.IsContainsOrigin(ref dir))
                 {
                     return true;
                 }
@@ -97,7 +131,41 @@ namespace SimpleX.Collision2D
                     return false;
                 }
 
-                if (IsContainsOrigin(ref simplex, ref dir))
+                if (simplex.IsContainsOrigin(ref dir))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // 检测胶囊（position1，length，radius1，angle）与圆形（position2，radius2）是否重叠
+        public static bool Overlaps(ref Vector2 position1, float length, float radius1, float angle,
+                                    ref Vector2 position2, float radius2)
+        {
+            var simplex = new Simplex()
+            {
+                vertics = new List<Vector2>(3)
+            };
+            var dir = position1 - position2;
+
+            var pt = Support(ref position1, length, radius1, angle, ref position2, radius2, ref dir);
+            simplex.Add(ref pt);
+
+            dir.Negative();
+
+            while (true)
+            {
+                pt = Support(ref position1, length, radius1, angle, ref position2, radius2, ref dir);
+                simplex.Add(ref pt);
+
+                if (simplex.a.Dot(ref dir) <= 0.0f)
+                {
+                    return false;
+                }
+
+                if (simplex.IsContainsOrigin(ref dir))
                 {
                     return true;
                 }
@@ -131,13 +199,25 @@ namespace SimpleX.Collision2D
                     return false;
                 }
 
-                if (IsContainsOrigin(ref simplex, ref dir))
+                if (simplex.IsContainsOrigin(ref dir))
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        // 两个圆形的闵可夫斯基差
+        private static Vector2 Support(ref Vector2 position1, float radius1,
+                                       ref Vector2 position2, float radius2, 
+                                       ref Vector2 dir)
+        {
+            var p1 = GetFarthestProjectionPoint(ref position1, radius1, ref dir);
+            var neg = -dir;
+            var p2 = GetFarthestProjectionPoint(ref position2, radius2, ref neg);
+
+            return p1 - p2;
         }
 
         // 两个多边形的闵可夫斯基差
@@ -170,6 +250,18 @@ namespace SimpleX.Collision2D
             var p1 = GetFarthestProjectionPoint(vertics, ref dir);
             var neg = -dir;
             var p2 = GetFarthestProjectionPoint(ref position, length, radius, angle, ref neg);
+
+            return p1 - p2;
+        }
+
+        // 胶囊和圆形的闵可夫斯基差
+        private static Vector2 Support(ref Vector2 position1, float length, float radius1, float angle,
+                                       ref Vector2 position2, float radius2,
+                                       ref Vector2 dir)
+        {
+            var p1 = GetFarthestProjectionPoint(ref position1, length, radius1, angle, ref dir);
+            var neg = -dir;
+            var p2 = GetFarthestProjectionPoint(ref position2, radius2, ref neg);
 
             return p1 - p2;
         }
@@ -218,53 +310,13 @@ namespace SimpleX.Collision2D
             var d1 = Matrix.Transform(ref dir, ref m1);
 
             var p1 = radius * d1.normalized;
-            var dx = d1.x >= 0 ? length * 0.5f : - length * 0.5f;
+            var dx = d1.x >= 0 ? length * 0.5f : -length * 0.5f;
             p1.x += dx;
 
             var m2 = Matrix.CreateRotationMatrix(angle * MathX.DEG2RAD);
             var p2 = Matrix.Transform(ref p1, ref m2);
 
             return p2 + position;
-        }
-
-        // 简单形是否包含原点
-        private static bool IsContainsOrigin(ref Simplex simplex, ref Vector2 dir)
-        {
-            var a = simplex.a;
-            var ao = -a;
-            var b = simplex.b;
-            var ab = b - a;
-
-            if (simplex.count == 3)
-            {
-                var c = simplex.c;
-                var ac = c - a;
-
-                var u = Vector2.Mul3(ref ac, ref ab, ref ab);
-                var v = Vector2.Mul3(ref ab, ref ac, ref ac);
-
-                if (Vector2.Dot(ref u, ref ao) > 0.0f)
-                {
-                    simplex.Remove('c');
-                    dir = u;
-                }
-                else
-                {
-                    if (Vector2.Dot(ref v, ref ao) <= 0.0f)
-                    {
-                        return true;
-                    }
-
-                    simplex.Remove('b');
-                    dir = v;
-                }
-            }
-            else
-            {
-                dir = Vector2.Mul3(ref ab, ref ao, ref ab);
-            }
-
-            return false;
         }
     }
 }

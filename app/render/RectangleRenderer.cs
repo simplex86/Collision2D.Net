@@ -9,12 +9,16 @@ namespace SimpleX
         public override void DrawCollision(Graphics grap, BaseCollision collision, ref Color color)
         {
             brush.Color = color;
-            DrawCollision(grap, collision as RectangleCollision);
+
+            var geometry = (collision as RectangleCollision).geometry;
+            var transform = collision.transform;
+            DrawRectangle(grap, ref geometry, ref transform);
         }
 
-        private void DrawCollision(Graphics grap, RectangleCollision collision)
+        private void DrawRectangle(Graphics grap, ref Rectangle rectangle, ref Transform transform)
         {
-            DrawRectangle(grap, collision.points);
+            var vertics = GeometryHelper.GetRectanglePoints(ref transform.position, rectangle.width, rectangle.height, transform.rotation);
+            DrawRectangle(grap, vertics);
         }
     }
 }

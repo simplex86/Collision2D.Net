@@ -5,13 +5,6 @@ namespace SimpleX.Collision2D
     internal class CircleCollision : BaseCollision
     {
         internal Circle geometry;
-        //
-        internal override Vector2 position => geometry.center;
-        //
-        internal override Vector2[] points => null;
-
-        //半径
-        public float radius => geometry.radius;
 
         public CircleCollision(Vector2 position, float radius)
             : base(CollisionType.Circle)
@@ -20,30 +13,17 @@ namespace SimpleX.Collision2D
             {
                 radius = radius,
             };
-            geometry.center = position;
-        }
-
-        // 移动
-        public override void Move(ref Vector2 delta)
-        {
-            geometry.center += delta;
-            dirty |= DirtyFlag.Position;
-        }
-
-        // 旋转
-        public override void Rotate(float delta)
-        {
-
+            transform.position = position;
         }
 
         public override void RefreshGeometry()
         {
             if (dirty != DirtyFlag.None)
             {
-                boundingBox.minx = position.x - radius;
-                boundingBox.maxx = position.x + radius;
-                boundingBox.miny = position.y - radius;
-                boundingBox.maxy = position.y + radius;
+                boundingBox.minx = transform.position.x - geometry.radius;
+                boundingBox.maxx = transform.position.x + geometry.radius;
+                boundingBox.miny = transform.position.y - geometry.radius;
+                boundingBox.maxy = transform.position.y + geometry.radius;
 
                 dirty = DirtyFlag.None;
             }
@@ -53,9 +33,14 @@ namespace SimpleX.Collision2D
         {
             if (IsAABBContains(ref pt))
             {
-                return GeometryHelper.IsCircleContains(ref geometry, ref pt);
+                return GeometryHelper.IsCircleContains(ref geometry, ref transform, ref pt);
             }
             return false;
+        }
+
+        public override Vector2 GetFarthestProjectionPoint(ref Vector2 dir)
+        {
+            return transform.position + geometry.radius * dir.normalized;
         }
 
         public override bool Overlaps(BaseCollision collision)

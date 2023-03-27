@@ -25,7 +25,7 @@ namespace SimpleX
 
         private void CheckCollision(BaseCollision collision)
         {
-            var position = collision.position;
+            var position = collision.transform.position;
             var bounding = collision.boundingBox;
 
             var w1 = position.x - bounding.minx;

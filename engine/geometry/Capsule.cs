@@ -6,6 +6,6 @@
         public float radius;
         public float angle;
 
-        public Vector2[] points;
+        //public Vector2[] points;
     }
 }

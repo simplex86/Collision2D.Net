@@ -38,5 +38,42 @@ namespace SimpleX.Collision2D
                     break;
             }
         }
+
+        // 是否包含原点
+        public bool IsContainsOrigin(ref Vector2 dir)
+        {
+            var ao = -a;
+            var ab = b - a;
+
+            if (count == 3)
+            {
+                var ac = c - a;
+
+                var u = Vector2.Mul3(ref ac, ref ab, ref ab);
+                var v = Vector2.Mul3(ref ab, ref ac, ref ac);
+
+                if (Vector2.Dot(ref u, ref ao) > 0.0f)
+                {
+                    Remove('c');
+                    dir = u;
+                }
+                else
+                {
+                    if (Vector2.Dot(ref v, ref ao) <= 0.0f)
+                    {
+                        return true;
+                    }
+
+                    Remove('b');
+                    dir = v;
+                }
+            }
+            else
+            {
+                dir = Vector2.Mul3(ref ab, ref ao, ref ab);
+            }
+
+            return false;
+        }
     }
 }
