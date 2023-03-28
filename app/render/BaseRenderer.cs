@@ -10,6 +10,21 @@ namespace SimpleX
         protected Pen pen = new Pen(Color.Red);
         protected SolidBrush brush = new SolidBrush(Color.Red);
 
+        // 方向的线头
+        protected static AdjustableArrowCap directionCap = new AdjustableArrowCap(6, 6, true)   	
+        {
+            Filled = true,
+            MiddleInset = 1.5f, //设置箭头中间的缩进
+        };
+        // 方向的画笔
+        protected static Pen directionPen = new Pen(Color.Black)
+        {
+            CustomStartCap = new AdjustableArrowCap(1, 1, true),
+            CustomEndCap = directionCap,
+        };
+        // 质点画刷
+        protected static SolidBrush pivotBrush = new SolidBrush(Color.Brown);
+
         public bool showBoundingBox = false;
         public bool showDirection = false;
 
@@ -18,21 +33,44 @@ namespace SimpleX
             pen.DashStyle = DashStyle.Dash;
         }
 
-        public void Render(Graphics grap, BaseCollision collision, ref Vector2 diretion, ref Color color)
+        public void Render(Graphics grap, ref Transform transform, ref AABB boundingBox, ref Vector2 direction, ref Color color)
         {
-            DrawCollision(grap, collision, ref color);
+            brush.Color = color;
+
+            DrawCollision(grap, ref transform);
             if (showBoundingBox)
             {
-                DrawBoundingBox(grap, ref collision.boundingBox, ref color);
+                DrawBoundingBox(grap, ref boundingBox, ref color);
             }
             if (showDirection)
             {
-                var position = collision.transform.position;
-                DrawDirection(grap, ref position, ref diretion);
+                var position = transform.position;
+                DrawDirection(grap, ref position, ref direction);
             }
+            DrawPivot(grap, ref transform.position);
         }
 
-        public abstract void DrawCollision(Graphics grap, BaseCollision collision, ref Color color);
+        protected virtual void DrawCollision(Graphics grap, ref Transform transform)
+        {
+            PrevDrawCollision(grap, ref transform);
+            {
+                OnDrawCollision(grap, ref transform);
+            }
+            PostDrawCollision(grap);
+        }
+
+        protected abstract void OnDrawCollision(Graphics grap, ref Transform transform);
+
+        private void PrevDrawCollision(Graphics grap, ref Transform transform)
+        {
+            grap.TranslateTransform(transform.position.x, transform.position.y);
+            grap.RotateTransform(transform.rotation);
+        }
+
+        private void PostDrawCollision(Graphics grap)
+        {
+            grap.ResetTransform();
+        }
 
         // 画包围盒
         protected void DrawBoundingBox(Graphics grap, ref AABB box, ref Color color)
@@ -52,37 +90,16 @@ namespace SimpleX
         {
             if (dir.magnitude2 > 0)
             {
-                var cap = new AdjustableArrowCap(6, 6, true)   //设置一个线头	
-                {
-                    Filled = true,
-                    MiddleInset = 1.5f, //设置箭头中间的缩进
-                };
-                var pen = new Pen(Color.Black)
-                {
-                    CustomStartCap = new AdjustableArrowCap(1, 1, true),
-                    CustomEndCap = cap,
-                };
-
                 var sp = position;
                 var ep = position + (dir * 0.8f);
 
-                grap.DrawLine(pen, sp.x, sp.y, ep.x, ep.y);
+                grap.DrawLine(directionPen, sp.x, sp.y, ep.x, ep.y);
             }
         }
 
-        // 画矩形
-        protected void DrawRectangle(Graphics grap, Vector2[] vertics)
+        protected void DrawPivot(Graphics grap, ref Vector2 position)
         {
-            var points = new PointF[]
-            {
-                new PointF(vertics[0].x, vertics[0].y),
-                new PointF(vertics[1].x, vertics[1].y),
-                new PointF(vertics[2].x, vertics[2].y),
-                new PointF(vertics[3].x, vertics[3].y),
-                new PointF(vertics[0].x, vertics[0].y),
-            };
-
-            grap.FillPolygon(brush, points);
+            grap.FillEllipse(pivotBrush, position.x - 1.5f, position.y - 1.5f, 3, 3);
         }
     }
 }

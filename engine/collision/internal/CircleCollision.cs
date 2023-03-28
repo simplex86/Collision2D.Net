@@ -6,13 +6,10 @@ namespace SimpleX.Collision2D
     {
         internal Circle geometry;
 
-        public CircleCollision(Vector2 position, float radius)
+        public CircleCollision(Vector2 position, Circle circle)
             : base(CollisionType.Circle)
         {
-            geometry = new Circle()
-            {
-                radius = radius,
-            };
+            geometry = circle;
             transform.position = position;
         }
 

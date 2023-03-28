@@ -106,9 +106,9 @@ namespace SimpleX.Collision2D
             return false;
         }
 
-        // 检测凸多边形（position1, vertics）与胶囊（position2，length，radius，angle）是否重叠
+        // 检测凸多边形（position1, vertics）与胶囊（position2，length，radius，rotation）是否重叠
         public static bool Overlaps(ref Vector2 position1, Vector2[] vertics, 
-                                    ref Vector2 position2, float length, float radius, float angle)
+                                    ref Vector2 position2, float length, float radius, float rotation)
         {
             var simplex = new Simplex()
             {
@@ -116,14 +116,14 @@ namespace SimpleX.Collision2D
             };
             var dir = position1 - position2;
 
-            var pt = Support(vertics, ref position2, length, radius, angle, ref dir);
+            var pt = Support(vertics, ref position2, length, radius, rotation, ref dir);
             simplex.Add(ref pt);
 
             dir.Negative();
 
             while (true)
             {
-                pt = Support(vertics, ref position2, length, radius, angle, ref dir);
+                pt = Support(vertics, ref position2, length, radius, rotation, ref dir);
                 simplex.Add(ref pt);
 
                 if (simplex.a.Dot(ref dir) <= 0.0f)
@@ -140,8 +140,8 @@ namespace SimpleX.Collision2D
             return false;
         }
 
-        // 检测胶囊（position1，length，radius1，angle）与圆形（position2，radius2）是否重叠
-        public static bool Overlaps(ref Vector2 position1, float length, float radius1, float angle,
+        // 检测胶囊（position1，length，radius1，rotation）与圆形（position2，radius2）是否重叠
+        public static bool Overlaps(ref Vector2 position1, float length, float radius1, float rotation,
                                     ref Vector2 position2, float radius2)
         {
             var simplex = new Simplex()
@@ -150,14 +150,14 @@ namespace SimpleX.Collision2D
             };
             var dir = position1 - position2;
 
-            var pt = Support(ref position1, length, radius1, angle, ref position2, radius2, ref dir);
+            var pt = Support(ref position1, length, radius1, rotation, ref position2, radius2, ref dir);
             simplex.Add(ref pt);
 
             dir.Negative();
 
             while (true)
             {
-                pt = Support(ref position1, length, radius1, angle, ref position2, radius2, ref dir);
+                pt = Support(ref position1, length, radius1, rotation, ref position2, radius2, ref dir);
                 simplex.Add(ref pt);
 
                 if (simplex.a.Dot(ref dir) <= 0.0f)
@@ -244,22 +244,22 @@ namespace SimpleX.Collision2D
 
         // 多边形和胶囊的闵可夫斯基差
         private static Vector2 Support(Vector2[] vertics, 
-                                       ref Vector2 position, float length, float radius, float angle, 
+                                       ref Vector2 position, float length, float radius, float rotation, 
                                        ref Vector2 dir)
         {
             var p1 = GetFarthestProjectionPoint(vertics, ref dir);
             var neg = -dir;
-            var p2 = GetFarthestProjectionPoint(ref position, length, radius, angle, ref neg);
+            var p2 = GetFarthestProjectionPoint(ref position, length, radius, rotation, ref neg);
 
             return p1 - p2;
         }
 
         // 胶囊和圆形的闵可夫斯基差
-        private static Vector2 Support(ref Vector2 position1, float length, float radius1, float angle,
+        private static Vector2 Support(ref Vector2 position1, float length, float radius1, float rotation,
                                        ref Vector2 position2, float radius2,
                                        ref Vector2 dir)
         {
-            var p1 = GetFarthestProjectionPoint(ref position1, length, radius1, angle, ref dir);
+            var p1 = GetFarthestProjectionPoint(ref position1, length, radius1, rotation, ref dir);
             var neg = -dir;
             var p2 = GetFarthestProjectionPoint(ref position2, radius2, ref neg);
 
@@ -303,17 +303,17 @@ namespace SimpleX.Collision2D
             return position + radius * dir.normalized;
         }
 
-        // 获取胶囊（position, length, radius, angle）在方向（dir）上最大投影的点
-        private static Vector2 GetFarthestProjectionPoint(ref Vector2 position, float length, float radius, float angle, ref Vector2 dir)
+        // 获取胶囊（position, length, radius, rotation）在方向（dir）上最大投影的点
+        private static Vector2 GetFarthestProjectionPoint(ref Vector2 position, float length, float radius, float rotation, ref Vector2 dir)
         {
-            var m1 = Matrix.CreateRotationMatrix(-angle * MathX.DEG2RAD);
+            var m1 = Matrix.CreateRotationMatrix(-rotation * MathX.DEG2RAD);
             var d1 = Matrix.Transform(ref dir, ref m1);
 
             var p1 = radius * d1.normalized;
             var dx = d1.x >= 0 ? length * 0.5f : -length * 0.5f;
             p1.x += dx;
 
-            var m2 = Matrix.CreateRotationMatrix(angle * MathX.DEG2RAD);
+            var m2 = Matrix.CreateRotationMatrix(rotation * MathX.DEG2RAD);
             var p2 = Matrix.Transform(ref p1, ref m2);
 
             return p2 + position;

@@ -6,20 +6,16 @@ namespace SimpleX
 
     class EllipseRenderer : BaseRenderer
     {
-        public override void DrawCollision(Graphics grap, BaseCollision collision, ref Color color)
+        public Ellipse geometry;
+
+        public EllipseRenderer(Ellipse ellipse)
         {
-            brush.Color = color;
-            DrawCollision(grap, collision as EllipseCollision);
+            geometry = ellipse;
         }
 
-        private void DrawCollision(Graphics grap, EllipseCollision collision)
+        protected override void OnDrawCollision(Graphics grap, ref Transform transform)
         {
-            var p = collision.transform.position;
-
-            grap.TranslateTransform(p.x, p.y);
-            grap.RotateTransform(collision.angle);
-            grap.FillEllipse(brush, 0, 0, collision.width, collision.height);
-            grap.ResetTransform();
+            grap.FillEllipse(brush, -geometry.width * 0.5f, -geometry.height * 0.5f, geometry.width, geometry.height);
         }
     }
 }

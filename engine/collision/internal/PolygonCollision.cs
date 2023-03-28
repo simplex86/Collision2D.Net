@@ -8,16 +8,14 @@ namespace SimpleX.Collision2D
 
         internal Vector2[] vertics { get; private set; } = null;
 
-        public PolygonCollision(Vector2 position, Vector2[] vertics)
+        public PolygonCollision(Vector2 position, ref Polygon polygon, float rotation)
             : base(CollisionType.Polygon)
         {
-            geometry = new Polygon()
-            {
-                vertics = vertics
-            };
+            geometry = polygon;
             transform.position = position;
+            transform.rotation = rotation;
 
-            this.vertics = new Vector2[vertics.Length];
+            vertics = new Vector2[polygon.vertics.Length];
         }
 
         public override void RefreshGeometry()
@@ -26,19 +24,14 @@ namespace SimpleX.Collision2D
             {
                 //if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
                 //{
-                //    for (int i = 0; i < geometry.vertics.Length; i++)
-                //    {
-                //        var m1 = Matrix.CreateRotationMatrix(transform.rotation * MathX.DEG2RAD);
-                //        var m2 = Matrix.CreateTranslationMatrix(ref transform.position);
-                //        var mt = m1 * m2;
-                //        vertics[i] = Matrix.Transform(ref geometry.vertics[i], ref mt);
-                //    }
+                    for (int i = 0; i < geometry.vertics.Length; i++)
+                    {
+                        var m1 = Matrix.CreateRotationMatrix(transform.rotation * MathX.DEG2RAD);
+                        var m2 = Matrix.CreateTranslationMatrix(ref transform.position);
+                        var mt = m1 * m2;
+                        vertics[i] = Matrix.Transform(ref geometry.vertics[i], ref mt);
+                    }
                 //}
-
-                for (int i = 0; i < vertics.Length; i++)
-                {
-                    vertics[i] = geometry.vertics[i] + transform.position;
-                }
 
                 boundingBox.minx = MinX();
                 boundingBox.miny = MinY();

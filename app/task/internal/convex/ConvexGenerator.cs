@@ -36,10 +36,12 @@ namespace SimpleX
             List<int> xlist = new List<int>(count);
             List<int> ylist = new List<int>(count);
 
+            var w = (int)Math.Floor(width  * 0.5f) + 1;
+            var h = (int)Math.Floor(height * 0.5f) + 1;
             for (int i = 0; i < count; i++)
             {
-                xlist.Add(random.Next(0, width));
-                ylist.Add(random.Next(0, height));
+                xlist.Add(random.Next(-w, w+1));
+                ylist.Add(random.Next(-h, h+1));
             }
             xlist.Sort();
             ylist.Sort();

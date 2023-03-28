@@ -6,25 +6,25 @@ namespace SimpleX
 
     class PolygonRenderer : BaseRenderer
     {
-        public override void DrawCollision(Graphics grap, BaseCollision collision, ref Color color)
+        public Polygon geometry;
+
+        public PolygonRenderer(Polygon polygon)
         {
-            brush.Color = color;
-            DrawCollision(grap, collision as PolygonCollision);
+            geometry = polygon;
         }
 
-        private void DrawCollision(Graphics grap, PolygonCollision collision)
+        protected override void OnDrawCollision(Graphics grap, ref Transform transform)
         {
-            var vertics = collision.vertics;
-            var n = vertics.Length;
+            var length = geometry.vertics.Length;
 
-            var points = new PointF[n + 1];
-            for (int i=0; i< points.Length; i++)
+            var vertics = new PointF[length + 1];
+            for (int i = 0; i <= length; i++)
             {
-                var v = vertics[i % n];
-                points[i] = new PointF(v.x, v.y);
+                var pt = geometry.vertics[i % length];
+                vertics[i] = new PointF(pt.x, pt.y);
             }
-
-            grap.FillPolygon(brush, points);
+            
+            grap.FillPolygon(brush, vertics);
         }
     }
 }

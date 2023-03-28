@@ -1,31 +1,48 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace SimpleX
 {
     using SimpleX.Collision2D;
+    using System.Text.RegularExpressions;
 
     class CapsuleRenderer : BaseRenderer
     {
-        public override void DrawCollision(Graphics grap, BaseCollision collision, ref Color color)
+        public Capsule geometry;
+
+        public CapsuleRenderer(Capsule capsule)
         {
-            brush.Color = color;
-            DrawCollision(grap, collision as CapsuleCollision);
+            geometry = capsule;
         }
 
-        private void DrawCollision(Graphics grap, CapsuleCollision collision)
+        protected override void DrawCollision(Graphics grap, ref Transform transform)
         {
-            var position = collision.transform.position;
-            var vertics = GeometryHelper.GetRectanglePoints(ref position, collision.geometry.length, collision.geometry.radius * 2, collision.transform.rotation);
-            DrawRectangle(grap, vertics);
+            var points = GeometryHelper.GetCapsulePoints(ref transform.position, geometry.length, transform.rotation);
 
-            var points = GeometryHelper.GetCapsulePoints(ref position, collision.geometry.length, collision.transform.rotation);
-            DrawSemicircle(grap, points[0].x, points[0].y, collision.geometry.radius, brush);
-            DrawSemicircle(grap, points[1].x, points[1].y, collision.geometry.radius, brush);
+            DrawRectangle(grap, transform.position.x, transform.position.y, geometry.length, geometry.radius * 2, transform.rotation);
+            DrawSemicircle(grap, points[0].x, points[0].y, geometry.radius, transform.rotation);
+            DrawSemicircle(grap, points[1].x, points[1].y, geometry.radius, transform.rotation);
         }
 
-        private void DrawSemicircle(Graphics grap, float x, float y, float radius, Brush brush)
+        protected override void OnDrawCollision(Graphics grap, ref Transform transform)
         {
-            grap.FillEllipse(brush, x - radius, y - radius, radius * 2, radius * 2);
+
+        }
+
+        private void DrawRectangle(Graphics grap, float x, float y, float width, float height, float rotation)
+        {
+            grap.TranslateTransform(x, y);
+            grap.RotateTransform(rotation);
+            grap.FillRectangle(brush, -width * 0.5f, -height * 0.5f, width, height);
+            grap.ResetTransform();
+        }
+
+        private void DrawSemicircle(Graphics grap, float x, float y, float radius, float rotation)
+        {
+            grap.TranslateTransform(x, y);
+            grap.RotateTransform(rotation);
+            grap.FillEllipse(brush, -radius, -radius, radius * 2, radius * 2);
+            grap.ResetTransform();
         }
     }
 }

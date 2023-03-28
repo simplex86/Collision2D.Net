@@ -86,7 +86,7 @@
     <Compile Include="engine\collision\internal\PolygonCollision.cs" />
     <Compile Include="engine\collision\internal\EllipseCollision.cs" />
     <Compile Include="engine\geometry\Ellipse.cs" />
-    <Compile Include="engine\geometry\internal\GeometryHelper.cs" />
+    <Compile Include="engine\geometry\helper\GeometryHelper.cs" />
     <Compile Include="engine\geometry\Capsule.cs" />
     <Compile Include="engine\geometry\Circle.cs" />
     <Compile Include="engine\geometry\Rectangle.cs" />

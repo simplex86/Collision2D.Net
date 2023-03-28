@@ -6,33 +6,20 @@ namespace SimpleX.Collision2D
     {
         internal Ellipse geometry;
 
-        //internal override Vector2 position => (geometry.vertics[0] + geometry.vertics[2]) * 0.5f;
-        //internal override Vector2[] vertics => null;// geometry.vertics;
+        private static Vector2[] X =
+        {
+            Vector2.up,
+            Vector2.right,
+            Vector2.down,
+            Vector2.left,
+        };
 
-        public float width
-        {
-            get => geometry.width;
-        }
-        public float height
-        {
-            get => geometry.height;
-        }
-        public float angle
-        {
-            get => geometry.angle;
-        }
-
-        public EllipseCollision(Vector2 position, float width, float height, float angle)
+        public EllipseCollision(Vector2 position, Ellipse ellipse, float rotation)
             : base(CollisionType.Ellipse)
         {
-            geometry = new Ellipse()
-            {
-                width = width,
-                height = height,
-                angle = angle,
-                //vertics = GeometryHelper.GetRectanglePoints(ref position, width, height, angle),
-            };
+            geometry = ellipse;
             transform.position = position;
+            transform.rotation = rotation;
         }
 
         public override void RefreshGeometry()
@@ -41,14 +28,13 @@ namespace SimpleX.Collision2D
             {
                 //if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
                 //{
-                    var position = transform.position;
-                    var vertics = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+                //    var vertics = GeometryHelper.GetRectanglePoints(ref transform.position, geometry.width, geometry.height, transform.rotation);
                 //}
-
-                var p1 = vertics[0];
-                var p2 = vertics[1];
-                var p3 = vertics[2];
-                var p4 = vertics[3];
+                
+                var p1 = GetFarthestProjectionPoint(ref X[0]);
+                var p2 = GetFarthestProjectionPoint(ref X[1]);
+                var p3 = GetFarthestProjectionPoint(ref X[2]);
+                var p4 = GetFarthestProjectionPoint(ref X[3]);
 
                 boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
                 boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
@@ -63,7 +49,7 @@ namespace SimpleX.Collision2D
         {
             if (IsAABBContains(ref pt))
             {
-                return GeometryHelper.IsEllipseContains(ref geometry, ref pt);
+                return GeometryHelper.IsEllipseContains(ref geometry, ref transform, ref pt);
             }
             return false;
         }
@@ -116,7 +102,7 @@ namespace SimpleX.Collision2D
             var x = k * d - (b2 * k2 * k * d) / (a2 + b2 * k2);
             var y = (b2 * k2 * d) / (a2 + b2 * k2);
 
-            return new Vector2(x, y);
+            return transform.position + new Vector2(x, y);
         }
     }
 }

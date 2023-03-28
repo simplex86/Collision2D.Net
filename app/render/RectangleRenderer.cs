@@ -6,19 +6,16 @@ namespace SimpleX
 
     class RectangleRenderer : BaseRenderer
     {
-        public override void DrawCollision(Graphics grap, BaseCollision collision, ref Color color)
-        {
-            brush.Color = color;
+        public Rectangle geometry;
 
-            var geometry = (collision as RectangleCollision).geometry;
-            var transform = collision.transform;
-            DrawRectangle(grap, ref geometry, ref transform);
+        public RectangleRenderer(Rectangle rectangle)
+        {
+            geometry = rectangle;
         }
 
-        private void DrawRectangle(Graphics grap, ref Rectangle rectangle, ref Transform transform)
+        protected override void OnDrawCollision(Graphics grap, ref Transform transform)
         {
-            var vertics = GeometryHelper.GetRectanglePoints(ref transform.position, rectangle.width, rectangle.height, transform.rotation);
-            DrawRectangle(grap, vertics);
+            grap.FillRectangle(brush, -geometry.width * 0.5f, -geometry.height * 0.5f, geometry.width, geometry.height);
         }
     }
 }

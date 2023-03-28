@@ -8,18 +8,14 @@ namespace SimpleX.Collision2D
         
         internal Vector2[] vertics { get; private set; } = null;
 
-        public RectangleCollision(Vector2 position, float width, float height, float angle)
+        public RectangleCollision(Vector2 position, Rectangle rectangle, float rotation)
             : base(CollisionType.Rectangle)
         {
-            geometry = new Rectangle()
-            {
-                width = width,
-                height = height,
-                angle = angle,
-            };
+            geometry = rectangle;
             transform.position = position;
+            transform.rotation = rotation;
 
-            vertics = GeometryHelper.GetRectanglePoints(ref position, width, height, angle);
+            vertics = GeometryHelper.GetRectanglePoints(ref position, geometry.width, geometry.height, rotation);
         }
 
         public override void RefreshGeometry()

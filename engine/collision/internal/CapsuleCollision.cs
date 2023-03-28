@@ -6,32 +6,30 @@ namespace SimpleX.Collision2D
     {
         internal Capsule geometry;
 
-        public CapsuleCollision(Vector2 position, float length, float radius, float angle)
+        private static Vector2[] X =
+        {
+            Vector2.up,
+            Vector2.right,
+            Vector2.down,
+            Vector2.left,
+        };
+
+        public CapsuleCollision(Vector2 position, Capsule capsule, float rotation)
             : base(CollisionType.Capsule)
         {
-            geometry = new Capsule()
-            {
-                length = length,
-                radius = radius,
-                angle = angle,
-            };
+            geometry = capsule;
             transform.position = position;
+            transform.rotation = rotation;
         }
 
         public override void RefreshGeometry()
         {
             if (dirty != DirtyFlag.None)
             {
-                //if ((dirty & DirtyFlag.Rotation) == DirtyFlag.Rotation)
-                //{
-                    var position = transform.position;
-                    var vertics = GeometryHelper.GetRectanglePoints(ref position, geometry.length + geometry.radius * 2, geometry.radius * 2, transform.rotation);
-                //}
-
-                var p1 = vertics[0];
-                var p2 = vertics[1];
-                var p3 = vertics[2];
-                var p4 = vertics[3];
+                var p1 = GetFarthestProjectionPoint(ref X[0]);
+                var p2 = GetFarthestProjectionPoint(ref X[1]);
+                var p3 = GetFarthestProjectionPoint(ref X[2]);
+                var p4 = GetFarthestProjectionPoint(ref X[3]);
 
                 boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
                 boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);

@@ -21,7 +21,7 @@ namespace SimpleX
         private readonly int height;
 
         // 实体数量
-        private const int ENTITY_COUNT = 50;
+        private const int ENTITY_COUNT = 100;
 
         public Task(Control canvas, Control detail)
         {
@@ -96,35 +96,54 @@ namespace SimpleX
             var entity = new Entity();
 
             var type = GetRandomCollisionType();
-            switch (type)
+            while (true)
             {
-                case CollisionType.Circle:
-                    entity.collisionComponent.collision = CreateCircleCollision();
-                    entity.colorComponent.color = Color.Red;
-                    entity.renderComponent.renderer = new CircleRenderer();
-                    break;
-                case CollisionType.Rectangle:
-                    entity.collisionComponent.collision = CreateRectangleCollision();
-                    entity.colorComponent.color = Color.Green;
-                    entity.renderComponent.renderer = new RectangleRenderer();
-                    break;
-                case CollisionType.Capsule:
-                    entity.collisionComponent.collision = CreateCapsuleCollision();
-                    entity.colorComponent.color = Color.Blue;
-                    entity.renderComponent.renderer = new CapsuleRenderer();
-                    break;
-                case CollisionType.Polygon:
-                    entity.collisionComponent.collision = CreatePolygonCollision();
-                    entity.colorComponent.color = Color.Orange;
-                    entity.renderComponent.renderer = new PolygonRenderer();
-                    break;
-                case CollisionType.Ellipse:
-                    entity.collisionComponent.collision = CreateEllipseCollision();
-                    entity.colorComponent.color = Color.Cyan;
-                    entity.renderComponent.renderer = new EllipseRenderer();
-                    break;
-                default:
-                    break;
+                switch (type)
+                {
+                    case CollisionType.Circle:
+                        var circle = CreateRandomCircle();
+                        entity.collisionComponent.collision = CreateCircleCollision(ref circle);
+                        entity.colorComponent.color = Color.Red;
+                        entity.renderComponent.renderer = new CircleRenderer(circle);
+                        break;
+                    case CollisionType.Rectangle:
+                        var rectangle = CreateRandomRectangle();
+                        entity.collisionComponent.collision = CreateRectangleCollision(ref rectangle);
+                        entity.colorComponent.color = Color.Green;
+                        entity.renderComponent.renderer = new RectangleRenderer(rectangle);
+                        break;
+                    case CollisionType.Capsule:
+                        var capsule = CreateRandomCapsule();
+                        entity.collisionComponent.collision = CreateCapsuleCollision(ref capsule);
+                        entity.colorComponent.color = Color.Blue;
+                        entity.renderComponent.renderer = new CapsuleRenderer(capsule);
+                        break;
+                    case CollisionType.Polygon:
+                        var polygon = CreateRandomPolygon();
+                        entity.collisionComponent.collision = CreatePolygonCollision(ref polygon);
+                        entity.colorComponent.color = Color.Orange;
+                        entity.renderComponent.renderer = new PolygonRenderer(polygon);
+                        break;
+                    case CollisionType.Ellipse:
+                        var ellipse = CreateRandomEllipse();
+                        entity.collisionComponent.collision = CreateEllipseCollision(ref ellipse);
+                        entity.colorComponent.color = Color.Cyan;
+                        entity.renderComponent.renderer = new EllipseRenderer(ellipse);
+                        break;
+                    default:
+                        break;
+                }
+
+                var overlap = false;
+                var collision = entity.collisionComponent.collision;
+
+                world.Each((e) =>
+                {
+                    overlap = e.collisionComponent.collision.Overlaps(collision);
+                    return !overlap;
+                });
+
+                if (!overlap) break;
             }
 
             var movable = IsMovable();
@@ -161,7 +180,64 @@ namespace SimpleX
         // 随机获取碰撞体类型
         public CollisionType GetRandomCollisionType()
         {
+            //return CollisionType.Ellipse;
             return (CollisionType)random.Next(0, 4);
+        }
+
+        // 
+        private Circle CreateRandomCircle()
+        {
+            return new Circle()
+            {
+                radius = random.Next(15, 30),
+            };
+        }
+
+        // 
+        private Rectangle CreateRandomRectangle()
+        {
+            return new Rectangle()
+            {
+                width = random.Next(20, 50),
+                height = random.Next(20, 50)
+            };
+        }
+
+        // 
+        private Capsule CreateRandomCapsule()
+        {
+            var length = random.Next(18, 36);
+
+            return new Capsule()
+            {
+                length = length,
+                radius = random.Next(8, Math.Min(14, length / 2)),
+            };
+        }
+
+        // 
+        private Polygon CreateRandomPolygon()
+        {
+            var vertics = GetRandomConvexPoints();
+            while (CalculatePolygonSize(vertics) < 300)
+            {
+                vertics = GetRandomConvexPoints();
+            }
+
+            return new Polygon()
+            {
+                vertics = vertics
+            };
+        }
+
+        // 
+        private Ellipse CreateRandomEllipse()
+        {
+            return new Ellipse()
+            {
+                width = 50,//random.Next(20, 50),
+                height = 20,//random.Next(20, 50),
+            };
         }
 
         // 是否可移动
@@ -177,143 +253,46 @@ namespace SimpleX
         }
 
         // 创建圆形碰撞体
-        private BaseCollision CreateCircleCollision()
+        private BaseCollision CreateCircleCollision(ref Circle circle)
         {
-            BaseCollision collision = null;
-
-            while (true)
-            {
-                var position = GetRandomPosition();
-                var radius = random.Next(15, 30);
-
-                collision = CollisionFactory.CreateCircleCollision(ref position, radius);
-                world.Each((entity) =>
-                {
-                    var overlap = entity.collisionComponent.collision.Overlaps(collision);
-                    if (overlap)
-                    {
-                        collision = null;
-                    }
-                    return !overlap;
-                });
-
-                if (collision != null) break;
-            }
-
-            return collision;
+            var position = GetRandomPosition();
+            return CollisionFactory.CreateCircleCollision(ref position, ref circle);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateRectangleCollision()
+        private BaseCollision CreateRectangleCollision(ref Rectangle rectangle)
         {
-            BaseCollision collision = null;
+            var position = GetRandomPosition();
+            var rotation = GetRandomRotation();
 
-            while (true)
-            {
-                var position = GetRandomPosition();
-                var width = random.Next(20, 50);
-                var height = random.Next(20, 50);
-                var angle = random.Next(0, 360);
-
-                collision = CollisionFactory.CreateRectangleCollision(ref position, width, height, angle);
-                world.Each((entity) =>
-                {
-                    var overlap = entity.collisionComponent.collision.Overlaps(collision);
-                    if (overlap)
-                    {
-                        collision = null;
-                    }
-                    return !overlap;
-                });
-
-                if (collision != null) break;
-            }
-
-            return collision;
+            return CollisionFactory.CreateRectangleCollision(ref position, ref rectangle, rotation);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateCapsuleCollision()
+        private BaseCollision CreateCapsuleCollision(ref Capsule capsule)
         {
-            BaseCollision collision = null;
+            var position = GetRandomPosition();
+            var rotation = GetRandomRotation();
 
-            while (true)
-            {
-                var position = GetRandomPosition();
-                var length = random.Next(18, 36);
-                var radius = random.Next(8, Math.Min(14, length / 2));
-                var angle = random.Next(0, 360);
-
-                collision = CollisionFactory.CreateCapsuleCollision(ref position, length, radius, angle);
-                world.Each((entity) =>
-                {
-                    var overlap = entity.collisionComponent.collision.Overlaps(collision);
-                    if (overlap)
-                    {
-                        collision = null;
-                    }
-                    return !overlap;
-                });
-
-                if (collision != null) break;
-            }
-            return collision;
+            return CollisionFactory.CreateCapsuleCollision(ref position, ref capsule, rotation);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreatePolygonCollision()
+        private BaseCollision CreatePolygonCollision(ref Polygon polygon)
         {
-            BaseCollision collision = null;
+            var position = GetRandomPosition();
+            var rotation = GetRandomRotation();
 
-            while (true)
-            {
-                var position = GetRandomPosition();
-                var vertics = GetRandomConvexPoints();
-                if (CalculatePolygonSize(vertics) < 300) continue;
-
-                collision = CollisionFactory.CreatePolygonCollision(ref position, vertics);
-                world.Each((entity) =>
-                {
-                    var overlap = entity.collisionComponent.collision.Overlaps(collision);
-                    if (overlap)
-                    {
-                        collision = null;
-                    }
-                    return !overlap;
-                });
-
-                if (collision != null) break;
-            }
-            return collision;
+            return CollisionFactory.CreatePolygonCollision(ref position, ref polygon, rotation);
         }
 
         // 创建椭圆碰撞体
-        private BaseCollision CreateEllipseCollision()
+        private BaseCollision CreateEllipseCollision(ref Ellipse ellipse)
         {
-            BaseCollision collision = null;
+            var position = GetRandomPosition();
+            var rotation = GetRandomRotation();
 
-            while (true)
-            {
-                var position = GetRandomPosition();
-                var width = random.Next(20, 50);
-                var height = random.Next(20, 50);
-                var angle = random.Next(0, 360);
-
-                collision = CollisionFactory.CreateEllipseCollision(ref position, width, height, angle);
-                world.Each((entity) =>
-                {
-                    var overlap = entity.collisionComponent.collision.Overlaps(collision);
-                    if (overlap)
-                    {
-                        collision = null;
-                    }
-                    return !overlap;
-                });
-
-                if (collision != null) break;
-            }
-
-            return collision;
+            return CollisionFactory.CreateEllipseCollision(ref position, ref ellipse, rotation);
         }
 
         // 获取随机坐标
@@ -322,6 +301,12 @@ namespace SimpleX
             var x = random.Next(50, width - 50);
             var y = random.Next(50, height - 50);
             return new Vector2(x, y);
+        }
+
+        // 获取随机旋转角度
+        private float GetRandomRotation()
+        {
+            return random.Next(0, 360);
         }
 
         // 计算三角形面积
