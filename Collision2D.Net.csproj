@@ -72,6 +72,7 @@
     <Compile Include="app\render\CapsuleRenderer.cs" />
     <Compile Include="app\render\CircleRenderer.cs" />
     <Compile Include="app\render\EllipseRenderer.cs" />
+    <Compile Include="app\render\PieRenderer.cs" />
     <Compile Include="app\render\RectangleRenderer.cs" />
     <Compile Include="app\render\PolygonRenderer.cs" />
     <Compile Include="app\task\internal\Time.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="app\task\internal\Stats.cs" />
     <Compile Include="app\task\Task.cs" />
     <Compile Include="engine\collision\Const.cs" />
+    <Compile Include="engine\collision\internal\PieCollision.cs" />
     <Compile Include="engine\collision\internal\gjk\GJK.cs" />
     <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
     <Compile Include="engine\collision\internal\PolygonCollision.cs" />

@@ -48,5 +48,14 @@ namespace SimpleX.Collision2D
 
             return collision;
         }
+
+        // 创建椭圆碰撞器
+        public static BaseCollision CreatePieCollision(ref Vector2 position, ref Pie pie, float rotation)
+        {
+            var collision = new PieCollision(pie, position, rotation);
+            collision.RefreshGeometry();
+
+            return collision;
+        }
     }
 }

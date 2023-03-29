@@ -30,11 +30,9 @@ namespace SimpleX
 
         }
 
-        private const float supplement = 2.0f;
-
         private void DrawRectangle(Graphics grap, float x, float y, float width, float height, float rotation)
         {
-            var w = (width + supplement) * 0.5f;
+            var w = width * 0.5f;
             var h = height * 0.5f;
             var x1 = -w;
             var y1 = -h;

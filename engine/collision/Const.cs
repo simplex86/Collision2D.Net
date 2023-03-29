@@ -13,5 +13,7 @@
         Capsule,
         // 椭圆
         Ellipse,
+        // 扇形
+        Pie,
     }
 }

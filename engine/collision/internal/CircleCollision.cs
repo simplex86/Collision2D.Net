@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimpleX.Collision2D
+﻿namespace SimpleX.Collision2D
 {
     internal class CircleCollision : BaseCollision
     {

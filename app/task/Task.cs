@@ -130,6 +130,12 @@ namespace SimpleX
                         entity.colorComponent.color = Color.Cyan;
                         entity.renderComponent.renderer = new EllipseRenderer(ellipse);
                         break;
+                    case CollisionType.Pie:
+                        var pie = CreateRandomPie();
+                        entity.collisionComponent.collision = CreatePieCollision(ref pie);
+                        entity.colorComponent.color = Color.Pink;
+                        entity.renderComponent.renderer = new PieRenderer(pie);
+                        break;
                     default:
                         break;
                 }
@@ -180,7 +186,7 @@ namespace SimpleX
         // 随机获取碰撞体类型
         public CollisionType GetRandomCollisionType()
         {
-            return (CollisionType)random.Next(0, 5);
+            return (CollisionType)random.Next(0, 6);
         }
 
         // 创建随机圆形
@@ -240,6 +246,16 @@ namespace SimpleX
             };
         }
 
+        // 创建随机扇形
+        private Pie CreateRandomPie()
+        {
+            return new Pie()
+            {
+                radius = random.Next(15, 30),
+                sweep = random.Next(10, 270),
+            };
+        }
+
         // 是否可移动
         public bool IsMovable()
         {
@@ -293,6 +309,15 @@ namespace SimpleX
             var rotation = GetRandomRotation();
 
             return CollisionFactory.CreateEllipseCollision(ref position, ref ellipse, rotation);
+        }
+
+        // 创建椭圆碰撞体
+        private BaseCollision CreatePieCollision(ref Pie pie)
+        {
+            var position = GetRandomPosition();
+            var rotation = GetRandomRotation();
+
+            return CollisionFactory.CreatePieCollision(ref position, ref pie, rotation);
         }
 
         // 获取随机坐标

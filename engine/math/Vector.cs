@@ -130,6 +130,13 @@
             return new Vector2(-z * c.y, z * c.x);
         }
 
+        // 向量与X轴的夹角，度
+        public float Angle()
+        {
+            var v = right;
+            return Angle(ref v);
+        }
+
         // 向量夹角，度
         public float Angle(ref Vector2 v)
         {
