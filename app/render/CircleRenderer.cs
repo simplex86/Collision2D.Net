@@ -13,9 +13,9 @@ namespace SimpleX
             geometry = circle;
         }
 
-        protected override void OnDrawCollision(Graphics grap, ref Transform transform)
+        protected override void OnDrawGeometry(Graphics grap, ref Transform transform)
         {
-            grap.FillEllipse(brush, -geometry.radius, -geometry.radius, geometry.radius * 2, geometry.radius * 2);
+            grap.DrawEllipse(bodyPen, -geometry.radius, -geometry.radius, geometry.radius * 2, geometry.radius * 2);
         }
     }
 }

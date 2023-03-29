@@ -7,6 +7,8 @@ namespace SimpleX.Collision2D
         // 类型
         public CollisionType type { get; }
         //
+        public IGeometry geometry;
+        //
         public Transform transform = new Transform()
         {
             position = Vector2.zero,
@@ -24,12 +26,22 @@ namespace SimpleX.Collision2D
         }
         // 脏标记
         protected byte dirty = DirtyFlag.None;
+        // 主方向
+        protected readonly static Vector2[] CARDINAL_DIRS =
+        {
+            Vector2.up,
+            Vector2.right,
+            Vector2.down,
+            Vector2.left,
+        };
 
         //
-        protected BaseCollision(CollisionType type)
+        protected BaseCollision(CollisionType type, Vector2 position, float rotation)
         {
             this.type = type;
-            dirty = DirtyFlag.Position;
+            this.transform.position = position;
+            this.transform.rotation = rotation;
+            this.dirty = DirtyFlag.Position;
         }
 
         // 移动
@@ -39,6 +51,7 @@ namespace SimpleX.Collision2D
             dirty |= DirtyFlag.Position;
         }
 
+        // 移动到
         public void MoveTo(ref Vector2 position)
         {
             transform.position = position;
@@ -52,17 +65,47 @@ namespace SimpleX.Collision2D
             dirty |= DirtyFlag.Rotation;
         }
 
+        // 旋转到
+        public void RotateTo(float angle)
+        {
+            transform.rotation = angle;
+            dirty |= DirtyFlag.Rotation;
+        }
+
         // 刷新几何信息
-        public abstract void RefreshGeometry();
+        public virtual void RefreshGeometry()
+        {
+            if (dirty != DirtyFlag.None)
+            {
+                var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[0]);
+                var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[1]);
+                var p3 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[2]);
+                var p4 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[3]);
+
+                boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
+                boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
+                boundingBox.miny = MathX.Min(p1.y, p2.y, p3.y, p4.y);
+                boundingBox.maxy = MathX.Max(p1.y, p2.y, p3.y, p4.y);
+
+                dirty = DirtyFlag.None;
+            }
+        }
 
         // 是否包含点pt
-        public abstract bool Contains(ref Vector2 pt);
+        public bool Contains(ref Vector2 pt)
+        {
+            if (IsAABBContains(ref pt))
+            {
+                return GeometryHelper.IsGeometryContains(geometry, ref transform, ref pt);
+            }
+            return false;
+        }
 
         // 是否与collision产生碰撞
-        public abstract bool Overlaps(BaseCollision collision);
-
-        //
-        public abstract Vector2 GetFarthestProjectionPoint(ref Vector2 dir);
+        public bool Overlaps(BaseCollision collision)
+        {
+            return CollisionHelper.Overlaps(this, collision);
+        }
 
         // AABB是否包含点pt
         protected bool IsAABBContains(ref Vector2 pt)

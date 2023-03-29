@@ -171,7 +171,7 @@ namespace SimpleX
             // 不能移动(同时不能旋转）的渲染成灰色
             if (!movable)
             {
-                entity.colorComponent.color = Color.Gray;
+                entity.colorComponent.color = Color.DarkGray;
             }
 
             return entity;
@@ -180,11 +180,10 @@ namespace SimpleX
         // 随机获取碰撞体类型
         public CollisionType GetRandomCollisionType()
         {
-            //return CollisionType.Ellipse;
-            return (CollisionType)random.Next(0, 4);
+            return (CollisionType)random.Next(0, 5);
         }
 
-        // 
+        // 创建随机圆形
         private Circle CreateRandomCircle()
         {
             return new Circle()
@@ -193,17 +192,17 @@ namespace SimpleX
             };
         }
 
-        // 
+        // 创建随机矩形
         private Rectangle CreateRandomRectangle()
         {
             return new Rectangle()
             {
-                width = random.Next(20, 50),
-                height = random.Next(20, 50)
+                width = random.Next(45, 60),
+                height = random.Next(20, 40)
             };
         }
 
-        // 
+        // 创建随机胶囊
         private Capsule CreateRandomCapsule()
         {
             var length = random.Next(18, 36);
@@ -215,10 +214,11 @@ namespace SimpleX
             };
         }
 
-        // 
+        // 创建随机多边形
         private Polygon CreateRandomPolygon()
         {
             var vertics = GetRandomConvexPoints();
+            // 面积太小的不要
             while (CalculatePolygonSize(vertics) < 300)
             {
                 vertics = GetRandomConvexPoints();
@@ -230,13 +230,13 @@ namespace SimpleX
             };
         }
 
-        // 
+        // 创建随机椭圆
         private Ellipse CreateRandomEllipse()
         {
             return new Ellipse()
             {
-                width = 50,//random.Next(20, 50),
-                height = 20,//random.Next(20, 50),
+                width = random.Next(45, 60),
+                height = random.Next(20, 40),
             };
         }
 
@@ -309,7 +309,7 @@ namespace SimpleX
             return random.Next(0, 360);
         }
 
-        // 计算三角形面积
+        // 计算多边形面积
         // 注：格林公式
         private float CalculatePolygonSize(Vector2[] vertics)
         {

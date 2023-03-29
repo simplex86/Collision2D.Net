@@ -13,7 +13,7 @@ namespace SimpleX
             geometry = polygon;
         }
 
-        protected override void OnDrawCollision(Graphics grap, ref Transform transform)
+        protected override void OnDrawGeometry(Graphics grap, ref Transform transform)
         {
             var length = geometry.vertics.Length;
 
@@ -24,7 +24,7 @@ namespace SimpleX
                 vertics[i] = new PointF(pt.x, pt.y);
             }
             
-            grap.FillPolygon(brush, vertics);
+            grap.DrawPolygon(bodyPen, vertics);
         }
     }
 }
