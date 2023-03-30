@@ -57,7 +57,7 @@
                               m31, m32, m33);
         }
 
-        public static Matrix CreateTranslationMatrix(ref Vector2 p)
+        public static Matrix CreateTranslationMatrix(Vector2 p)
         {
             return CreateTranslationMatrix(p.x, p.y);
         }
@@ -81,7 +81,7 @@
             return matrix;
         }
 
-        public static Vector2 Transform(ref Vector2 vector, ref Matrix matrix)
+        public static Vector2 Transform(Vector2 vector, Matrix matrix)
         {
             var x = ((vector.x * matrix.m11) + (vector.y * matrix.m21)) + (vector.w * matrix.m31);
             var y = ((vector.x * matrix.m12) + (vector.y * matrix.m22)) + (vector.w * matrix.m32);

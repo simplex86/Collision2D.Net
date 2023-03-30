@@ -9,7 +9,6 @@ namespace SimpleX
     {
         protected Pen bodyPen = new Pen(Color.Red);
         protected Pen bboxPen = new Pen(Color.Red);
-        //protected SolidBrush brush = new SolidBrush(Color.Red);
 
         // 速度的线头
         protected static AdjustableArrowCap velocityCap = new AdjustableArrowCap(6, 6, true)   	
@@ -18,7 +17,7 @@ namespace SimpleX
             MiddleInset = 1.5f, //设置箭头中间的缩进
         };
         // 速度的画笔
-        protected static Pen velocityPen = new Pen(Color.Black)
+        protected static Pen velocityPen = new Pen(Color.FromArgb(128, 0, 0, 0))
         {
             CustomStartCap = new AdjustableArrowCap(1, 1, true),
             CustomEndCap = velocityCap,
@@ -31,47 +30,44 @@ namespace SimpleX
 
         protected BaseRenderer()
         {
+            bodyPen.Width = 1.0f;
             bodyPen.DashStyle = DashStyle.Solid;
 
-            bboxPen.Width = 0.5f;
+            bboxPen.Width = 1.0f;
             bboxPen.DashStyle = DashStyle.Dash;
         }
 
         // 画图形
-        public void Render(Graphics grap, ref Transform transform, ref AABB boundingBox, ref Vector2 direction, ref Color color)
+        public void Render(Graphics grap, Transform transform, AABB boundingBox, Vector2 direction, Color color)
         {
             bodyPen.Color = color;
-            //brush.Color = color;
+            bboxPen.Color = Color.FromArgb(80, color);
 
-            DrawGeometry(grap, ref transform);
+            PrevDrawGeometry(grap, transform);
+            {
+                DrawGeometry(grap, transform);
+            }
+            PostDrawGeometry(grap);
+
             if (showBoundingBox)
             {
-                DrawBoundingBox(grap, ref boundingBox, ref color);
+                DrawBoundingBox(grap, boundingBox);
             }
             if (showDirection)
             {
                 var position = transform.position;
-                DrawDirection(grap, ref position, ref direction);
+                DrawDirection(grap, position, direction);
             }
-            DrawPivot(grap, ref transform.position);
+            DrawPivot(grap, transform.position);
         }
 
-        private void PrevDrawGeometry(Graphics grap, ref Transform transform)
+        private void PrevDrawGeometry(Graphics grap, Transform transform)
         {
             grap.TranslateTransform(transform.position.x, transform.position.y);
             grap.RotateTransform(transform.rotation);
         }
 
-        protected virtual void DrawGeometry(Graphics grap, ref Transform transform)
-        {
-            PrevDrawGeometry(grap, ref transform);
-            {
-                OnDrawGeometry(grap, ref transform);
-            }
-            PostDrawGeometry(grap);
-        }
-
-        protected abstract void OnDrawGeometry(Graphics grap, ref Transform transform);
+        protected abstract void DrawGeometry(Graphics grap, Transform transform);
 
         private void PostDrawGeometry(Graphics grap)
         {
@@ -79,10 +75,8 @@ namespace SimpleX
         }
 
         // 画包围盒
-        protected void DrawBoundingBox(Graphics grap, ref AABB box, ref Color color)
+        protected void DrawBoundingBox(Graphics grap, AABB box)
         {
-            bboxPen.Color = color;
-
             var x = box.minx;
             var y = box.miny;
             var w = box.maxx - box.minx;
@@ -92,7 +86,7 @@ namespace SimpleX
         }
 
         // 画方向
-        protected void DrawDirection(Graphics grap, ref Vector2 position, ref Vector2 dir)
+        protected void DrawDirection(Graphics grap, Vector2 position, Vector2 dir)
         {
             if (dir.magnitude2 > 0)
             {
@@ -104,7 +98,7 @@ namespace SimpleX
         }
 
         // 画质点
-        protected void DrawPivot(Graphics grap, ref Vector2 position)
+        protected void DrawPivot(Graphics grap, Vector2 position)
         {
             grap.FillEllipse(pivotBrush, position.x - 1.5f, position.y - 1.5f, 3, 3);
         }

@@ -45,14 +45,14 @@ namespace SimpleX.Collision2D
         }
 
         // 移动
-        public void Move(ref Vector2 delta)
+        public void Move(Vector2 delta)
         {
             transform.position += delta;
             dirty |= DirtyFlag.Position;
         }
 
         // 移动到
-        public void MoveTo(ref Vector2 position)
+        public void MoveTo(Vector2 position)
         {
             transform.position = position;
             dirty |= DirtyFlag.Position;
@@ -77,10 +77,10 @@ namespace SimpleX.Collision2D
         {
             if (dirty != DirtyFlag.None)
             {
-                var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[0]);
-                var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[1]);
-                var p3 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[2]);
-                var p4 = GeometryHelper.GetFarthestProjectionPoint(geometry, ref transform, ref CARDINAL_DIRS[3]);
+                var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry, transform, CARDINAL_DIRS[0]);
+                var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry, transform, CARDINAL_DIRS[1]);
+                var p3 = GeometryHelper.GetFarthestProjectionPoint(geometry, transform, CARDINAL_DIRS[2]);
+                var p4 = GeometryHelper.GetFarthestProjectionPoint(geometry, transform, CARDINAL_DIRS[3]);
 
                 boundingBox.minx = MathX.Min(p1.x, p2.x, p3.x, p4.x);
                 boundingBox.maxx = MathX.Max(p1.x, p2.x, p3.x, p4.x);
@@ -92,11 +92,11 @@ namespace SimpleX.Collision2D
         }
 
         // 是否包含点pt
-        public bool Contains(ref Vector2 pt)
+        public bool Contains(Vector2 pt)
         {
-            if (IsAABBContains(ref pt))
+            if (IsAABBContains(pt))
             {
-                return GeometryHelper.IsGeometryContains(geometry, ref transform, ref pt);
+                return GeometryHelper.IsGeometryContains(geometry, transform, pt);
             }
             return false;
         }
@@ -108,7 +108,7 @@ namespace SimpleX.Collision2D
         }
 
         // AABB是否包含点pt
-        protected bool IsAABBContains(ref Vector2 pt)
+        protected bool IsAABBContains(Vector2 pt)
         {
             return boundingBox.minx <= pt.x && boundingBox.maxx >= pt.x &&
                    boundingBox.miny <= pt.y && boundingBox.maxy >= pt.y;

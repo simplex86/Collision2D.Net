@@ -37,7 +37,7 @@ namespace SimpleX
             var dy = MathX.Clamp(position.y, world.top.y + h1, world.bottom.y - h2);
 
             position = new Vector2(dx, dy);
-            collision.MoveTo(ref position);
+            collision.MoveTo(position);
         }
     }
 }

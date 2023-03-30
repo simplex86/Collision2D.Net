@@ -102,38 +102,38 @@ namespace SimpleX
                 {
                     case CollisionType.Circle:
                         var circle = CreateRandomCircle();
-                        entity.collisionComponent.collision = CreateCircleCollision(ref circle);
+                        entity.collisionComponent.collision = CreateCircleCollision(circle);
                         entity.colorComponent.color = Color.Red;
                         entity.renderComponent.renderer = new CircleRenderer(circle);
                         break;
                     case CollisionType.Rectangle:
                         var rectangle = CreateRandomRectangle();
-                        entity.collisionComponent.collision = CreateRectangleCollision(ref rectangle);
+                        entity.collisionComponent.collision = CreateRectangleCollision(rectangle);
                         entity.colorComponent.color = Color.Green;
                         entity.renderComponent.renderer = new RectangleRenderer(rectangle);
                         break;
                     case CollisionType.Capsule:
                         var capsule = CreateRandomCapsule();
-                        entity.collisionComponent.collision = CreateCapsuleCollision(ref capsule);
+                        entity.collisionComponent.collision = CreateCapsuleCollision(capsule);
                         entity.colorComponent.color = Color.Blue;
                         entity.renderComponent.renderer = new CapsuleRenderer(capsule);
                         break;
                     case CollisionType.Polygon:
                         var polygon = CreateRandomPolygon();
-                        entity.collisionComponent.collision = CreatePolygonCollision(ref polygon);
+                        entity.collisionComponent.collision = CreatePolygonCollision(polygon);
                         entity.colorComponent.color = Color.Orange;
                         entity.renderComponent.renderer = new PolygonRenderer(polygon);
                         break;
                     case CollisionType.Ellipse:
                         var ellipse = CreateRandomEllipse();
-                        entity.collisionComponent.collision = CreateEllipseCollision(ref ellipse);
+                        entity.collisionComponent.collision = CreateEllipseCollision(ellipse);
                         entity.colorComponent.color = Color.Cyan;
                         entity.renderComponent.renderer = new EllipseRenderer(ellipse);
                         break;
                     case CollisionType.Pie:
                         var pie = CreateRandomPie();
-                        entity.collisionComponent.collision = CreatePieCollision(ref pie);
-                        entity.colorComponent.color = Color.Pink;
+                        entity.collisionComponent.collision = CreatePieCollision(pie);
+                        entity.colorComponent.color = Color.DarkKhaki;
                         entity.renderComponent.renderer = new PieRenderer(pie);
                         break;
                     default:
@@ -216,7 +216,7 @@ namespace SimpleX
             return new Capsule()
             {
                 length = length,
-                radius = random.Next(8, Math.Min(14, length / 2)),
+                radius = random.Next(8, MathX.Min(14, length / 2)),
             };
         }
 
@@ -252,7 +252,7 @@ namespace SimpleX
             return new Pie()
             {
                 radius = random.Next(15, 30),
-                sweep = random.Next(10, 270),
+                sweep = random.Next(10, 180),
             };
         }
 
@@ -269,55 +269,55 @@ namespace SimpleX
         }
 
         // 创建圆形碰撞体
-        private BaseCollision CreateCircleCollision(ref Circle circle)
+        private BaseCollision CreateCircleCollision(Circle circle)
         {
             var position = GetRandomPosition();
-            return CollisionFactory.CreateCircleCollision(ref position, ref circle);
+            return CollisionFactory.CreateCircleCollision(position, circle);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateRectangleCollision(ref Rectangle rectangle)
+        private BaseCollision CreateRectangleCollision(Rectangle rectangle)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateRectangleCollision(ref position, ref rectangle, rotation);
+            return CollisionFactory.CreateRectangleCollision(position, rectangle, rotation);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateCapsuleCollision(ref Capsule capsule)
+        private BaseCollision CreateCapsuleCollision(Capsule capsule)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateCapsuleCollision(ref position, ref capsule, rotation);
+            return CollisionFactory.CreateCapsuleCollision(position, capsule, rotation);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreatePolygonCollision(ref Polygon polygon)
+        private BaseCollision CreatePolygonCollision(Polygon polygon)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreatePolygonCollision(ref position, ref polygon, rotation);
+            return CollisionFactory.CreatePolygonCollision(position, polygon, rotation);
         }
 
         // 创建椭圆碰撞体
-        private BaseCollision CreateEllipseCollision(ref Ellipse ellipse)
+        private BaseCollision CreateEllipseCollision(Ellipse ellipse)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateEllipseCollision(ref position, ref ellipse, rotation);
+            return CollisionFactory.CreateEllipseCollision(position, ellipse, rotation);
         }
 
         // 创建椭圆碰撞体
-        private BaseCollision CreatePieCollision(ref Pie pie)
+        private BaseCollision CreatePieCollision(Pie pie)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreatePieCollision(ref position, ref pie, rotation);
+            return CollisionFactory.CreatePieCollision(position, pie, rotation);
         }
 
         // 获取随机坐标
@@ -361,7 +361,7 @@ namespace SimpleX
             var position = Vector2.zero;
 
             var convex = new ConvexGenerator(random);
-            return convex.Gen(ref position, 45, 45, count);
+            return convex.Gen(position, 45, 45, count);
         }
 
         private void OnTimerHandler(object sender, EventArgs e)

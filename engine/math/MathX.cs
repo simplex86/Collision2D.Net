@@ -8,6 +8,8 @@
         public const float PI = (float)Math.PI;
         // 角度转弧度的参数
         public const float DEG2RAD = PI / 180.0f;
+        //
+        public const float RAD2DEG = 180.0f / PI;
         // 
         public const float EPSILON = 0.00001f;
 
@@ -39,6 +41,12 @@
         public static float ACos(float cos)
         {
             return (float)Math.Acos(cos);
+        }
+
+        // 
+        public static float Atan2(float y, float x)
+        {
+            return (float)Math.Atan2(y, x);
         }
 
         // （2个值中的）最大值
@@ -149,16 +157,55 @@
             return Abs(a - b) < EPSILON;
         }
 
-        // 
+        // 将num限制在[min, max]范围内
         public static int Clamp(int num, int min, int max)
         {
             return Min(max, Max(num, min));
         }
 
-        // 
+        // 将num限制在[min, max]范围内
         public static float Clamp(float num, float min, float max)
         {
             return Min(max, Max(num, min));
+        }
+
+        // 将num限制在[0, 1]范围内
+        public static float Clamp01(float num)
+        {
+            return Clamp(num, 0f, 1f);
+        }
+
+        // 将angle限制在[0, 360)范围内
+        public static float Clamp360(float angle)
+        {
+            if (angle < 0)
+            {
+                angle = 360 + angle;
+            }
+            while (angle >= 360)
+            {
+                angle = angle - 360;
+            }
+
+            return angle;
+        }
+
+        // 获取value的符号
+        public static int Sign(float value)
+        {
+            return (value >= 0) ? 1 : -1;
+        }
+
+        // 
+        public static float Floor(float value)
+        {
+            return (float)Math.Floor(value);
+        }
+
+        // 
+        public static float Ceiling(float value)
+        {
+            return (float)Math.Ceiling(value);
         }
     }
 }

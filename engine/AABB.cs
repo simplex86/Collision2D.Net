@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimpleX.Collision2D
+﻿namespace SimpleX.Collision2D
 {
     public struct AABB
     {
@@ -9,14 +7,7 @@ namespace SimpleX.Collision2D
         public float maxx;
         public float maxy;
 
-        public float width
-        {
-            get { return maxx - minx; }
-        }
-        
-        public float height
-        {
-            get { return maxy - miny; }
-        }
+        public float width  => maxx - minx;   
+        public float height => maxy - miny;
     }
 }

@@ -13,7 +13,7 @@ namespace SimpleX
             geometry = ellipse;
         }
 
-        protected override void OnDrawGeometry(Graphics grap, ref Transform transform)
+        protected override void DrawGeometry(Graphics grap, Transform transform)
         {
             grap.DrawEllipse(bodyPen, -geometry.width * 0.5f, -geometry.height * 0.5f, geometry.width, geometry.height);
         }

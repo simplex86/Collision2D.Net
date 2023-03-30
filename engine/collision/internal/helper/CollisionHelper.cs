@@ -9,8 +9,8 @@ namespace SimpleX.Collision2D
         {
             if (IsAABBOverlaps(a, b))
             {
-                return GJK.Overlaps(ref a.transform, a.geometry,
-                                    ref b.transform, b.geometry);
+                return GJK.Overlaps(a.transform, a.geometry,
+                                    b.transform, b.geometry);
             }
             return false;
         }

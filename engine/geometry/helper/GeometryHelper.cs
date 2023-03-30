@@ -1,9 +1,9 @@
 ﻿namespace SimpleX.Collision2D
 { 
-    internal static class GeometryHelper
+    public static class GeometryHelper
     {
         // 获取两点间距离的平方
-        public static float GetDistance2(ref Vector2 a, ref Vector2 b)
+        public static float GetDistance2(Vector2 a, Vector2 b)
         {
             var dx = a.x - b.x;
             var dy = a.y - b.y;
@@ -12,7 +12,7 @@
         }
 
         // 获取点（pt）到线段（pa，pb）的最小距离的平方
-        public static float GetDistance2(ref Vector2 pa, ref Vector2 pb, ref Vector2 pt)
+        public static float GetDistance2(Vector2 pa, Vector2 pb, Vector2 pt)
         {
             float px = pt.x - pa.x, py = pt.y - pa.y;
             float xx = pb.x - pa.x, yy = pb.y - pa.y;
@@ -36,10 +36,10 @@
             var mt = Matrix.CreateRotationMatrix(rotation * MathX.DEG2RAD);
 
             var points = new Vector2[] {
-                Matrix.Transform(ref p1, ref mt),
-                Matrix.Transform(ref p2, ref mt),
-                Matrix.Transform(ref p3, ref mt),
-                Matrix.Transform(ref p4, ref mt),
+                Matrix.Transform(p1, mt),
+                Matrix.Transform(p2, mt),
+                Matrix.Transform(p3, mt),
+                Matrix.Transform(p4, mt),
             };
 
             return points;
@@ -51,43 +51,43 @@
             var mt = Matrix.CreateRotationMatrix(rotation * MathX.DEG2RAD);
 
             var p1 = new Vector2(length * 0.5f, 0);
-            p1 = Matrix.Transform(ref p1, ref mt);
+            p1 = Matrix.Transform(p1, mt);
 
             var p2 = new Vector2(length * -0.5f, 0);
-            p2 = Matrix.Transform(ref p2, ref mt);
+            p2 = Matrix.Transform(p2, mt);
 
             return new Vector2[] { p1, p2, };
         }
 
         // 图形（geometry)是否包含点（pt)
-        public static bool IsGeometryContains(IGeometry geometry, ref Transform transform, ref Vector2 pt)
+        public static bool IsGeometryContains(IGeometry geometry, Transform transform, Vector2 pt)
         {
             var m1 = Matrix.CreateTranslationMatrix(-transform.position.x, -transform.position.y);
             var m2 = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
             var mt = m1 * m2;
-            var p = Matrix.Transform(ref pt, ref mt);
+            pt = Matrix.Transform(pt, mt);
 
-            return geometry.Contains(ref p);
+            return geometry.Contains(pt);
         }
 
         // 圆（pa, ra)是否和圆（pb, rb）重叠
-        public static bool IsCircleOverlapsWithCircle(ref Circle circle1, ref Transform transform1, 
-                                                      ref Circle circle2, ref Transform transform2)
+        public static bool IsCircleOverlapsWithCircle(Circle circle1, Transform transform1, 
+                                                      Circle circle2, Transform transform2)
         {
-            var dist2 = GetDistance2(ref transform1.position, ref transform2.position);
+            var dist2 = GetDistance2(transform1.position, transform2.position);
             var radius2 = (circle1.radius + circle2.radius) * (circle1.radius + circle2.radius);
 
             return dist2 <= radius2;
         }
 
         // 圆（circle）是否和矩形（rectangle)重叠
-        public static bool IsCircleOverlapsWithRectangle(ref Circle circle,       ref Transform circleTransform, 
-                                                         ref Rectangle rectangle, ref Transform rectangleTransform)
+        public static bool IsCircleOverlapsWithRectangle(Circle circle,       Transform circleTransform, 
+                                                         Rectangle rectangle, Transform rectangleTransform)
         {
             var m = Matrix.CreateRotationMatrix(rectangleTransform.rotation * MathX.DEG2RAD * -1f);
             var v = circleTransform.position - rectangleTransform.position;
 
-            v = Matrix.Transform(ref v, ref m);
+            v = Matrix.Transform(v, m);
             v.x = MathX.Abs(v.x);
             v.y = MathX.Abs(v.y);
 
@@ -101,18 +101,18 @@
         }
 
         // 两个矩形是否重叠
-        public static bool IsRectangleOverlapsWithRectangle(ref Rectangle rectangle1, ref Transform transform1,
-                                                            ref Rectangle rectangle2, ref Transform transform2)
+        public static bool IsRectangleOverlapsWithRectangle(Rectangle rectangle1, Transform transform1,
+                                                            Rectangle rectangle2, Transform transform2)
         {
-            if (!IsRectangleProjectionOverlaps(ref rectangle1, ref transform1, ref rectangle2, ref transform2)) return false;
-            if (!IsRectangleProjectionOverlaps(ref rectangle2, ref transform2, ref rectangle1, ref transform1)) return false;
+            if (!IsRectangleProjectionOverlaps(rectangle1, transform1, rectangle2, transform2)) return false;
+            if (!IsRectangleProjectionOverlaps(rectangle2, transform2, rectangle1, transform1)) return false;
 
             return true;
         }
 
         // 矩形投影是否重叠
-        private static bool IsRectangleProjectionOverlaps(ref Rectangle rectangle1, ref Transform transform1,
-                                                          ref Rectangle rectangle2, ref Transform transform2)
+        private static bool IsRectangleProjectionOverlaps(Rectangle rectangle1, Transform transform1,
+                                                          Rectangle rectangle2, Transform transform2)
         {
             var w = rectangle1.width * 0.5f;
             var h = rectangle1.height * 0.5f;
@@ -120,13 +120,13 @@
 
             var m1 = Matrix.CreateTranslationMatrix(d.x, d.y);
             var m2 = Matrix.CreateRotationMatrix(transform1.rotation * MathX.DEG2RAD * -1f);
-            var m3 = m1 * m2;
+            var mt = m1 * m2;
 
             var ps = GetRectanglePoints(rectangle2.width, rectangle2.height, transform2.rotation);
-            var p5 = transform2.position + Matrix.Transform(ref ps[0], ref m3);
-            var p6 = transform2.position + Matrix.Transform(ref ps[1], ref m3);
-            var p7 = transform2.position + Matrix.Transform(ref ps[2], ref m3);
-            var p8 = transform2.position + Matrix.Transform(ref ps[3], ref m3);
+            var p5 = transform2.position + Matrix.Transform(ps[0], mt);
+            var p6 = transform2.position + Matrix.Transform(ps[1], mt);
+            var p7 = transform2.position + Matrix.Transform(ps[2], mt);
+            var p8 = transform2.position + Matrix.Transform(ps[3], mt);
 
             var x1 = MathX.Min(p5.x, p6.x, p7.x, p8.x);
             var x2 = MathX.Max(p5.x, p6.x, p7.x, p8.x);
@@ -140,9 +140,8 @@
         }
 
         // 多边形（polygon）和圆形（circle）是否重叠
-        public static bool IsPolygonOverlapsWithCircle(ref Polygon polygon, ref Transform polygonTransform, ref Circle circle, ref Transform circleTransform)
+        public static bool IsPolygonOverlapsWithCircle(Polygon polygon, Transform polygonTransform, Circle circle, Transform circleTransform)
         {
-            var cp = circleTransform.position;
             var r2 = circle.radius * circle.radius;
 
             int n = polygon.vertics.Length;
@@ -151,38 +150,38 @@
                 var p1 = polygon.vertics[i] - polygonTransform.position;
                 var p2 = polygon.vertics[(i + 1) % n] - polygonTransform.position;
 
-                var d2 = GetDistance2(ref p1, ref p2, ref cp);
+                var d2 = GetDistance2(p1, p2, circleTransform.position);
                 if (d2 <= r2) return true;
             }
 
-            return IsGeometryContains(polygon, ref polygonTransform, ref cp);
+            return IsGeometryContains(polygon, polygonTransform, circleTransform.position);
         }
 
         // 线段（p1, p2）是否和线段（q1, q2）相交
-        public static bool IsSegmentIntersected(ref Vector2 p1, ref Vector2 p2, ref Vector2 q1, ref Vector2 q2)
+        public static bool IsSegmentIntersected(Vector2 p1, Vector2 p2, Vector2 q1, Vector2 q2)
         {
             Vector2 a1 = p1 - q2, b1 = p2 - p2, c1 = q1 - q2;
-            if (Vector2.Cross(ref a1, ref c1) * Vector2.Cross(ref b1, ref c1) > 0) return false;
+            if (Vector2.Cross(a1, c1) * Vector2.Cross(b1, c1) > 0) return false;
 
             Vector2 a2 = q2 - p2, b2 = q1 - p2, c2 = p1 - p2;
-            if (Vector2.Cross(ref a2, ref c2) * Vector2.Cross(ref b2, ref c2) > 0) return false;
+            if (Vector2.Cross(a2, c2) * Vector2.Cross(b2, c2) > 0) return false;
 
             return true;
         }
 
         // 获取图形（geomotry， transform）在方向（dir）上最大投影的点
-        public static Vector2 GetFarthestProjectionPoint(IGeometry geometry, ref Transform transform, ref Vector2 dir)
+        public static Vector2 GetFarthestProjectionPoint(IGeometry geometry, Transform transform, Vector2 dir)
         {
             var mt = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
-            var d = Matrix.Transform(ref dir, ref mt);
+            dir = Matrix.Transform(dir, mt);
 
-            var pt = geometry.GetFarthestProjectionPoint(ref d);
+            var pt = geometry.GetFarthestProjectionPoint(dir);
 
             var m1 = Matrix.CreateRotationMatrix(transform.rotation * MathX.DEG2RAD);
-            var m2 = Matrix.CreateTranslationMatrix(ref transform.position);
+            var m2 = Matrix.CreateTranslationMatrix(transform.position);
             mt = m1 * m2;
 
-            return Matrix.Transform(ref pt, ref mt);
+            return Matrix.Transform(pt, mt);
         }
     }
 }

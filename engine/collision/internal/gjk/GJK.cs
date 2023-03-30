@@ -5,8 +5,8 @@ namespace SimpleX.Collision2D
     static class GJK
     {
         // 检测图形（geometry1, transform1）与图形（geometry2, transform2）是否重叠
-        public static bool Overlaps(ref Transform transform1, IGeometry geometry1,
-                                    ref Transform transform2, IGeometry geometry2)
+        public static bool Overlaps(Transform transform1, IGeometry geometry1,
+                                    Transform transform2, IGeometry geometry2)
         {
             var simplex = new Simplex()
             {
@@ -14,22 +14,22 @@ namespace SimpleX.Collision2D
             };
             var dir = transform1.position - transform2.position;
 
-            var pt = Support(ref transform1, ref geometry1, ref transform2, ref geometry2, ref dir);
-            simplex.Add(ref pt);
+            var pt = Support(transform1, geometry1, transform2, geometry2, dir);
+            simplex.Add(pt);
 
             dir.Negative();
 
             while (true)
             {
-                pt = Support(ref transform1, ref geometry1, ref transform2, ref geometry2, ref dir);
-                simplex.Add(ref pt);
+                pt = Support(transform1, geometry1, transform2, geometry2, dir);
+                simplex.Add(pt);
 
-                if (simplex.a.Dot(ref dir) <= 0.0f)
+                if (simplex.a.Dot(dir) <= 0.0f)
                 {
                     return false;
                 }
 
-                if (simplex.IsContainsOrigin(ref dir))
+                if (simplex.IsContainsOrigin(dir))
                 {
                     return true;
                 }
@@ -39,13 +39,12 @@ namespace SimpleX.Collision2D
         }
 
         // 两个图形的闵可夫斯基差
-        private static Vector2 Support(ref Transform transform1, ref IGeometry geometry1,
-                                       ref Transform transform2, ref IGeometry geometry2, 
-                                       ref Vector2 dir)
+        private static Vector2 Support(Transform transform1, IGeometry geometry1,
+                                       Transform transform2, IGeometry geometry2, 
+                                       Vector2 dir)
         {
-            var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, ref transform1, ref dir);
-            var neg = -dir;
-            var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, ref transform2, ref neg);
+            var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, transform1,  dir);
+            var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, transform2, -dir);
 
             return p1 - p2;
         }

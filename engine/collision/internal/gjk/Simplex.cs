@@ -16,7 +16,7 @@ namespace SimpleX.Collision2D
         public Vector2 b { get => vertics[count - 2]; }
         public Vector2 c { get => vertics[count - 3]; }
 
-        public void Add(ref Vector2 point)
+        public void Add(Vector2 point)
         {
             vertics.Add(point);
         }
@@ -40,7 +40,7 @@ namespace SimpleX.Collision2D
         }
 
         // 是否包含原点
-        public bool IsContainsOrigin(ref Vector2 dir)
+        public bool IsContainsOrigin(Vector2 dir)
         {
             var ao = -a;
             var ab = b - a;
@@ -49,17 +49,17 @@ namespace SimpleX.Collision2D
             {
                 var ac = c - a;
 
-                var u = Vector2.Mul3(ref ac, ref ab, ref ab);
-                var v = Vector2.Mul3(ref ab, ref ac, ref ac);
+                var u = Vector2.Mul3(ac, ab, ab);
+                var v = Vector2.Mul3(ab, ac, ac);
 
-                if (Vector2.Dot(ref u, ref ao) > 0.0f)
+                if (Vector2.Dot(u, ao) > 0.0f)
                 {
                     Remove('c');
                     dir = u;
                 }
                 else
                 {
-                    if (Vector2.Dot(ref v, ref ao) <= 0.0f)
+                    if (Vector2.Dot(v, ao) <= 0.0f)
                     {
                         return true;
                     }
@@ -70,7 +70,7 @@ namespace SimpleX.Collision2D
             }
             else
             {
-                dir = Vector2.Mul3(ref ab, ref ao, ref ab);
+                dir = Vector2.Mul3(ab, ao, ab);
             }
 
             return false;

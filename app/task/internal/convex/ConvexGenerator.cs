@@ -31,13 +31,13 @@ namespace SimpleX
         }
 
         // 生成随机的凸多边形
-        public Vector2[] Gen(ref Vector2 position, int width, int height, int count)
+        public Vector2[] Gen(Vector2 position, int width, int height, int count)
         {
             List<int> xlist = new List<int>(count);
             List<int> ylist = new List<int>(count);
 
-            var w = (int)Math.Floor(width  * 0.5f) + 1;
-            var h = (int)Math.Floor(height * 0.5f) + 1;
+            var w = (int)MathX.Floor(width  * 0.5f) + 1;
+            var h = (int)MathX.Floor(height * 0.5f) + 1;
             for (int i = 0; i < count; i++)
             {
                 xlist.Add(random.Next(-w, w+1));
@@ -101,10 +101,10 @@ namespace SimpleX
             }
             vectors.Sort((a, b) =>
             {
-                var u = Math.Atan2(a.y, a.x);
-                var v = Math.Atan2(b.y, b.x);
+                var u = MathX.Atan2(a.y, a.x);
+                var v = MathX.Atan2(b.y, b.x);
 
-                if (Math.Abs(u - v) <= double.Epsilon) return 0;
+                if (MathX.Abs(u - v) <= double.Epsilon) return 0;
 
                 return (u < v) ? -1 : 1;
             });

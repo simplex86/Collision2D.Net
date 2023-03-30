@@ -16,18 +16,15 @@ namespace SimpleX
             geometry = capsule;
         }
 
-        protected override void DrawGeometry(Graphics grap, ref Transform transform)
+        protected override void DrawGeometry(Graphics grap, Transform transform)
         {
+            grap.ResetTransform();
+
             var points = GeometryHelper.GetCapsulePoints(geometry.length, transform.rotation);
 
             DrawRectangle(grap, transform.position.x, transform.position.y, geometry.length, geometry.radius * 2, transform.rotation);
             DrawSemicircle1(grap, transform.position.x + points[0].x, transform.position.y + points[0].y, geometry.radius, transform.rotation);
             DrawSemicircle2(grap, transform.position.x + points[1].x, transform.position.y + points[1].y, geometry.radius, transform.rotation);
-        }
-
-        protected override void OnDrawGeometry(Graphics grap, ref Transform transform)
-        {
-
         }
 
         private void DrawRectangle(Graphics grap, float x, float y, float width, float height, float rotation)

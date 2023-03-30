@@ -24,19 +24,19 @@ namespace SimpleX
 
                 if (aabb.minx <= world.left.x)
                 {
-                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.left.normal);
+                    movementComponent.direction = Vector2.Reflect(direction, world.left.normal);
                 }
                 else if (aabb.maxx >= world.right.x)
                 {
-                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.right.normal);
+                    movementComponent.direction = Vector2.Reflect(direction, world.right.normal);
                 }
                 else if (aabb.miny <= world.top.y)
                 {
-                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.top.normal);
+                    movementComponent.direction = Vector2.Reflect(direction, world.top.normal);
                 }
                 else if(aabb.maxy >= world.bottom.y)
                 {
-                    movementComponent.direction = Vector2.Reflect(ref direction, ref world.bottom.normal);
+                    movementComponent.direction = Vector2.Reflect(direction, world.bottom.normal);
                 }
             });
         }

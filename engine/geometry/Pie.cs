@@ -5,24 +5,53 @@
         public float radius;
         public float sweep;
 
-        public bool Contains(ref Vector2 pt)
+        public bool Contains(Vector2 pt)
         {
-            var o = Vector2.zero;
-            var r = Vector2.right;
+            if (pt.magnitude2 > radius * radius)
+            {
+                return false;
+            }
 
-            var d = GeometryHelper.GetDistance2(ref pt, ref o);
-            if (d > radius * radius) return false;
+            pt.y = MathX.Abs(pt.y);
+            var a0 = pt.Angle() * MathX.RAD2DEG;
+            var a1 = MathX.Clamp360(sweep * 0.5f);
 
-            var p = new Vector2(pt.x, MathX.Abs(pt.y));
-            var c = Vector2.Dot(ref p, ref r);
-            var t = MathX.ACos(c);
-
-            return t <= sweep * 0.5f;
+            return a0 <= a1;
         }
 
-        public Vector2 GetFarthestProjectionPoint(ref Vector2 dir)
+        public Vector2 GetFarthestProjectionPoint(Vector2 dir)
         {
-            return Vector2.zero;
+            var sign = MathX.Sign(dir.y);
+
+            dir.y = MathX.Abs(dir.y);
+            var a0 = dir.Angle() * MathX.RAD2DEG;
+            var a1 = MathX.Clamp360(sweep * 0.5f);
+
+            var pt = Vector2.zero;
+            if (a0 <= a1)
+            {
+                pt = dir.normalized * radius;
+            }
+            else
+            {
+                if (a1 <= 90)
+                {
+                    var a2 = 90 + a1;
+                    if (a0 <= a2)
+                    {
+                        var mt = Matrix.CreateRotationMatrix(a1 * MathX.DEG2RAD);
+                        pt = Matrix.Transform(Vector2.right, mt) * radius;
+                    }
+                }
+                else
+                {
+                    var mt = Matrix.CreateRotationMatrix(a1 * MathX.DEG2RAD);
+                    pt = Matrix.Transform(Vector2.right, mt) * radius;
+                }
+            }
+            pt.y *= sign;
+
+            return pt;
         }
     }
 }

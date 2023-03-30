@@ -2,8 +2,8 @@
 {
     public interface IGeometry
     {
-        bool Contains(ref Vector2 pt);
+        bool Contains(Vector2 pt);
 
-        Vector2 GetFarthestProjectionPoint(ref Vector2 dir);
+        Vector2 GetFarthestProjectionPoint(Vector2 dir);
     }
 }

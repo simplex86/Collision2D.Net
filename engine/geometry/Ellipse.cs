@@ -9,7 +9,7 @@
         public float A => width * 0.5f;
         public float B => height * 0.5f;
 
-        public bool Contains(ref Vector2 pt)
+        public bool Contains(Vector2 pt)
         {
             var x2 = MathX.Pow2(pt.x);
             var y2 = MathX.Pow2(pt.y);
@@ -19,7 +19,7 @@
             return x2 / a2 + y2 / b2 <= 1;
         }
 
-        public Vector2 GetFarthestProjectionPoint(ref Vector2 dir)
+        public Vector2 GetFarthestProjectionPoint(Vector2 dir)
         {
             var x = 0f;
             var y = 0f;
@@ -44,7 +44,7 @@
 
                 var t = MathX.Sqrt((a2 + b2 * k2) / k2);
                 var v = new Vector2(0.0f, t);
-                if (Vector2.Dot(ref v, ref dir) < 0)
+                if (Vector2.Dot(v, dir) < 0)
                 {
                     t *= -1;
                 }

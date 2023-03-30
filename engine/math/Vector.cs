@@ -6,12 +6,12 @@
         public float y;
         internal readonly float w;
 
-        public readonly static Vector2 zero  = new Vector2( 0,  0);
-        public readonly static Vector2 one   = new Vector2( 1,  1);
-        public readonly static Vector2 left  = new Vector2(-1,  0);
-        public readonly static Vector2 right = new Vector2( 1,  0);
-        public readonly static Vector2 up    = new Vector2( 0, -1);
-        public readonly static Vector2 down  = new Vector2( 0,  1);
+        public readonly static Vector2 zero = new Vector2(0, 0);
+        public readonly static Vector2 one = new Vector2(1, 1);
+        public readonly static Vector2 left = new Vector2(-1, 0);
+        public readonly static Vector2 right = new Vector2(1, 0);
+        public readonly static Vector2 up = new Vector2(0, -1);
+        public readonly static Vector2 down = new Vector2(0, 1);
 
         public Vector2(float x, float y)
         {
@@ -71,26 +71,26 @@
         }
 
         // 两点间的距离
-        public float Distance(ref Vector2 v)
+        public float Distance(Vector2 v)
         {
-            return Distance(ref this, ref v);
+            return Distance(this, v);
         }
 
         // 两点间的距离
-        public static float Distance(ref Vector2 a, ref Vector2 b)
+        public static float Distance(Vector2 a, Vector2 b)
         {
-            var d = Distance2(ref a, ref b);
+            var d = Distance2(a, b);
             return MathX.Sqrt(d);
         }
 
         // 两点间距离的平方
-        public float Distance2(ref Vector2 v)
+        public float Distance2(Vector2 v)
         {
-            return Distance2(ref this, ref v);
+            return Distance2(this, v);
         }
 
         // 两点间距离的平方
-        public static float Distance2(ref Vector2 a, ref Vector2 b)
+        public static float Distance2(Vector2 a, Vector2 b)
         {
             var dx = a.x - b.x;
             var dy = a.y - b.y;
@@ -98,33 +98,33 @@
         }
 
         // 向量点乘
-        public float Dot(ref Vector2 v)
+        public float Dot(Vector2 v)
         {
-            return Dot(ref this, ref v);
+            return Dot(this, v);
         }
 
         // 向量点乘
-        public static float Dot(ref Vector2 a, ref Vector2 b)
+        public static float Dot(Vector2 a, Vector2 b)
         {
             return a.x * b.x + a.y * b.y;
         }
 
         // 向量叉乘
         // 在2D中，向量叉乘没有意义。但为了方便某些计算，定义了叉乘。由W分量表示Z轴
-        public float Cross(ref Vector2 v)
+        public float Cross(Vector2 v)
         {
-            return Cross(ref this, ref v);
+            return Cross(this, v);
         }
 
         // 向量叉乘
         // 在2D中，向量叉乘没有意义。但为了方便某些计算，定义了叉乘。由W分量表示Z轴
-        public static float Cross(ref Vector2 a, ref Vector2 b)
+        public static float Cross(Vector2 a, Vector2 b)
         {
             return a.x * b.y - a.y * b.x;
         }
 
         // 向量三重积
-        public static Vector2 Mul3(ref Vector2 a, ref Vector2 b, ref Vector2 c)
+        public static Vector2 Mul3(Vector2 a, Vector2 b, Vector2 c)
         {
             var z = a.x * b.y - a.y * b.x;
             return new Vector2(-z * c.y, z * c.x);
@@ -133,32 +133,36 @@
         // 向量与X轴的夹角，度
         public float Angle()
         {
-            var v = right;
-            return Angle(ref v);
+            return Angle(right);
         }
 
         // 向量夹角，度
-        public float Angle(ref Vector2 v)
+        public float Angle(Vector2 v)
         {
-            return Angle(ref this, ref v);
+            return Angle(this, v);
         }
 
         // 向量夹角，度
-        public static float Angle(ref Vector2 a, ref Vector2 b)
+        public static float Angle(Vector2 a, Vector2 b)
         {
             var u = a.normalized;
             var v = b.normalized;
-            var d = Dot(ref u, ref v);
+            var d = Dot(u, v);
 
             return MathX.ACos(d);
         }
 
+        public float Theta()
+        {
+            return MathX.Atan2(y, x);
+        }
+
         // 反射向量
-        public static Vector2 Reflect(ref Vector2 input, ref Vector2 normal)
+        public static Vector2 Reflect(Vector2 input, Vector2 normal)
         {
             var I = input;
             var N = normal.normalized;
-            var R = I - 2 * Vector2.Dot(ref I, ref N) * N;
+            var R = I - 2 * Dot(I, N) * N;
 
             return R.normalized;
         }
@@ -195,7 +199,7 @@
         }
 
         // 通过矩阵M变换向量V
-        public static Vector2 Transform(ref Vector2 v, ref Matrix m)
+        public static Vector2 Transform(Vector2 v, Matrix m)
         {
             var x = v.x * m.m11 + v.y * m.m21;
             var y = v.x * m.m12 + v.y * m.m22;

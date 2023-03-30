@@ -46,7 +46,7 @@ namespace SimpleX
             var renderer = entity.renderComponent.renderer;
 
             direction *= speed;
-            renderer.Render(grap, ref collision.transform, ref collision.boundingBox, ref direction, ref color);
+            renderer.Render(grap, collision.transform, collision.boundingBox, direction, color);
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)

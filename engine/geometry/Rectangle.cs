@@ -7,7 +7,7 @@ namespace SimpleX.Collision2D
         public float width;
         public float height;
 
-        public bool Contains(ref Vector2 pt)
+        public bool Contains(Vector2 pt)
         {
             var w = width * 0.5f;
             var h = height * 0.5f;
@@ -18,7 +18,7 @@ namespace SimpleX.Collision2D
             return true;
         }
 
-        public Vector2 GetFarthestProjectionPoint(ref Vector2 dir)
+        public Vector2 GetFarthestProjectionPoint(Vector2 dir)
         {
             var w = width * 0.5f;
             var h = height * 0.5f;
@@ -32,11 +32,11 @@ namespace SimpleX.Collision2D
             };
 
             var point = vertics[0];
-            var max = Vector2.Dot(ref point, ref dir);
+            var max = Vector2.Dot(point, dir);
 
             for (int i = 1; i < vertics.Length; i++)
             {
-                var dot = Vector2.Dot(ref vertics[i], ref dir);
+                var dot = Vector2.Dot(vertics[i], dir);
                 if (dot > max)
                 {
                     max = dot;

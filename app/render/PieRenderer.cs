@@ -13,7 +13,7 @@ namespace SimpleX
             geometry = pie;
         }
 
-        protected override void OnDrawGeometry(Graphics grap, ref Transform transform)
+        protected override void DrawGeometry(Graphics grap, Transform transform)
         {
             var p = -geometry.radius;
             var s =  geometry.radius * 2;
