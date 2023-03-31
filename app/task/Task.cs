@@ -358,10 +358,8 @@ namespace SimpleX
         private Vector2[] GetRandomConvexPoints()
         {
             var count = random.Next(3, 10);
-            var position = Vector2.zero;
-
             var convex = new ConvexGenerator(random);
-            return convex.Gen(position, 45, 45, count);
+            return convex.Gen(45, 45, count);
         }
 
         private void OnTimerHandler(object sender, EventArgs e)

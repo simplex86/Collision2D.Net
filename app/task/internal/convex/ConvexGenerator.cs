@@ -31,7 +31,7 @@ namespace SimpleX
         }
 
         // 生成随机的凸多边形
-        public Vector2[] Gen(Vector2 position, int width, int height, int count)
+        public Vector2[] Gen(int width, int height, int count)
         {
             List<int> xlist = new List<int>(count);
             List<int> ylist = new List<int>(count);
@@ -124,10 +124,17 @@ namespace SimpleX
             }
 
             var translation = new Vector2(minX - minPolygonX, minY - minPolygonY);
+            var pivot = new Vector2(0, 0);
             for (int i = 0; i < count; i++)
             {
                 points[i] += translation;
-                result.Add(points[i] + position);
+                pivot += points[i];
+            }
+            pivot = pivot / count;
+
+            for (int i = 0; i < count; i++)
+            {
+                result.Add(points[i] - pivot);
             }
 
             return result.ToArray();

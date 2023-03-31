@@ -32,22 +32,10 @@
             {
                 pt = dir.normalized * radius;
             }
-            else
+            else if (a0 <= 90 + a1)
             {
-                if (a1 <= 90)
-                {
-                    var a2 = 90 + a1;
-                    if (a0 <= a2)
-                    {
-                        var mt = Matrix.CreateRotationMatrix(a1 * MathX.DEG2RAD);
-                        pt = Matrix.Transform(Vector2.right, mt) * radius;
-                    }
-                }
-                else
-                {
-                    var mt = Matrix.CreateRotationMatrix(a1 * MathX.DEG2RAD);
-                    pt = Matrix.Transform(Vector2.right, mt) * radius;
-                }
+                var mt = Matrix.CreateRotationMatrix(a1 * MathX.DEG2RAD);
+                pt = Matrix.Transform(Vector2.right, mt) * radius;
             }
             pt.y *= sign;
 
