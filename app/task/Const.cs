@@ -3,8 +3,10 @@
     // 碰撞体类型
     public enum CollisionType
     {
+        BOT,
+
         // 圆盘
-        Circle,
+        Circle = BOT,
         // 矩形
         Rectangle,
         // 凸多边形
@@ -15,5 +17,7 @@
         Ellipse,
         // 扇形
         Pie,
+
+        EOT,
     }
 }

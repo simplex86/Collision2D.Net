@@ -9,5 +9,19 @@
 
         public float width  => maxx - minx;   
         public float height => maxy - miny;
+
+        public bool Contains(Vector2 pt)
+        {
+            return minx <= pt.x && maxx >= pt.x &&
+                   miny <= pt.y && maxy >= pt.y;
+        }
+
+        public bool Overlaps(AABB other)
+        {
+            if (minx > other.maxx || maxx < other.minx) return false;
+            if (miny > other.maxy || maxy < other.miny) return false;
+
+            return true;
+        }
     }
 }

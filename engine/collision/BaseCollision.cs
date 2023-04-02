@@ -2,13 +2,11 @@
 
 namespace SimpleX.Collision2D
 {
-    public abstract class BaseCollision
+    public abstract class IBaseCollision
     {
-        // 类型
-        public CollisionType type { get; }
-        //
-        public IGeometry geometry;
-        //
+        // 图形
+        public IGeometry geometry { get; protected set; }
+        // 
         public Transform transform = new Transform()
         {
             position = Vector2.zero,
@@ -18,6 +16,23 @@ namespace SimpleX.Collision2D
         // 包围盒
         public AABB boundingBox = new AABB();
 
+        protected IBaseCollision()
+        {
+        }
+
+        public abstract void Move(Vector2 delta);
+        public abstract void MoveTo(Vector2 position);
+        public abstract void Rotate(float delta);
+        public abstract void RotateTo(float rotation);
+
+        public abstract void RefreshGeometry();
+
+        public abstract bool Contains(Vector2 pt);
+        public abstract bool Overlaps(IBaseCollision collision);
+    }
+
+    public abstract class BaseCollision<T> : IBaseCollision where T :IGeometry
+    {
         protected static class DirtyFlag
         {
             public const byte None = 0x00;
@@ -36,44 +51,43 @@ namespace SimpleX.Collision2D
         };
 
         //
-        protected BaseCollision(CollisionType type, Vector2 position, float rotation)
+        protected BaseCollision(Vector2 position, float rotation)
         {
-            this.type = type;
             this.transform.position = position;
             this.transform.rotation = rotation;
-            this.dirty = DirtyFlag.Position;
+            this.dirty = DirtyFlag.Position | DirtyFlag.Rotation;
         }
 
         // 移动
-        public void Move(Vector2 delta)
+        public override void Move(Vector2 delta)
         {
             transform.position += delta;
             dirty |= DirtyFlag.Position;
         }
 
         // 移动到
-        public void MoveTo(Vector2 position)
+        public override void MoveTo(Vector2 position)
         {
             transform.position = position;
             dirty |= DirtyFlag.Position;
         }
 
         // 旋转
-        public void Rotate(float delta)
+        public override void Rotate(float delta)
         {
             transform.rotation += delta;
             dirty |= DirtyFlag.Rotation;
         }
 
         // 旋转到
-        public void RotateTo(float angle)
+        public override void RotateTo(float angle)
         {
             transform.rotation = angle;
             dirty |= DirtyFlag.Rotation;
         }
 
         // 刷新几何信息
-        public virtual void RefreshGeometry()
+        public override void RefreshGeometry()
         {
             if (dirty != DirtyFlag.None)
             {
@@ -92,9 +106,9 @@ namespace SimpleX.Collision2D
         }
 
         // 是否包含点pt
-        public bool Contains(Vector2 pt)
+        public override bool Contains(Vector2 pt)
         {
-            if (IsAABBContains(pt))
+            if (boundingBox.Contains(pt))
             {
                 return GeometryHelper.IsGeometryContains(geometry, transform, pt);
             }
@@ -102,16 +116,13 @@ namespace SimpleX.Collision2D
         }
 
         // 是否与collision产生碰撞
-        public bool Overlaps(BaseCollision collision)
+        public override bool Overlaps(IBaseCollision collision)
         {
-            return CollisionHelper.Overlaps(this, collision);
-        }
-
-        // AABB是否包含点pt
-        protected bool IsAABBContains(Vector2 pt)
-        {
-            return boundingBox.minx <= pt.x && boundingBox.maxx >= pt.x &&
-                   boundingBox.miny <= pt.y && boundingBox.maxy >= pt.y;
+            if (boundingBox.Overlaps(collision.boundingBox))
+            {
+                return GJK.Overlaps(geometry, transform, collision.geometry, collision.transform);
+            }
+            return false;
         }
     }
 }

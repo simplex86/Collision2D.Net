@@ -23,7 +23,7 @@ namespace SimpleX
             });
         }
 
-        private void CheckCollision(BaseCollision collision)
+        private void CheckCollision(IBaseCollision collision)
         {
             var position = collision.transform.position;
             var bounding = collision.boundingBox;

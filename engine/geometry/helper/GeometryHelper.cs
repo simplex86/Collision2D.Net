@@ -62,7 +62,7 @@
         // 图形（geometry)是否包含点（pt)
         public static bool IsGeometryContains(IGeometry geometry, Transform transform, Vector2 pt)
         {
-            var m1 = Matrix.CreateTranslationMatrix(-transform.position.x, -transform.position.y);
+            var m1 = Matrix.CreateTranslationMatrix(-transform.position);
             var m2 = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
             var mt = m1 * m2;
             pt = Matrix.Transform(pt, mt);
@@ -116,9 +116,8 @@
         {
             var w = rectangle1.width * 0.5f;
             var h = rectangle1.height * 0.5f;
-            var d = transform1.position * -1f;
 
-            var m1 = Matrix.CreateTranslationMatrix(d.x, d.y);
+            var m1 = Matrix.CreateTranslationMatrix(-transform1.position);
             var m2 = Matrix.CreateRotationMatrix(transform1.rotation * MathX.DEG2RAD * -1f);
             var mt = m1 * m2;
 

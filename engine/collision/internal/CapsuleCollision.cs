@@ -1,9 +1,9 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class CapsuleCollision : BaseCollision
+    internal class CapsuleCollision : BaseCollision<Capsule>
     {
         public CapsuleCollision(Capsule capsule, Vector2 position, float rotation)
-            : base(CollisionType.Capsule, position, rotation)
+            : base(position, rotation)
         {
             geometry = capsule;
         }

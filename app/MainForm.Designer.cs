@@ -54,7 +54,7 @@
             this.detail.Location = new System.Drawing.Point(7, 7);
             this.detail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.detail.Name = "detail";
-            this.detail.Size = new System.Drawing.Size(104, 80);
+            this.detail.Size = new System.Drawing.Size(105, 80);
             this.detail.TabIndex = 1;
             this.detail.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nCollide\r\n  FPS : -  Cost: - m" +
     "s";
@@ -100,7 +100,7 @@
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "凸多边形（2D）碰撞检测";
+            this.Text = "Collision2D.Net";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosingHandler);
             this.Load += new System.EventHandler(this.OnLoadHandler);
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();

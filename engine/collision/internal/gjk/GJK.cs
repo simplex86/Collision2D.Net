@@ -5,8 +5,8 @@ namespace SimpleX.Collision2D
     static class GJK
     {
         // 检测图形（geometry1, transform1）与图形（geometry2, transform2）是否重叠
-        public static bool Overlaps(Transform transform1, IGeometry geometry1,
-                                    Transform transform2, IGeometry geometry2)
+        public static bool Overlaps(IGeometry geometry1,Transform transform1,
+                                    IGeometry geometry2, Transform transform2)
         {
             var simplex = new Simplex()
             {
@@ -14,14 +14,14 @@ namespace SimpleX.Collision2D
             };
             var dir = transform1.position - transform2.position;
 
-            var pt = Support(transform1, geometry1, transform2, geometry2, dir);
+            var pt = Support(geometry1, transform1, geometry2, transform2, dir);
             simplex.Add(pt);
 
             dir.Negative();
 
             while (true)
             {
-                pt = Support(transform1, geometry1, transform2, geometry2, dir);
+                pt = Support(geometry1, transform1, geometry2, transform2, dir);
                 simplex.Add(pt);
 
                 if (simplex.a.Dot(dir) <= 0.0f)
@@ -39,12 +39,13 @@ namespace SimpleX.Collision2D
         }
 
         // 两个图形的闵可夫斯基差
-        private static Vector2 Support(Transform transform1, IGeometry geometry1,
-                                       Transform transform2, IGeometry geometry2, 
+        private static Vector2 Support(IGeometry geometry1,Transform transform1, 
+                                       IGeometry geometry2,Transform transform2,  
                                        Vector2 dir)
         {
-            var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, transform1,  dir);
-            var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, transform2, -dir);
+            var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, transform1, dir);
+            dir.Negative();
+            var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, transform2, dir);
 
             return p1 - p2;
         }

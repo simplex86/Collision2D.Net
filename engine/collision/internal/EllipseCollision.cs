@@ -1,9 +1,9 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class EllipseCollision : BaseCollision
+    internal class EllipseCollision : BaseCollision<Ellipse>
     {
         public EllipseCollision(Ellipse ellipse, Vector2 position, float rotation)
-            : base(CollisionType.Ellipse, position, rotation)
+            : base(position, rotation)
         {
             geometry = ellipse;
         }

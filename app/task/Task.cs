@@ -186,7 +186,8 @@ namespace SimpleX
         // 随机获取碰撞体类型
         public CollisionType GetRandomCollisionType()
         {
-            return (CollisionType)random.Next(0, 6);
+            return (CollisionType)random.Next((int)CollisionType.BOT, 
+                                              (int)CollisionType.EOT);
         }
 
         // 创建随机圆形
@@ -269,55 +270,55 @@ namespace SimpleX
         }
 
         // 创建圆形碰撞体
-        private BaseCollision CreateCircleCollision(Circle circle)
+        private IBaseCollision CreateCircleCollision(Circle circle)
         {
             var position = GetRandomPosition();
-            return CollisionFactory.CreateCircleCollision(position, circle);
+            return CollisionFactory.CreateCircleCollision(circle, position);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateRectangleCollision(Rectangle rectangle)
+        private IBaseCollision CreateRectangleCollision(Rectangle rectangle)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateRectangleCollision(position, rectangle, rotation);
+            return CollisionFactory.CreateRectangleCollision(rectangle, position, rotation);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreateCapsuleCollision(Capsule capsule)
+        private IBaseCollision CreateCapsuleCollision(Capsule capsule)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateCapsuleCollision(position, capsule, rotation);
+            return CollisionFactory.CreateCapsuleCollision(capsule, position, rotation);
         }
 
         // 创建矩形碰撞体
-        private BaseCollision CreatePolygonCollision(Polygon polygon)
+        private IBaseCollision CreatePolygonCollision(Polygon polygon)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreatePolygonCollision(position, polygon, rotation);
+            return CollisionFactory.CreatePolygonCollision(polygon, position, rotation);
         }
 
         // 创建椭圆碰撞体
-        private BaseCollision CreateEllipseCollision(Ellipse ellipse)
+        private IBaseCollision CreateEllipseCollision(Ellipse ellipse)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateEllipseCollision(position, ellipse, rotation);
+            return CollisionFactory.CreateEllipseCollision(ellipse, position, rotation);
         }
 
         // 创建椭圆碰撞体
-        private BaseCollision CreatePieCollision(Pie pie)
+        private IBaseCollision CreatePieCollision(Pie pie)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreatePieCollision(position, pie, rotation);
+            return CollisionFactory.CreatePieCollision(pie, position, rotation);
         }
 
         // 获取随机坐标

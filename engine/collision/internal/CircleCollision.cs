@@ -1,9 +1,9 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class CircleCollision : BaseCollision
+    internal class CircleCollision : BaseCollision<Circle>
     {
         public CircleCollision(Circle circle, Vector2 position)
-            : base(CollisionType.Circle, position, 0)
+            : base(position, 0)
         {
             geometry = circle;
         }
