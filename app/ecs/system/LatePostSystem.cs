@@ -18,15 +18,15 @@ namespace SimpleX
         {
             world.Each((entity) =>
             {
-                var collision = entity.collisionComponent.collision;
-                CheckCollision(collision);
+                var collider = entity.collisionComponent.collider;
+                CheckCollision(collider);
             });
         }
 
-        private void CheckCollision(IBaseCollision collision)
+        private void CheckCollision(IBaseCollider collider)
         {
-            var position = collision.transform.position;
-            var bounding = collision.boundingBox;
+            var position = collider.transform.position;
+            var bounding = collider.boundingBox;
 
             var w1 = position.x - bounding.minx;
             var w2 = bounding.maxx - position.x;
@@ -37,7 +37,7 @@ namespace SimpleX
             var dy = MathX.Clamp(position.y, world.top.y + h1, world.bottom.y - h2);
 
             position = new Vector2(dx, dy);
-            collision.MoveTo(position);
+            collider.MoveTo(position);
         }
     }
 }

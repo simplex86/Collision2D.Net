@@ -39,14 +39,14 @@ namespace SimpleX
         // 绘制实体
         private void DrawEntity(Graphics grap, Entity entity)
         {
-            var collision = entity.collisionComponent.collision;
+            var collider = entity.collisionComponent.collider;
             var direction = entity.movementComponent.direction;
             var speed = entity.movementComponent.speed;
             var color = entity.colorComponent.color;
             var renderer = entity.renderComponent.renderer;
 
             direction *= speed;
-            renderer.Render(grap, collision.transform, collision.boundingBox, direction, color);
+            renderer.Render(grap, collider.transform, collider.boundingBox, direction, color);
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)

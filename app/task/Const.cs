@@ -1,7 +1,7 @@
 ﻿namespace SimpleX.Collision2D
 {
     // 碰撞体类型
-    public enum CollisionType
+    public enum ColliderType
     {
         BOT,
 

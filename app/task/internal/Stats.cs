@@ -3,7 +3,7 @@
     class Stats
     {
         //
-        public int collisionCount { get; set; }
+        public int colliderCount { get; set; }
         //
         public float collideCost { get => (frames[0] == 0) ? float.NaN : costs[0] / frames[0]; }
         //

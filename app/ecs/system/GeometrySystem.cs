@@ -16,8 +16,8 @@ namespace SimpleX
         {
             world.Each((entity) =>
             {
-                var collision = entity.collisionComponent.collision;
-                collision.RefreshGeometry();
+                var collider = entity.collisionComponent.collider;
+                collider.RefreshGeometry();
             });
         }
     }

@@ -2,7 +2,7 @@
 
 namespace SimpleX.Collision2D
 {
-    public abstract class IBaseCollision
+    public abstract class IBaseCollider
     {
         // 图形
         public IGeometry geometry { get; protected set; }
@@ -16,7 +16,7 @@ namespace SimpleX.Collision2D
         // 包围盒
         public AABB boundingBox = new AABB();
 
-        protected IBaseCollision()
+        protected IBaseCollider()
         {
         }
 
@@ -28,10 +28,10 @@ namespace SimpleX.Collision2D
         public abstract void RefreshGeometry();
 
         public abstract bool Contains(Vector2 pt);
-        public abstract bool Overlaps(IBaseCollision collision);
+        public abstract bool Overlaps(IBaseCollider collision);
     }
 
-    public abstract class BaseCollision<T> : IBaseCollision where T :IGeometry
+    public abstract class BaseCollider<T> : IBaseCollider where T :IGeometry
     {
         protected static class DirtyFlag
         {
@@ -51,7 +51,7 @@ namespace SimpleX.Collision2D
         };
 
         //
-        protected BaseCollision(Vector2 position, float rotation)
+        protected BaseCollider(Vector2 position, float rotation)
         {
             this.transform.position = position;
             this.transform.rotation = rotation;
@@ -116,11 +116,11 @@ namespace SimpleX.Collision2D
         }
 
         // 是否与collision产生碰撞
-        public override bool Overlaps(IBaseCollision collision)
+        public override bool Overlaps(IBaseCollider collider)
         {
-            if (boundingBox.Overlaps(collision.boundingBox))
+            if (boundingBox.Overlaps(collider.boundingBox))
             {
-                return GJK.Overlaps(geometry, transform, collision.geometry, collision.transform);
+                return GJK.Overlaps(geometry, transform, collider.geometry, collider.transform);
             }
             return false;
         }

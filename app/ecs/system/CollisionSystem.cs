@@ -16,14 +16,14 @@ namespace SimpleX
         {
             world.Each2((a, b) =>
             {
-                var collision1 = a.collisionComponent.collision;
-                var collision2 = b.collisionComponent.collision;
+                var collider1 = a.collisionComponent.collider;
+                var collider2 = b.collisionComponent.collider;
 
-                if (collision1.Overlaps(collision2))
+                if (collider1.Overlaps(collider2))
                 {
-                    var direction = Vector2.Normalize(collision1.transform.position - collision2.transform.position);
-                    a.movementComponent.direction = direction;
-                    b.movementComponent.direction = direction * -1;
+                    var direction = Vector2.Normalize(collider1.transform.position - collider2.transform.position);
+                    a.movementComponent.direction =  direction;
+                    b.movementComponent.direction = -direction;
                 }
             });
         }

@@ -6,6 +6,6 @@ namespace SimpleX
 
     class CollisionComponent
     {
-        public IBaseCollision collision = null;
+        public IBaseCollider collider = null;
     }
 }

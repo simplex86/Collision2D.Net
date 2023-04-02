@@ -74,7 +74,7 @@ namespace SimpleX
                 var entity = CreateEntity();
                 world.AddEntity(entity);
             }
-            stats.collisionCount = ENTITY_COUNT;
+            stats.colliderCount = ENTITY_COUNT;
 
             collide.Start();
             render.Start();
@@ -95,44 +95,44 @@ namespace SimpleX
         {
             var entity = new Entity();
 
-            var type = GetRandomCollisionType();
+            var type = GetRandomColliderType();
             while (true)
             {
                 switch (type)
                 {
-                    case CollisionType.Circle:
+                    case ColliderType.Circle:
                         var circle = CreateRandomCircle();
-                        entity.collisionComponent.collision = CreateCircleCollision(circle);
+                        entity.collisionComponent.collider = CreateCircleCollider(circle);
                         entity.colorComponent.color = Color.Red;
                         entity.renderComponent.renderer = new CircleRenderer(circle);
                         break;
-                    case CollisionType.Rectangle:
+                    case ColliderType.Rectangle:
                         var rectangle = CreateRandomRectangle();
-                        entity.collisionComponent.collision = CreateRectangleCollision(rectangle);
+                        entity.collisionComponent.collider = CreateRectangleCollider(rectangle);
                         entity.colorComponent.color = Color.Green;
                         entity.renderComponent.renderer = new RectangleRenderer(rectangle);
                         break;
-                    case CollisionType.Capsule:
+                    case ColliderType.Capsule:
                         var capsule = CreateRandomCapsule();
-                        entity.collisionComponent.collision = CreateCapsuleCollision(capsule);
+                        entity.collisionComponent.collider = CreateCapsuleCollider(capsule);
                         entity.colorComponent.color = Color.Blue;
                         entity.renderComponent.renderer = new CapsuleRenderer(capsule);
                         break;
-                    case CollisionType.Polygon:
+                    case ColliderType.Polygon:
                         var polygon = CreateRandomPolygon();
-                        entity.collisionComponent.collision = CreatePolygonCollision(polygon);
+                        entity.collisionComponent.collider = CreatePolygonCollider(polygon);
                         entity.colorComponent.color = Color.Orange;
                         entity.renderComponent.renderer = new PolygonRenderer(polygon);
                         break;
-                    case CollisionType.Ellipse:
+                    case ColliderType.Ellipse:
                         var ellipse = CreateRandomEllipse();
-                        entity.collisionComponent.collision = CreateEllipseCollision(ellipse);
+                        entity.collisionComponent.collider = CreateEllipseCollider(ellipse);
                         entity.colorComponent.color = Color.Cyan;
                         entity.renderComponent.renderer = new EllipseRenderer(ellipse);
                         break;
-                    case CollisionType.Pie:
+                    case ColliderType.Pie:
                         var pie = CreateRandomPie();
-                        entity.collisionComponent.collision = CreatePieCollision(pie);
+                        entity.collisionComponent.collider = CreatePieCollider(pie);
                         entity.colorComponent.color = Color.DarkKhaki;
                         entity.renderComponent.renderer = new PieRenderer(pie);
                         break;
@@ -141,11 +141,11 @@ namespace SimpleX
                 }
 
                 var overlap = false;
-                var collision = entity.collisionComponent.collision;
+                var collider = entity.collisionComponent.collider;
 
                 world.Each((e) =>
                 {
-                    overlap = e.collisionComponent.collision.Overlaps(collision);
+                    overlap = e.collisionComponent.collider.Overlaps(collider);
                     return !overlap;
                 });
 
@@ -184,10 +184,10 @@ namespace SimpleX
         }
 
         // 随机获取碰撞体类型
-        public CollisionType GetRandomCollisionType()
+        public ColliderType GetRandomColliderType()
         {
-            return (CollisionType)random.Next((int)CollisionType.BOT, 
-                                              (int)CollisionType.EOT);
+            return (ColliderType)random.Next((int)ColliderType.BOT, 
+                                             (int)ColliderType.EOT);
         }
 
         // 创建随机圆形
@@ -270,55 +270,55 @@ namespace SimpleX
         }
 
         // 创建圆形碰撞体
-        private IBaseCollision CreateCircleCollision(Circle circle)
+        private IBaseCollider CreateCircleCollider(Circle circle)
         {
             var position = GetRandomPosition();
-            return CollisionFactory.CreateCircleCollision(circle, position);
+            return ColliderFactory.CreateCircleCollider(circle, position);
         }
 
         // 创建矩形碰撞体
-        private IBaseCollision CreateRectangleCollision(Rectangle rectangle)
+        private IBaseCollider CreateRectangleCollider(Rectangle rectangle)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateRectangleCollision(rectangle, position, rotation);
+            return ColliderFactory.CreateRectangleCollider(rectangle, position, rotation);
         }
 
         // 创建矩形碰撞体
-        private IBaseCollision CreateCapsuleCollision(Capsule capsule)
+        private IBaseCollider CreateCapsuleCollider(Capsule capsule)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateCapsuleCollision(capsule, position, rotation);
+            return ColliderFactory.CreateCapsuleCollider(capsule, position, rotation);
         }
 
         // 创建矩形碰撞体
-        private IBaseCollision CreatePolygonCollision(Polygon polygon)
+        private IBaseCollider CreatePolygonCollider(Polygon polygon)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreatePolygonCollision(polygon, position, rotation);
+            return ColliderFactory.CreatePolygonCollider(polygon, position, rotation);
         }
 
         // 创建椭圆碰撞体
-        private IBaseCollision CreateEllipseCollision(Ellipse ellipse)
+        private IBaseCollider CreateEllipseCollider(Ellipse ellipse)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreateEllipseCollision(ellipse, position, rotation);
+            return ColliderFactory.CreateEllipseCollider(ellipse, position, rotation);
         }
 
         // 创建椭圆碰撞体
-        private IBaseCollision CreatePieCollision(Pie pie)
+        private IBaseCollider CreatePieCollider(Pie pie)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
 
-            return CollisionFactory.CreatePieCollision(pie, position, rotation);
+            return ColliderFactory.CreatePieCollider(pie, position, rotation);
         }
 
         // 获取随机坐标
@@ -374,7 +374,7 @@ namespace SimpleX
 
         private void UpdateStats(Control detail)
         {
-            var countText = string.Format("Collision Count: {0}", stats.collisionCount);
+            var countText = string.Format("Collider Count: {0}", stats.colliderCount);
             var renderText = string.Format("Render\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.renderCost), stats.renderCost * 1000);
             var logicText = string.Format("Collide\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.collideCost), stats.collideCost * 1000);
             detail.Text = $"{countText}\n{renderText}\n{logicText}";

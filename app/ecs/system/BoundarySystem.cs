@@ -19,7 +19,7 @@ namespace SimpleX
                 var collisionComponent = entity.collisionComponent;
                 var movementComponent = entity.movementComponent;
 
-                var aabb = collisionComponent.collision.boundingBox;
+                var aabb = collisionComponent.collider.boundingBox;
                 var direction = movementComponent.direction;
 
                 if (aabb.minx <= world.left.x)

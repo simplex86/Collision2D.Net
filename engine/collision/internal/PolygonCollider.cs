@@ -1,8 +1,8 @@
 ﻿namespace SimpleX.Collision2D
 {
-    class PolygonCollision : BaseCollision<Polygon>
+    class PolygonCollider : BaseCollider<Polygon>
     {
-        public PolygonCollision(Polygon polygon, Vector2 position, float rotation)
+        public PolygonCollider(Polygon polygon, Vector2 position, float rotation)
             : base(position, rotation)
         {
             geometry = polygon;

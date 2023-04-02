@@ -22,8 +22,8 @@ namespace SimpleX
                 {
                     var delta = speed * dt;
 
-                    var collision = entity.collisionComponent.collision;
-                    collision.Rotate(delta);
+                    var collider = entity.collisionComponent.collider;
+                    collider.Rotate(delta);
                 }
             });
         }
