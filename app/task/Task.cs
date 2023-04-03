@@ -163,7 +163,7 @@ namespace SimpleX
                     y = random.Next(-99, 100);
                 }
                 entity.movementComponent.direction = Vector2.Normalize(x, y);
-                entity.movementComponent.speed = random.Next(20, 80);
+                entity.movementComponent.speed = random.Next(40, 80);
 
                 var rotatable = IsRotatable(); // 能移动的才有可能旋转
                 if (rotatable)

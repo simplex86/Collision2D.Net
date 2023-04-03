@@ -11,7 +11,7 @@ namespace SimpleX
         protected Pen bboxPen = new Pen(Color.Red);
 
         // 速度的线头
-        protected static AdjustableArrowCap velocityCap = new AdjustableArrowCap(6, 6, true)   	
+        protected static AdjustableArrowCap velocityCap = new AdjustableArrowCap(4, 4, true)   	
         {
             Filled = true,
             MiddleInset = 1.5f, //设置箭头中间的缩进
@@ -91,7 +91,7 @@ namespace SimpleX
             if (dir.magnitude2 > 0)
             {
                 var sp = position;
-                var ep = position + (dir * 0.8f);
+                var ep = position + (dir * 0.3f);
 
                 grap.DrawLine(velocityPen, sp.x, sp.y, ep.x, ep.y);
             }
