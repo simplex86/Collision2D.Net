@@ -1,37 +1,7 @@
-﻿using System;
-
-namespace SimpleX.Collision2D
+﻿namespace SimpleX.Collision2D
 {
-    public abstract class IBaseCollider
-    {
-        // 图形
-        public IGeometry geometry { get; protected set; }
-        // 
-        public Transform transform = new Transform()
-        {
-            position = Vector2.zero,
-            rotation = 0.0f,
-            scale = 1.0f,
-        };
-        // 包围盒
-        public AABB boundingBox = new AABB();
-
-        protected IBaseCollider()
-        {
-        }
-
-        public abstract void Move(Vector2 delta);
-        public abstract void MoveTo(Vector2 position);
-        public abstract void Rotate(float delta);
-        public abstract void RotateTo(float rotation);
-
-        public abstract void RefreshGeometry();
-
-        public abstract bool Contains(Vector2 pt);
-        public abstract bool Overlaps(IBaseCollider collision);
-    }
-
-    public abstract class BaseCollider<T> : IBaseCollider where T :IGeometry
+    // 
+    public abstract class BaseCollider<T> : ICollider where T :IGeometry
     {
         protected static class DirtyFlag
         {
@@ -115,8 +85,8 @@ namespace SimpleX.Collision2D
             return false;
         }
 
-        // 是否与collision产生碰撞
-        public override bool Overlaps(IBaseCollider collider)
+        // 是否与collider产生碰撞
+        public override bool Overlaps(ICollider collider)
         {
             if (boundingBox.Overlaps(collider.boundingBox))
             {

@@ -270,14 +270,14 @@ namespace SimpleX
         }
 
         // 创建圆形碰撞体
-        private IBaseCollider CreateCircleCollider(Circle circle)
+        private ICollider CreateCircleCollider(Circle circle)
         {
             var position = GetRandomPosition();
             return ColliderFactory.CreateCircleCollider(circle, position);
         }
 
         // 创建矩形碰撞体
-        private IBaseCollider CreateRectangleCollider(Rectangle rectangle)
+        private ICollider CreateRectangleCollider(Rectangle rectangle)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
@@ -286,7 +286,7 @@ namespace SimpleX
         }
 
         // 创建矩形碰撞体
-        private IBaseCollider CreateCapsuleCollider(Capsule capsule)
+        private ICollider CreateCapsuleCollider(Capsule capsule)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
@@ -295,7 +295,7 @@ namespace SimpleX
         }
 
         // 创建矩形碰撞体
-        private IBaseCollider CreatePolygonCollider(Polygon polygon)
+        private ICollider CreatePolygonCollider(Polygon polygon)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
@@ -304,7 +304,7 @@ namespace SimpleX
         }
 
         // 创建椭圆碰撞体
-        private IBaseCollider CreateEllipseCollider(Ellipse ellipse)
+        private ICollider CreateEllipseCollider(Ellipse ellipse)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();
@@ -313,7 +313,7 @@ namespace SimpleX
         }
 
         // 创建椭圆碰撞体
-        private IBaseCollider CreatePieCollider(Pie pie)
+        private ICollider CreatePieCollider(Pie pie)
         {
             var position = GetRandomPosition();
             var rotation = GetRandomRotation();

@@ -82,6 +82,7 @@
     <Compile Include="app\task\internal\Stats.cs" />
     <Compile Include="app\task\Task.cs" />
     <Compile Include="app\task\Const.cs" />
+    <Compile Include="engine\collision\ICollider.cs" />
     <Compile Include="engine\collision\internal\PieCollider.cs" />
     <Compile Include="engine\collision\internal\gjk\GJK.cs" />
     <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="engine\geometry\Rectangle.cs" />
     <Compile Include="engine\geometry\Polygon.cs" />
     <Compile Include="engine\AABB.cs" />
-    <Compile Include="engine\collision\BaseCollider.cs" />
+    <Compile Include="engine\collision\internal\BaseCollider.cs" />
     <Compile Include="engine\collision\internal\CapsuleCollider.cs" />
     <Compile Include="engine\collision\internal\CircleCollider.cs" />
     <Compile Include="engine\collision\ColliderFactory.cs" />
