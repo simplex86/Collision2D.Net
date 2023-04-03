@@ -45,8 +45,8 @@ namespace SimpleX
             var color = entity.colorComponent.color;
             var renderer = entity.renderComponent.renderer;
 
-            direction *= speed;
-            renderer.Render(grap, collider.transform, collider.boundingBox, direction, color);
+            var velocity = direction * speed;
+            renderer.Render(grap, collider.transform, collider.boundingBox, velocity);
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)
@@ -65,7 +65,7 @@ namespace SimpleX
             {
                 var renderer = entity.renderComponent.renderer;
                 var checkbox = sender as CheckBox;
-                renderer.showBoundingBox = checkbox.Checked;
+                renderer.boundingBox = checkbox.Checked;
             });
         }
 
@@ -76,7 +76,7 @@ namespace SimpleX
             {
                 var renderer = entity.renderComponent.renderer;
                 var checkbox = sender as CheckBox;
-                renderer.showDirection = checkbox.Checked;
+                renderer.velocity = checkbox.Checked;
             });
         }
     }

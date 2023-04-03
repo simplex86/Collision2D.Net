@@ -69,12 +69,13 @@
     </Compile>
     <Compile Include="app\Program.cs" />
     <Compile Include="app\render\BaseRenderer.cs" />
-    <Compile Include="app\render\CapsuleRenderer.cs" />
-    <Compile Include="app\render\CircleRenderer.cs" />
-    <Compile Include="app\render\EllipseRenderer.cs" />
-    <Compile Include="app\render\PieRenderer.cs" />
-    <Compile Include="app\render\RectangleRenderer.cs" />
-    <Compile Include="app\render\PolygonRenderer.cs" />
+    <Compile Include="app\render\internal\CapsuleRenderer.cs" />
+    <Compile Include="app\render\internal\CircleRenderer.cs" />
+    <Compile Include="app\render\internal\EllipseRenderer.cs" />
+    <Compile Include="app\render\internal\PieRenderer.cs" />
+    <Compile Include="app\render\internal\RectangleRenderer.cs" />
+    <Compile Include="app\render\internal\PolygonRenderer.cs" />
+    <Compile Include="app\render\IRenderer.cs" />
     <Compile Include="app\task\internal\Time.cs" />
     <Compile Include="app\task\internal\CollideTask.cs" />
     <Compile Include="app\task\internal\convex\ConvexGenerator.cs" />

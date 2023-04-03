@@ -5,7 +5,7 @@ namespace SimpleX
 {
     using SimpleX.Collision2D;
 
-    abstract class BaseRenderer
+    public abstract class BaseRenderer : IRenderer
     {
         protected Pen bodyPen = new Pen(Color.Red);
         protected Pen bboxPen = new Pen(Color.Red);
@@ -25,8 +25,12 @@ namespace SimpleX
         // 质点画刷
         protected static SolidBrush pivotBrush = new SolidBrush(Color.Brown);
 
-        public bool showBoundingBox = false;
-        public bool showDirection = false;
+        // 颜色
+        public Color color { get; set; } = Color.Red;
+        // 是否显示包围盒
+        public bool boundingBox { get; set; } = false;
+        // 是否显示速度
+        public bool velocity { get; set; } = false;
 
         protected BaseRenderer()
         {
@@ -38,7 +42,7 @@ namespace SimpleX
         }
 
         // 画图形
-        public void Render(Graphics grap, Transform transform, AABB boundingBox, Vector2 direction, Color color)
+        public void Render(Graphics grap, Transform transform, AABB boundingBox, Vector2 velocity)
         {
             bodyPen.Color = color;
             bboxPen.Color = Color.FromArgb(80, color);
@@ -49,14 +53,14 @@ namespace SimpleX
             }
             PostDrawGeometry(grap);
 
-            if (showBoundingBox)
+            if (this.boundingBox)
             {
                 DrawBoundingBox(grap, boundingBox);
             }
-            if (showDirection)
+            if (this.velocity)
             {
                 var position = transform.position;
-                DrawDirection(grap, position, direction);
+                DrawVelocity(grap, position, velocity);
             }
             DrawPivot(grap, transform.position);
         }
@@ -86,12 +90,12 @@ namespace SimpleX
         }
 
         // 画方向
-        protected void DrawDirection(Graphics grap, Vector2 position, Vector2 dir)
+        protected void DrawVelocity(Graphics grap, Vector2 position, Vector2 velocity)
         {
-            if (dir.magnitude2 > 0)
+            if (velocity.magnitude2 > 0)
             {
                 var sp = position;
-                var ep = position + (dir * 0.3f);
+                var ep = position + (velocity * 0.3f);
 
                 grap.DrawLine(velocityPen, sp.x, sp.y, ep.x, ep.y);
             }
