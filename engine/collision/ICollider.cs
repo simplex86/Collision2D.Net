@@ -2,30 +2,33 @@
 {
     public abstract class ICollider
     {
-        // 图形
+        // 几何体
         public IGeometry geometry { get; protected set; }
+        // 包围盒
+        public AABB boundingBox = new AABB();
+
         // 
-        public Transform transform = new Transform()
+        public Transform transform { get; private set; } = new Transform()
         {
             position = Vector2.zero,
             rotation = 0.0f,
             scale = 1.0f,
         };
-        // 包围盒
-        public AABB boundingBox = new AABB();
 
         protected ICollider()
         {
+
         }
 
-        public abstract void Move(Vector2 delta);
-        public abstract void MoveTo(Vector2 position);
-        public abstract void Rotate(float delta);
-        public abstract void RotateTo(float rotation);
-
-        public abstract void RefreshGeometry();
+        public void RefreshGeometry(Transform transform)
+        {
+            this.transform = transform;
+            OnRefreshGeometry();
+        }
 
         public abstract bool Contains(Vector2 pt);
         public abstract bool Overlaps(ICollider collider);
+
+        protected abstract void OnRefreshGeometry();
     }
 }

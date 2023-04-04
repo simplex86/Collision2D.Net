@@ -2,8 +2,8 @@
 {
     internal class RectangleCollider : BaseCollider<Rectangle>
     {
-        public RectangleCollider(Rectangle rectangle, Vector2 position, float rotation)
-            : base(position, rotation)
+        public RectangleCollider(Rectangle rectangle)
+            : base()
         {
             geometry = rectangle;
         }

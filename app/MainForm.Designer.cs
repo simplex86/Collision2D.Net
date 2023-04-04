@@ -31,7 +31,7 @@
             this.canvas = new System.Windows.Forms.PictureBox();
             this.detail = new System.Windows.Forms.Label();
             this.showBoundingBox = new System.Windows.Forms.CheckBox();
-            this.showDirection = new System.Windows.Forms.CheckBox();
+            this.showVelocity = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,7 +54,7 @@
             this.detail.Location = new System.Drawing.Point(7, 7);
             this.detail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.detail.Name = "detail";
-            this.detail.Size = new System.Drawing.Size(105, 80);
+            this.detail.Size = new System.Drawing.Size(104, 80);
             this.detail.TabIndex = 1;
             this.detail.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nCollide\r\n  FPS : -  Cost: - m" +
     "s";
@@ -72,24 +72,24 @@
             this.showBoundingBox.UseVisualStyleBackColor = true;
             this.showBoundingBox.CheckedChanged += new System.EventHandler(this.OnBoundingBoxVisibleChanged);
             // 
-            // showDirection
+            // showVelocity
             // 
-            this.showDirection.AutoSize = true;
-            this.showDirection.Location = new System.Drawing.Point(8, 113);
-            this.showDirection.Margin = new System.Windows.Forms.Padding(2);
-            this.showDirection.Name = "showDirection";
-            this.showDirection.Size = new System.Drawing.Size(72, 16);
-            this.showDirection.TabIndex = 3;
-            this.showDirection.Text = "显示方向";
-            this.showDirection.UseVisualStyleBackColor = true;
-            this.showDirection.CheckedChanged += new System.EventHandler(this.OnDirectionVisibleChanged);
+            this.showVelocity.AutoSize = true;
+            this.showVelocity.Location = new System.Drawing.Point(8, 113);
+            this.showVelocity.Margin = new System.Windows.Forms.Padding(2);
+            this.showVelocity.Name = "showVelocity";
+            this.showVelocity.Size = new System.Drawing.Size(72, 16);
+            this.showVelocity.TabIndex = 3;
+            this.showVelocity.Text = "显示速度";
+            this.showVelocity.UseVisualStyleBackColor = true;
+            this.showVelocity.CheckedChanged += new System.EventHandler(this.OnVelocityVisibleChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 861);
-            this.Controls.Add(this.showDirection);
+            this.Controls.Add(this.showVelocity);
             this.Controls.Add(this.showBoundingBox);
             this.Controls.Add(this.detail);
             this.Controls.Add(this.canvas);
@@ -113,7 +113,7 @@
         private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.Label detail;
         private System.Windows.Forms.CheckBox showBoundingBox;
-        private System.Windows.Forms.CheckBox showDirection;
+        private System.Windows.Forms.CheckBox showVelocity;
     }
 }
 

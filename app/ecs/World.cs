@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace SimpleX
 {
     class World
     {
-        private List<BaseSystem> systems = new List<BaseSystem>();
-        private List<BaseSystem> lateSystems = new List<BaseSystem>();
+        private List<LogicSystem> logicSystems = new List<LogicSystem>();
+        private List<LogicSystem> lateLogicSystems = new List<LogicSystem>();
+        private List<RenderSystem> renderSystems = new List<RenderSystem>();
 
-        private List<Entity> entities = new List<Entity>(20);
+        private List<Entity> entities = new List<Entity>(100);
         private object mutex = new object();
 
         public Boundary left;
@@ -18,14 +20,17 @@ namespace SimpleX
 
         public World()
         {
-            systems.Add(new PositionSystem(this));
-            systems.Add(new RotationSystem(this));
-            systems.Add(new GeometrySystem(this));
+            logicSystems.Add(new PositionSystem(this));
+            logicSystems.Add(new RotationSystem(this));
+            logicSystems.Add(new GeometrySystem(this));
 
-            lateSystems.Add(new CollisionSystem(this));
-            lateSystems.Add(new BoundarySystem(this));
-            // 最后执行的一个LateSystem
-            lateSystems.Add(new LatePostSystem(this));
+            lateLogicSystems.Add(new CollisionSystem(this));
+            lateLogicSystems.Add(new BoundarySystem(this));
+            lateLogicSystems.Add(new LatePostSystem(this));
+
+            renderSystems.Add(new GeometryRenderSystem(this));
+            renderSystems.Add(new BoundingRenderSystem(this));
+            renderSystems.Add(new VelocityRenderSystem(this));
         }
 
         public void AddEntity(Entity entity)
@@ -43,7 +48,7 @@ namespace SimpleX
 
         public void Update(float dt)
         {
-            foreach (var system in systems)
+            foreach (var system in logicSystems)
             {
                 system.Tick(dt);
             }
@@ -51,9 +56,17 @@ namespace SimpleX
 
         public void LateUpdate(float dt)
         {
-            foreach (var system in lateSystems)
+            foreach (var system in lateLogicSystems)
             {
                 system.Tick(dt);
+            }
+        }
+
+        public void Render(Graphics grap)
+        {
+            foreach (var system in renderSystems)
+            {
+                system.Render(grap);
             }
         }
 

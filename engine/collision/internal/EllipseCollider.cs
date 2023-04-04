@@ -2,8 +2,8 @@
 {
     internal class EllipseCollider : BaseCollider<Ellipse>
     {
-        public EllipseCollider(Ellipse ellipse, Vector2 position, float rotation)
-            : base(position, rotation)
+        public EllipseCollider(Ellipse ellipse)
+            : base()
         {
             geometry = ellipse;
         }

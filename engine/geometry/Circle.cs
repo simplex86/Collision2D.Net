@@ -1,5 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
+    // 圆形
     public struct Circle : IGeometry
     {
         public float radius;

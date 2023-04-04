@@ -1,19 +1,22 @@
 ﻿using System.Drawing;
 
-namespace SimpleX
+namespace SimpleX.Collision2D
 {
-    using SimpleX.Collision2D;
-
-    class PolygonRenderer : BaseRenderer
+    internal class PolygonRenderer : GeometryRenderer<Polygon>
     {
-        public Polygon geometry;
-
         public PolygonRenderer(Polygon polygon)
+            : base(polygon)
         {
-            geometry = polygon;
+
         }
 
-        protected override void DrawGeometry(Graphics grap, Transform transform)
+        public PolygonRenderer(Polygon polygon, Color color)
+            : base(polygon)
+        {
+            this.color = color;
+        }
+
+        protected override void DrawGeometry(Graphics grap)
         {
             var n = geometry.vertics.Length;
 
@@ -24,7 +27,7 @@ namespace SimpleX
                 vertics[i] = new PointF(pt.x, pt.y);
             }
             
-            grap.DrawPolygon(bodyPen, vertics);
+            grap.DrawPolygon(pen, vertics);
         }
     }
 }

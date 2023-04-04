@@ -1,13 +1,16 @@
-﻿using System;
-
-namespace SimpleX
+﻿namespace SimpleX
 {
     class Entity
     {
         public CollisionComponent collisionComponent { get; } = new CollisionComponent();
-        public ColorComponent colorComponent { get; } = new ColorComponent();
-        public MovementComponent movementComponent { get; } = new MovementComponent();
+        public TransformComponent transformComponent { get; } = new TransformComponent();
+        public VelocityComponent velocityComponent { get; } = new VelocityComponent();
         public RotationComponent rotationComponent { get; } = new RotationComponent();
-        public RenderComponent renderComponent { get; } = new RenderComponent();
+
+        public ColorComponent colorComponent { get; } = new ColorComponent();
+
+        public GeomotryRendererComponent geometryRendererComponent { get; } = new GeomotryRendererComponent();
+        public BoundingRendererComponent boundingRendererComponent { get; } = new BoundingRendererComponent();
+        public VelocityRendererComponent velocityRendererComponent { get; } = new VelocityRendererComponent();
     }
 }

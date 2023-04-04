@@ -1,5 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
+    // 扇形
     public class Pie : IGeometry
     {
         public float radius;

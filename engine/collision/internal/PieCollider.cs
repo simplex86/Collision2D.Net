@@ -2,8 +2,8 @@
 {
     internal class PieCollider : BaseCollider<Pie>
     {
-        public PieCollider(Pie pie, Vector2 position, float rotation)
-            : base(position, rotation)
+        public PieCollider(Pie pie)
+            : base()
         {
             geometry = pie;
         }

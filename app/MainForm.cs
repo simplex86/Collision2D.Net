@@ -14,6 +14,9 @@ namespace SimpleX
         public MainForm()
         {
             InitializeComponent();
+
+            showBoundingBox.Checked = Settings.showBoundingBox;
+            showVelocity.Checked = Settings.showVelocity;
         }
 
         // 窗体加载完后，初始化数据
@@ -30,23 +33,7 @@ namespace SimpleX
             grap.SmoothingMode = SmoothingMode.HighQuality;
 
             var world = task.world;
-            world.Each((entity) =>
-            {
-                DrawEntity(grap, entity);
-            });
-        }
-
-        // 绘制实体
-        private void DrawEntity(Graphics grap, Entity entity)
-        {
-            var collider = entity.collisionComponent.collider;
-            var direction = entity.movementComponent.direction;
-            var speed = entity.movementComponent.speed;
-            var color = entity.colorComponent.color;
-            var renderer = entity.renderComponent.renderer;
-
-            var velocity = direction * speed;
-            renderer.Render(grap, collider.transform, collider.boundingBox, velocity);
+            world.Render(grap);
         }
 
         private void OnClosingHandler(object sender, FormClosingEventArgs e)
@@ -60,24 +47,14 @@ namespace SimpleX
 
         private void OnBoundingBoxVisibleChanged(object sender, EventArgs e)
         {
-            var world = task.world;
-            world.Each((entity) =>
-            {
-                var renderer = entity.renderComponent.renderer;
-                var checkbox = sender as CheckBox;
-                renderer.boundingBox = checkbox.Checked;
-            });
+            var checkbox = sender as CheckBox;
+            Settings.showBoundingBox = checkbox.Checked;
         }
 
-        private void OnDirectionVisibleChanged(object sender, EventArgs e)
+        private void OnVelocityVisibleChanged(object sender, EventArgs e)
         {
-            var world = task.world;
-            world.Each((entity) =>
-            {
-                var renderer = entity.renderComponent.renderer;
-                var checkbox = sender as CheckBox;
-                renderer.velocity = checkbox.Checked;
-            });
+            var checkbox = sender as CheckBox;
+            Settings.showVelocity = checkbox.Checked;
         }
     }
 }

@@ -2,24 +2,19 @@
 {
     internal class CircleCollider : BaseCollider<Circle>
     {
-        public CircleCollider(Circle circle, Vector2 position)
-            : base(position, 0)
+        public CircleCollider(Circle circle)
+            : base()
         {
             geometry = circle;
         }
 
-        public override void RefreshGeometry()
+        protected override void OnRefreshGeometry()
         {
-            if (dirty != DirtyFlag.None)
-            {
-                var circle = (Circle)geometry;
-                boundingBox.minx = transform.position.x - circle.radius;
-                boundingBox.maxx = transform.position.x + circle.radius;
-                boundingBox.miny = transform.position.y - circle.radius;
-                boundingBox.maxy = transform.position.y + circle.radius;
-
-                dirty = DirtyFlag.None;
-            }
+            var circle = (Circle)geometry;
+            boundingBox.minx = transform.position.x - circle.radius;
+            boundingBox.maxx = transform.position.x + circle.radius;
+            boundingBox.miny = transform.position.y - circle.radius;
+            boundingBox.maxy = transform.position.y + circle.radius;
         }
     }
 }

@@ -98,51 +98,58 @@ namespace SimpleX
             var type = GetRandomColliderType();
             while (true)
             {
+                var transform = CreateRanfomTransform();
+                entity.transformComponent.transform = transform;
+
+                entity.boundingRendererComponent.renderer = RendererFactory.CreateAABBRenderer();
+                entity.velocityRendererComponent.renderer = RendererFactory.CreateVelocityRenderer();
+
                 switch (type)
                 {
-                    case ColliderType.Circle:
+                    case GeometryType.Circle:
                         var circle = CreateRandomCircle();
-                        entity.collisionComponent.collider = CreateCircleCollider(circle);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCircleCollider(circle);
                         entity.colorComponent.color = Color.Red;
-                        entity.renderComponent.renderer = new CircleRenderer(circle);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateCircleRenderer(circle);
                         break;
-                    case ColliderType.Rectangle:
+                    case GeometryType.Rectangle:
                         var rectangle = CreateRandomRectangle();
-                        entity.collisionComponent.collider = CreateRectangleCollider(rectangle);
+                        entity.collisionComponent.collider = ColliderFactory.CreateRectangleCollider(rectangle);
                         entity.colorComponent.color = Color.Green;
-                        entity.renderComponent.renderer = new RectangleRenderer(rectangle);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRectangleRenderer(rectangle);
                         break;
-                    case ColliderType.Capsule:
+                    case GeometryType.Capsule:
                         var capsule = CreateRandomCapsule();
-                        entity.collisionComponent.collider = CreateCapsuleCollider(capsule);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCapsuleCollider(capsule);
                         entity.colorComponent.color = Color.Blue;
-                        entity.renderComponent.renderer = new CapsuleRenderer(capsule);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateCapsuleRenderer(capsule);
                         break;
-                    case ColliderType.Polygon:
+                    case GeometryType.Polygon:
                         var polygon = CreateRandomPolygon();
-                        entity.collisionComponent.collider = CreatePolygonCollider(polygon);
+                        entity.collisionComponent.collider = ColliderFactory.CreatePolygonCollider(polygon);
                         entity.colorComponent.color = Color.Orange;
-                        entity.renderComponent.renderer = new PolygonRenderer(polygon);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreatePolygonRenderer(polygon);
                         break;
-                    case ColliderType.Ellipse:
+                    case GeometryType.Ellipse:
                         var ellipse = CreateRandomEllipse();
-                        entity.collisionComponent.collider = CreateEllipseCollider(ellipse);
+                        entity.collisionComponent.collider = ColliderFactory.CreateEllipseCollider(ellipse);
                         entity.colorComponent.color = Color.Cyan;
-                        entity.renderComponent.renderer = new EllipseRenderer(ellipse);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateEllipseRenderer(ellipse);
                         break;
-                    case ColliderType.Pie:
+                    case GeometryType.Pie:
                         var pie = CreateRandomPie();
-                        entity.collisionComponent.collider = CreatePieCollider(pie);
+                        entity.collisionComponent.collider = ColliderFactory.CreatePieCollider(pie);
                         entity.colorComponent.color = Color.DarkKhaki;
-                        entity.renderComponent.renderer = new PieRenderer(pie);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreatePieRenderer(pie);
                         break;
                     default:
                         break;
                 }
 
-                var overlap = false;
                 var collider = entity.collisionComponent.collider;
+                collider.RefreshGeometry(transform);
 
+                var overlap = false;
                 world.Each((e) =>
                 {
                     overlap = e.collisionComponent.collider.Overlaps(collider);
@@ -162,8 +169,8 @@ namespace SimpleX
                     x = random.Next(-99, 100);
                     y = random.Next(-99, 100);
                 }
-                entity.movementComponent.direction = Vector2.Normalize(x, y);
-                entity.movementComponent.speed = random.Next(40, 80);
+                entity.velocityComponent.direction = Vector2.Normalize(x, y);
+                entity.velocityComponent.magnitude = random.Next(40, 80);
 
                 var rotatable = IsRotatable(); // 能移动的才有可能旋转
                 if (rotatable)
@@ -184,10 +191,10 @@ namespace SimpleX
         }
 
         // 随机获取碰撞体类型
-        public ColliderType GetRandomColliderType()
+        public GeometryType GetRandomColliderType()
         {
-            return (ColliderType)random.Next((int)ColliderType.BOT, 
-                                             (int)ColliderType.EOT);
+            return (GeometryType)random.Next((int)GeometryType.BOT, 
+                                             (int)GeometryType.EOT);
         }
 
         // 创建随机圆形
@@ -269,70 +276,16 @@ namespace SimpleX
             return true;
         }
 
-        // 创建圆形碰撞体
-        private ICollider CreateCircleCollider(Circle circle)
-        {
-            var position = GetRandomPosition();
-            return ColliderFactory.CreateCircleCollider(circle, position);
-        }
-
-        // 创建矩形碰撞体
-        private ICollider CreateRectangleCollider(Rectangle rectangle)
-        {
-            var position = GetRandomPosition();
-            var rotation = GetRandomRotation();
-
-            return ColliderFactory.CreateRectangleCollider(rectangle, position, rotation);
-        }
-
-        // 创建矩形碰撞体
-        private ICollider CreateCapsuleCollider(Capsule capsule)
-        {
-            var position = GetRandomPosition();
-            var rotation = GetRandomRotation();
-
-            return ColliderFactory.CreateCapsuleCollider(capsule, position, rotation);
-        }
-
-        // 创建矩形碰撞体
-        private ICollider CreatePolygonCollider(Polygon polygon)
-        {
-            var position = GetRandomPosition();
-            var rotation = GetRandomRotation();
-
-            return ColliderFactory.CreatePolygonCollider(polygon, position, rotation);
-        }
-
-        // 创建椭圆碰撞体
-        private ICollider CreateEllipseCollider(Ellipse ellipse)
-        {
-            var position = GetRandomPosition();
-            var rotation = GetRandomRotation();
-
-            return ColliderFactory.CreateEllipseCollider(ellipse, position, rotation);
-        }
-
-        // 创建椭圆碰撞体
-        private ICollider CreatePieCollider(Pie pie)
-        {
-            var position = GetRandomPosition();
-            var rotation = GetRandomRotation();
-
-            return ColliderFactory.CreatePieCollider(pie, position, rotation);
-        }
-
-        // 获取随机坐标
-        private Vector2 GetRandomPosition()
+        private Transform CreateRanfomTransform()
         {
             var x = random.Next(50, width - 50);
             var y = random.Next(50, height - 50);
-            return new Vector2(x, y);
-        }
 
-        // 获取随机旋转角度
-        private float GetRandomRotation()
-        {
-            return random.Next(0, 360);
+            return new Transform()
+            {
+                position = new Vector2(x, y),
+                rotation = random.Next(0, 360)
+            };
         }
 
         // 计算多边形面积

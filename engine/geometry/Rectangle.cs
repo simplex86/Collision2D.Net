@@ -1,7 +1,6 @@
-﻿using System.Drawing;
-
-namespace SimpleX.Collision2D
+﻿namespace SimpleX.Collision2D
 {
+    // 矩形
     public struct Rectangle : IGeometry
     {
         public float width;
