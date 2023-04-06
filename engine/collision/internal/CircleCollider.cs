@@ -3,18 +3,19 @@
     internal class CircleCollider : BaseCollider<Circle>
     {
         public CircleCollider(Circle circle)
-            : base()
+            : base(circle)
         {
-            geometry = circle;
+
         }
 
         protected override void OnRefreshGeometry()
         {
             var circle = (Circle)geometry;
-            boundingBox.minx = transform.position.x - circle.radius;
-            boundingBox.maxx = transform.position.x + circle.radius;
-            boundingBox.miny = transform.position.y - circle.radius;
-            boundingBox.maxy = transform.position.y + circle.radius;
+
+            SetBoundingBox(transform.position.x - circle.radius,
+                           transform.position.y - circle.radius,
+                           transform.position.x + circle.radius,
+                           transform.position.y + circle.radius);
         }
     }
 }

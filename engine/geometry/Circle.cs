@@ -1,9 +1,11 @@
 ﻿namespace SimpleX.Collision2D
 {
     // 圆形
-    public struct Circle : IGeometry
+    public class Circle : IGeometry
     {
         public float radius;
+
+        public GeometryType type => GeometryType.Circle;
 
         public bool Contains(Vector2 pt)
         {

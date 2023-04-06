@@ -76,6 +76,8 @@
     </Compile>
     <Compile Include="app\Program.cs" />
     <Compile Include="app\Settings.cs" />
+    <Compile Include="engine\collision\internal\SegmentCollider.cs" />
+    <Compile Include="engine\geometry\Segment.cs" />
     <Compile Include="engine\renderer\bounding\AABBRenderer.cs" />
     <Compile Include="engine\renderer\geometry\GeometryRenderer.cs" />
     <Compile Include="engine\renderer\geometry\CapsuleRenderer.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="engine\renderer\geometry\PieRenderer.cs" />
     <Compile Include="engine\renderer\geometry\RectangleRenderer.cs" />
     <Compile Include="engine\renderer\geometry\PolygonRenderer.cs" />
+    <Compile Include="engine\renderer\geometry\SegmentRenderer.cs" />
     <Compile Include="engine\renderer\IRenderer.cs" />
     <Compile Include="engine\renderer\others\VelocityRenderer.cs" />
     <Compile Include="engine\renderer\RendererFactory.cs" />
@@ -93,11 +96,11 @@
     <Compile Include="app\task\internal\RenderTask.cs" />
     <Compile Include="app\task\internal\Stats.cs" />
     <Compile Include="app\task\Task.cs" />
-    <Compile Include="app\Const.cs" />
+    <Compile Include="engine\Const.cs" />
     <Compile Include="engine\collision\ICollider.cs" />
     <Compile Include="engine\collision\internal\PieCollider.cs" />
-    <Compile Include="engine\collision\internal\gjk\GJK.cs" />
-    <Compile Include="engine\collision\internal\gjk\Simplex.cs" />
+    <Compile Include="engine\gjk\GJK.cs" />
+    <Compile Include="engine\gjk\Simplex.cs" />
     <Compile Include="engine\collision\internal\PolygonCollider.cs" />
     <Compile Include="engine\collision\internal\EllipseCollider.cs" />
     <Compile Include="engine\geometry\Ellipse.cs" />

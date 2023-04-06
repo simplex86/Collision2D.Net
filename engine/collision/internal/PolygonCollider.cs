@@ -3,9 +3,9 @@
     class PolygonCollider : BaseCollider<Polygon>
     {
         public PolygonCollider(Polygon polygon)
-            : base()
+            : base(polygon)
         {
-            geometry = polygon;
+
         }
     }
 }

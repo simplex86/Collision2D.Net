@@ -3,9 +3,9 @@
     internal class CapsuleCollider : BaseCollider<Capsule>
     {
         public CapsuleCollider(Capsule capsule)
-            : base()
+            : base(capsule)
         {
-            geometry = capsule;
+
         }
     }
 }

@@ -108,39 +108,45 @@ namespace SimpleX
                 {
                     case GeometryType.Circle:
                         var circle = CreateRandomCircle();
-                        entity.collisionComponent.collider = ColliderFactory.CreateCircleCollider(circle);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(circle);
                         entity.colorComponent.color = Color.Red;
-                        entity.geometryRendererComponent.renderer = RendererFactory.CreateCircleRenderer(circle);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(circle);
                         break;
                     case GeometryType.Rectangle:
                         var rectangle = CreateRandomRectangle();
-                        entity.collisionComponent.collider = ColliderFactory.CreateRectangleCollider(rectangle);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(rectangle);
                         entity.colorComponent.color = Color.Green;
-                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRectangleRenderer(rectangle);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(rectangle);
                         break;
                     case GeometryType.Capsule:
                         var capsule = CreateRandomCapsule();
-                        entity.collisionComponent.collider = ColliderFactory.CreateCapsuleCollider(capsule);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(capsule);
                         entity.colorComponent.color = Color.Blue;
-                        entity.geometryRendererComponent.renderer = RendererFactory.CreateCapsuleRenderer(capsule);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(capsule);
                         break;
                     case GeometryType.Polygon:
                         var polygon = CreateRandomPolygon();
-                        entity.collisionComponent.collider = ColliderFactory.CreatePolygonCollider(polygon);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(polygon);
                         entity.colorComponent.color = Color.Orange;
-                        entity.geometryRendererComponent.renderer = RendererFactory.CreatePolygonRenderer(polygon);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(polygon);
                         break;
                     case GeometryType.Ellipse:
                         var ellipse = CreateRandomEllipse();
-                        entity.collisionComponent.collider = ColliderFactory.CreateEllipseCollider(ellipse);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(ellipse);
                         entity.colorComponent.color = Color.Cyan;
-                        entity.geometryRendererComponent.renderer = RendererFactory.CreateEllipseRenderer(ellipse);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(ellipse);
                         break;
                     case GeometryType.Pie:
                         var pie = CreateRandomPie();
-                        entity.collisionComponent.collider = ColliderFactory.CreatePieCollider(pie);
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(pie);
                         entity.colorComponent.color = Color.DarkKhaki;
-                        entity.geometryRendererComponent.renderer = RendererFactory.CreatePieRenderer(pie);
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(pie);
+                        break;
+                    case GeometryType.Segment:
+                        var segment = CreateRandomSegment();
+                        entity.collisionComponent.collider = ColliderFactory.CreateCollider(segment);
+                        entity.colorComponent.color = Color.DarkSalmon;
+                        entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(segment);
                         break;
                     default:
                         break;
@@ -261,6 +267,15 @@ namespace SimpleX
             {
                 radius = random.Next(15, 30),
                 sweep = random.Next(10, 180),
+            };
+        }
+
+        // 创建随机线段
+        private Segment CreateRandomSegment()
+        {
+            return new Segment()
+            { 
+                length = random.Next(30, 60),
             };
         }
 

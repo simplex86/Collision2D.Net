@@ -60,7 +60,7 @@
         }
 
         // 图形（geometry)是否包含点（pt)
-        public static bool IsGeometryContains(IGeometry geometry, Transform transform, Vector2 pt)
+        public static bool Contains(IGeometry geometry, Transform transform, Vector2 pt)
         {
             var m1 = Matrix.CreateTranslationMatrix(-transform.position);
             var m2 = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
@@ -68,6 +68,13 @@
             pt = Matrix.Transform(pt, mt);
 
             return geometry.Contains(pt);
+        }
+
+        // 检测图形（geometry1, transform1）与图形（geometry2, transform2）是否重叠
+        public static bool Overlaps(IGeometry geometry1, Transform transform1,
+                                    IGeometry geometry2, Transform transform2)
+        {
+            return GJK.Overlaps(geometry1, transform1, geometry2, transform2);
         }
 
         // 圆（pa, ra)是否和圆（pb, rb）重叠
@@ -110,6 +117,24 @@
             return true;
         }
 
+        // 圆形（circle）和多边形（polygon）是否重叠
+        public static bool IsPolygonOverlapsWithCircle(Circle circle, Transform circleTransform, Polygon polygon, Transform polygonTransform)
+        {
+            var r2 = circle.radius * circle.radius;
+
+            int n = polygon.vertics.Length;
+            for (int i = 0; i < n; i++)
+            {
+                var p1 = polygon.vertics[i] - polygonTransform.position;
+                var p2 = polygon.vertics[(i + 1) % n] - polygonTransform.position;
+
+                var d2 = GetDistance2(p1, p2, circleTransform.position);
+                if (d2 <= r2) return true;
+            }
+
+            return Contains(polygon, polygonTransform, circleTransform.position);
+        }
+
         // 矩形投影是否重叠
         private static bool IsRectangleProjectionOverlaps(Rectangle rectangle1, Transform transform1,
                                                           Rectangle rectangle2, Transform transform2)
@@ -138,26 +163,8 @@
             return true;
         }
 
-        // 多边形（polygon）和圆形（circle）是否重叠
-        public static bool IsPolygonOverlapsWithCircle(Polygon polygon, Transform polygonTransform, Circle circle, Transform circleTransform)
-        {
-            var r2 = circle.radius * circle.radius;
-
-            int n = polygon.vertics.Length;
-            for (int i = 0; i < n; i++)
-            {
-                var p1 = polygon.vertics[i] - polygonTransform.position;
-                var p2 = polygon.vertics[(i + 1) % n] - polygonTransform.position;
-
-                var d2 = GetDistance2(p1, p2, circleTransform.position);
-                if (d2 <= r2) return true;
-            }
-
-            return IsGeometryContains(polygon, polygonTransform, circleTransform.position);
-        }
-
         // 线段（p1, p2）是否和线段（q1, q2）相交
-        public static bool IsSegmentIntersected(Vector2 p1, Vector2 p2, Vector2 q1, Vector2 q2)
+        public static bool IsSegmentsIntersected(Vector2 p1, Vector2 p2, Vector2 q1, Vector2 q2)
         {
             Vector2 a1 = p1 - q2, b1 = p2 - p2, c1 = q1 - q2;
             if (Vector2.Cross(a1, c1) * Vector2.Cross(b1, c1) > 0) return false;

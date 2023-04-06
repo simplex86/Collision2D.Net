@@ -10,6 +10,14 @@
         public float width  => maxx - minx;   
         public float height => maxy - miny;
 
+        public void Set(float minx, float miny, float maxx, float maxy)
+        {
+            this.minx = minx;
+            this.miny = miny;
+            this.maxx = maxx;
+            this.maxy = maxy;
+        }
+
         public bool Contains(Vector2 pt)
         {
             return minx <= pt.x && maxx >= pt.x &&

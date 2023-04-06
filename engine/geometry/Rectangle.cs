@@ -1,7 +1,7 @@
 ﻿namespace SimpleX.Collision2D
 {
     // 矩形
-    public struct Rectangle : IGeometry
+    public class Rectangle : IGeometry
     {
         public float width;
         public float height;

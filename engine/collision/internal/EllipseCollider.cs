@@ -3,9 +3,9 @@
     internal class EllipseCollider : BaseCollider<Ellipse>
     {
         public EllipseCollider(Ellipse ellipse)
-            : base()
+            : base(ellipse)
         {
-            geometry = ellipse;
+
         }
     }
 }

@@ -3,9 +3,9 @@
     internal class RectangleCollider : BaseCollider<Rectangle>
     {
         public RectangleCollider(Rectangle rectangle)
-            : base()
+            : base(rectangle)
         {
-            geometry = rectangle;
+
         }
     }
 }

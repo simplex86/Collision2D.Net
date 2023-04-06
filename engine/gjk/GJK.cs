@@ -5,7 +5,7 @@ namespace SimpleX.Collision2D
     static class GJK
     {
         // 检测图形（geometry1, transform1）与图形（geometry2, transform2）是否重叠
-        public static bool Overlaps(IGeometry geometry1,Transform transform1,
+        public static bool Overlaps(IGeometry geometry1, Transform transform1,
                                     IGeometry geometry2, Transform transform2)
         {
             var simplex = new Simplex()
@@ -39,8 +39,8 @@ namespace SimpleX.Collision2D
         }
 
         // 两个图形的闵可夫斯基差
-        private static Vector2 Support(IGeometry geometry1,Transform transform1, 
-                                       IGeometry geometry2,Transform transform2,  
+        private static Vector2 Support(IGeometry geometry1, Transform transform1, 
+                                       IGeometry geometry2, Transform transform2,  
                                        Vector2 dir)
         {
             var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, transform1, dir);

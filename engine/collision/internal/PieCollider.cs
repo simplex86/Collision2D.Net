@@ -3,9 +3,9 @@
     internal class PieCollider : BaseCollider<Pie>
     {
         public PieCollider(Pie pie)
-            : base()
+            : base(pie)
         {
-            geometry = pie;
+
         }
     }
 }
