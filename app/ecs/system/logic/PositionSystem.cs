@@ -17,15 +17,12 @@ namespace SimpleX
         {
             world.Each((entity) =>
             {
-                var velocityComponent = entity.velocityComponent;
-                var magnitude = velocityComponent.magnitude;
+                var velocity = entity.velocityComponent.velocity;
 
-                if (!MathX.Equals(magnitude, 0))
+                if (!MathX.Equals(velocity.magnitude, 0))
                 {
-                    var direction = velocityComponent.direction;
-                    var delta = direction * (magnitude * dt);
-
-                    entity.transformComponent.transform.position += delta;
+                    var delta = velocity.direction * (velocity.magnitude * dt);
+                    entity.transformComponent.transform.Move(delta);
                 }
             });
         }

@@ -1,9 +1,5 @@
-﻿using System;
-
-namespace SimpleX
+﻿namespace SimpleX
 {
-    using SimpleX.Collision2D;
-
     class GeometrySystem : LogicSystem
     {
         public GeometrySystem(World world)

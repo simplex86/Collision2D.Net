@@ -56,8 +56,7 @@
             this.detail.Name = "detail";
             this.detail.Size = new System.Drawing.Size(104, 80);
             this.detail.TabIndex = 1;
-            this.detail.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nCollide\r\n  FPS : -  Cost: - m" +
-    "s";
+            this.detail.Text = "Collision Count: --\r\nRender\r\n  FPS : -  Cost: - ms\r\nLogic\r\n  FPS : -  Cost: - ms";
             this.detail.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // showBoundingBox

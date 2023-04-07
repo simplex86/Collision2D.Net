@@ -10,7 +10,7 @@ namespace SimpleX
     {
         public World world { get; private set; }
 
-        private CollideTask collide;
+        private LogicTask logic;
         private RenderTask render;
 
         private Random random = new Random();
@@ -53,7 +53,7 @@ namespace SimpleX
                 },
             };
 
-            collide = new CollideTask(world, stats);
+            logic = new LogicTask(world, stats);
             render = new RenderTask(world, stats, canvas)
             {
                 OnRefreshCanvasHandler = () => canvas.Refresh()
@@ -76,7 +76,7 @@ namespace SimpleX
             }
             stats.colliderCount = ENTITY_COUNT;
 
-            collide.Start();
+            logic.Start();
             render.Start();
 
             timer.Start();
@@ -86,7 +86,7 @@ namespace SimpleX
         {
             timer.Stop();
 
-            collide.Destroy();
+            logic.Destroy();
             render.Destroy();
         }
 
@@ -98,9 +98,7 @@ namespace SimpleX
             var type = GetRandomColliderType();
             while (true)
             {
-                var transform = CreateRanfomTransform();
-                entity.transformComponent.transform = transform;
-
+                entity.transformComponent.transform = CreateRanfomTransform();
                 entity.boundingRendererComponent.renderer = RendererFactory.CreateAABBRenderer();
                 entity.velocityRendererComponent.renderer = RendererFactory.CreateVelocityRenderer();
 
@@ -153,6 +151,7 @@ namespace SimpleX
                 }
 
                 var collider = entity.collisionComponent.collider;
+                var transform = entity.transformComponent.transform;
                 collider.RefreshGeometry(transform);
 
                 var overlap = false;
@@ -175,15 +174,18 @@ namespace SimpleX
                     x = random.Next(-99, 100);
                     y = random.Next(-99, 100);
                 }
-                entity.velocityComponent.direction = Vector2.Normalize(x, y);
-                entity.velocityComponent.magnitude = random.Next(40, 80);
+                entity.velocityComponent.velocity = new Velocity()
+                {
+                    direction = Vector2.Normalize(x, y),
+                    magnitude = random.Next(40, 80)
+                };
 
                 var rotatable = IsRotatable(); // 能移动的才有可能旋转
                 if (rotatable)
                 {
-                    var speed = (random.Next(0, 10) % 2 == 0) ? random.Next(20, 80)
-                                                              : random.Next(-80, -20);
-                    entity.rotationComponent.speed = speed;
+                    var magnitude = (random.Next(0, 10) % 2 == 0) ? random.Next(20, 80)
+                                                                  : random.Next(-80, -20);
+                    entity.rotationComponent.magnitude = magnitude;
                 }
             }
 
@@ -344,7 +346,7 @@ namespace SimpleX
         {
             var countText = string.Format("Collider Count: {0}", stats.colliderCount);
             var renderText = string.Format("Render\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.renderCost), stats.renderCost * 1000);
-            var logicText = string.Format("Collide\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.collideCost), stats.collideCost * 1000);
+            var logicText = string.Format("Logic\n  FPS: {0}  Cost: {1:F2} ms", (int)(1.0f / stats.collideCost), stats.collideCost * 1000);
             detail.Text = $"{countText}\n{renderText}\n{logicText}";
         }
     }

@@ -5,6 +5,8 @@
     {
         public Vector2[] vertics;
 
+        public GeometryType type => GeometryType.Polygon;
+
         public bool Contains(Vector2 pt)
         {
             int n = vertics.Length;

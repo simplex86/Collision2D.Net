@@ -5,12 +5,14 @@ namespace SimpleX.Collision2D
 {
     class VelocityRenderer : IRenderer
     {
-        // 
-        public Vector2 direction { get; set; } = Vector2.zero;
-        // 
-        public float magnitude { get; set; } = 0f;
+        // 方向
+        public Velocity velocity { get; set; }
         // 颜色
-        public Color color { get; set; } = Color.Black;
+        public Color color
+        {
+            set { pen.Color = Color.FromArgb(128, value); }
+            get { return pen.Color; }
+        }
 
         // 速度的线头
         protected static AdjustableArrowCap cap = new AdjustableArrowCap(4, 4, true)
@@ -33,16 +35,14 @@ namespace SimpleX.Collision2D
         // 绘制图形
         public void Render(Graphics grap, Transform transform)
         {
-            if (magnitude > 0)
+            if (velocity.magnitude > 0)
             {
-                var position = transform.position;
-                var velocity = direction * magnitude;
-
-                var sp = position;
-                var ep = position + (velocity * 0.4f);
-
-                pen.Color = Color.FromArgb(128, color);
-                grap.DrawLine(pen, sp.x, sp.y, ep.x, ep.y);
+                grap.TranslateTransform(transform.position.x, transform.position.y);
+                {
+                    var p = velocity.direction * velocity.magnitude * 0.4f;
+                    grap.DrawLine(pen, 0, 0, p.x, p.y);
+                }
+                grap.ResetTransform();
             }
         }
     }

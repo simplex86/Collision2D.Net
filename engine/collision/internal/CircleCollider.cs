@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class CircleCollider : BaseCollider<Circle>
+    internal class CircleCollider : ICollider
     {
         public CircleCollider(Circle circle)
             : base(circle)
@@ -12,10 +12,10 @@
         {
             var circle = (Circle)geometry;
 
-            SetBoundingBox(transform.position.x - circle.radius,
-                           transform.position.y - circle.radius,
-                           transform.position.x + circle.radius,
-                           transform.position.y + circle.radius);
+            _boundingBox.Set(-circle.radius,
+                             -circle.radius,
+                              circle.radius,
+                              circle.radius);
         }
     }
 }

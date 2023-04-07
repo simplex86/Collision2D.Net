@@ -6,17 +6,23 @@ namespace SimpleX
 {
     class World
     {
+        public Boundary left;
+        public Boundary right;
+        public Boundary top;
+        public Boundary bottom;
+
         private List<LogicSystem> logicSystems = new List<LogicSystem>();
+        private List<LogicSystem> fixedLogicSystems = new List<LogicSystem>();
         private List<LogicSystem> lateLogicSystems = new List<LogicSystem>();
         private List<RenderSystem> renderSystems = new List<RenderSystem>();
 
         private List<Entity> entities = new List<Entity>(100);
         private object mutex = new object();
 
-        public Boundary left;
-        public Boundary right;
-        public Boundary top;
-        public Boundary bottom;
+        private float elapsedTime = 0f;
+
+        private const int FIXED_UPDATE_FPS = 60;
+        private const float FIXED_INTERVAL_S = 1f / FIXED_UPDATE_FPS;
 
         public World()
         {
@@ -24,9 +30,10 @@ namespace SimpleX
             logicSystems.Add(new RotationSystem(this));
             logicSystems.Add(new GeometrySystem(this));
 
-            lateLogicSystems.Add(new CollisionSystem(this));
-            lateLogicSystems.Add(new BoundarySystem(this));
-            lateLogicSystems.Add(new LatePostSystem(this));
+            fixedLogicSystems.Add(new CollisionSystem(this));
+            fixedLogicSystems.Add(new BoundarySystem(this));
+
+            lateLogicSystems.Add(new PostLogicSystem(this));
 
             renderSystems.Add(new GeometryRenderSystem(this));
             renderSystems.Add(new BoundingRenderSystem(this));
@@ -51,6 +58,20 @@ namespace SimpleX
             foreach (var system in logicSystems)
             {
                 system.Tick(dt);
+            }
+        }
+
+        public void FixedUpdate(float dt)
+        {
+            elapsedTime += dt;
+
+            while (elapsedTime >= FIXED_INTERVAL_S)
+            {
+                foreach (var system in fixedLogicSystems)
+                {
+                    system.Tick(FIXED_INTERVAL_S);
+                }
+                elapsedTime -= FIXED_INTERVAL_S;
             }
         }
 

@@ -9,6 +9,8 @@
         public float A => width * 0.5f;
         public float B => height * 0.5f;
 
+        public GeometryType type => GeometryType.Ellipse;
+
         public bool Contains(Vector2 pt)
         {
             var x2 = MathX.Pow2(pt.x);

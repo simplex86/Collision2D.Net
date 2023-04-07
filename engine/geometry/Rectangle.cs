@@ -6,6 +6,8 @@
         public float width;
         public float height;
 
+        public GeometryType type => GeometryType.Rectangle;
+
         public bool Contains(Vector2 pt)
         {
             var w = width * 0.5f;

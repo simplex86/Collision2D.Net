@@ -6,6 +6,8 @@
         public float radius;
         public float sweep;
 
+        public GeometryType type => GeometryType.Pie;
+
         public bool Contains(Vector2 pt)
         {
             if (pt.magnitude2 > radius * radius)

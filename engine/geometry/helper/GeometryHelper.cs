@@ -88,7 +88,7 @@
         }
 
         // 圆（circle）是否和矩形（rectangle)重叠
-        public static bool IsCircleOverlapsWithRectangle(Circle circle,       Transform circleTransform, 
+        public static bool IsCircleOverlapsWithRectangle(Circle    circle,    Transform circleTransform, 
                                                          Rectangle rectangle, Transform rectangleTransform)
         {
             var m = Matrix.CreateRotationMatrix(rectangleTransform.rotation * MathX.DEG2RAD * -1f);
@@ -118,7 +118,8 @@
         }
 
         // 圆形（circle）和多边形（polygon）是否重叠
-        public static bool IsPolygonOverlapsWithCircle(Circle circle, Transform circleTransform, Polygon polygon, Transform polygonTransform)
+        public static bool IsPolygonOverlapsWithCircle(Circle  circle,  Transform circleTransform, 
+                                                       Polygon polygon, Transform polygonTransform)
         {
             var r2 = circle.radius * circle.radius;
 
@@ -175,19 +176,16 @@
             return true;
         }
 
-        // 获取图形（geomotry， transform）在方向（dir）上最大投影的点
-        public static Vector2 GetFarthestProjectionPoint(IGeometry geometry, Transform transform, Vector2 dir)
+        // 获取图形（geomotry）旋转（rotation）后在方向（dir）上最大投影的点
+        public static Vector2 GetFarthestProjectionPoint(IGeometry geometry, float rotation, Vector2 dir)
         {
-            var mt = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
-            dir = Matrix.Transform(dir, mt);
+            var m1 = Matrix.CreateRotationMatrix(-rotation * MathX.DEG2RAD);
+            dir = Matrix.Transform(dir, m1);
 
             var pt = geometry.GetFarthestProjectionPoint(dir);
 
-            var m1 = Matrix.CreateRotationMatrix(transform.rotation * MathX.DEG2RAD);
-            var m2 = Matrix.CreateTranslationMatrix(transform.position);
-            mt = m1 * m2;
-
-            return Matrix.Transform(pt, mt);
+            var m2 = Matrix.CreateRotationMatrix(rotation * MathX.DEG2RAD);
+            return Matrix.Transform(pt, m2);
         }
     }
 }

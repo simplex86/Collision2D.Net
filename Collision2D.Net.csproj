@@ -60,7 +60,7 @@
     <Compile Include="app\ecs\system\logic\BoundarySystem.cs" />
     <Compile Include="app\ecs\system\logic\GeometrySystem.cs" />
     <Compile Include="app\ecs\system\logic\CollisionSystem.cs" />
-    <Compile Include="app\ecs\system\logic\LatePostSystem.cs" />
+    <Compile Include="app\ecs\system\logic\PostLogicSystem.cs" />
     <Compile Include="app\ecs\system\logic\PositionSystem.cs" />
     <Compile Include="app\ecs\system\logic\RotationSystem.cs" />
     <Compile Include="app\ecs\system\render\BoundingRenderSystem.cs" />
@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="app\Program.cs" />
     <Compile Include="app\Settings.cs" />
+    <Compile Include="engine\boundingbox\helper\BoundingBoxHelper.cs" />
     <Compile Include="engine\collision\internal\SegmentCollider.cs" />
     <Compile Include="engine\geometry\Segment.cs" />
     <Compile Include="engine\renderer\bounding\AABBRenderer.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="engine\renderer\others\VelocityRenderer.cs" />
     <Compile Include="engine\renderer\RendererFactory.cs" />
     <Compile Include="app\task\internal\Time.cs" />
-    <Compile Include="app\task\internal\CollideTask.cs" />
+    <Compile Include="app\task\internal\LogicTask.cs" />
     <Compile Include="app\task\internal\convex\ConvexGenerator.cs" />
     <Compile Include="app\task\internal\RenderTask.cs" />
     <Compile Include="app\task\internal\Stats.cs" />
@@ -110,8 +111,7 @@
     <Compile Include="engine\geometry\IGeometry.cs" />
     <Compile Include="engine\geometry\Rectangle.cs" />
     <Compile Include="engine\geometry\Polygon.cs" />
-    <Compile Include="engine\AABB.cs" />
-    <Compile Include="engine\collision\internal\BaseCollider.cs" />
+    <Compile Include="engine\boundingbox\AABB.cs" />
     <Compile Include="engine\collision\internal\CapsuleCollider.cs" />
     <Compile Include="engine\collision\internal\CircleCollider.cs" />
     <Compile Include="engine\collision\ColliderFactory.cs" />
@@ -121,6 +121,7 @@
     <Compile Include="engine\math\Matrix.cs" />
     <Compile Include="engine\math\Vector.cs" />
     <Compile Include="engine\Transform.cs" />
+    <Compile Include="engine\Velocity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="app\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

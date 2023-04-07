@@ -16,6 +16,9 @@ namespace SimpleX
         // 子线程刷新画布的委托
         public Action OnRefreshCanvasHandler;
 
+        private const int MAX_RENDER_FPS = 60;
+        private const float RENDER_INTERVAL_S = 1f / MAX_RENDER_FPS;
+
         public RenderTask(World world, Stats stats, Control canvas)
         {
             this.world = world;
@@ -70,7 +73,7 @@ namespace SimpleX
         {
             canvasTime += dt;
 
-            if (canvasTime >= 0.016f)
+            if (canvasTime >= RENDER_INTERVAL_S)
             {
                 stats.OnRenderFrame(canvasTime);
 

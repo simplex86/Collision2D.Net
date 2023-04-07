@@ -7,14 +7,11 @@ namespace SimpleX.Collision2D
     {
         public List<Vector2> vertics;
 
-        public int count
-        {
-            get => vertics.Count;
-        }
+        public int count => vertics.Count;
 
-        public Vector2 a { get => vertics[count - 1]; }
-        public Vector2 b { get => vertics[count - 2]; }
-        public Vector2 c { get => vertics[count - 3]; }
+        public Vector2 a => vertics[count - 1];
+        public Vector2 b => vertics[count - 2];
+        public Vector2 c => vertics[count - 3];
 
         public void Add(Vector2 point)
         {
@@ -40,7 +37,7 @@ namespace SimpleX.Collision2D
         }
 
         // 是否包含原点
-        public bool IsContainsOrigin(Vector2 dir)
+        public bool CheckOrigin(ref Vector2 dir)
         {
             var ao = -a;
             var ab = b - a;

@@ -5,6 +5,8 @@
         public float length;
         public float radius;
 
+        public GeometryType type => GeometryType.Capsule;
+
         public bool Contains(Vector2 pt)
         {
             var p1 = new Vector2(length *  0.5f, 0);

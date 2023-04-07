@@ -25,8 +25,8 @@ namespace SimpleX
                     var transform2 = b.transformComponent.transform;
 
                     var direction = Vector2.Normalize(transform1.position - transform2.position);
-                    a.velocityComponent.direction =  direction;
-                    b.velocityComponent.direction = -direction;
+                    a.velocityComponent.velocity.direction =  direction;
+                    b.velocityComponent.velocity.direction = -direction;
                 }
             });
         }

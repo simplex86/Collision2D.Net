@@ -16,27 +16,41 @@ namespace SimpleX
         {
             world.Each((entity) =>
             {
+                var transformComponent = entity.transformComponent;
                 var collisionComponent = entity.collisionComponent;
                 var velocityComponent = entity.velocityComponent;
 
-                var aabb = collisionComponent.collider.boundingBox;
-                var direction = velocityComponent.direction;
+                var position = transformComponent.transform.position;
+                var bounding = collisionComponent.collider.boundingBox;
+                var direction = velocityComponent.velocity.direction;
 
-                if (aabb.minx <= world.left.x)
+                if (position.x + bounding.minx <= world.left.x)
                 {
-                    velocityComponent.direction = Vector2.Reflect(direction, world.left.normal);
+                    if (Vector2.Dot(direction, world.left.normal) < 0)
+                    {
+                        velocityComponent.velocity.direction = Vector2.Reflect(direction, world.left.normal);
+                    }
                 }
-                else if (aabb.maxx >= world.right.x)
+                else if (position.x + bounding.maxx >= world.right.x)
                 {
-                    velocityComponent.direction = Vector2.Reflect(direction, world.right.normal);
+                    if (Vector2.Dot(direction, world.right.normal) < 0)
+                    {
+                        velocityComponent.velocity.direction = Vector2.Reflect(direction, world.right.normal);
+                    }
                 }
-                else if (aabb.miny <= world.top.y)
+                else if (position.y + bounding.miny <= world.top.y)
                 {
-                    velocityComponent.direction = Vector2.Reflect(direction, world.top.normal);
+                    if (Vector2.Dot(direction, world.top.normal) < 0)
+                    {
+                        velocityComponent.velocity.direction = Vector2.Reflect(direction, world.top.normal);
+                    }
                 }
-                else if(aabb.maxy >= world.bottom.y)
+                else if(position.y + bounding.maxy >= world.bottom.y)
                 {
-                    velocityComponent.direction = Vector2.Reflect(direction, world.bottom.normal);
+                    if (Vector2.Dot(direction, world.bottom.normal) < 0)
+                    {
+                        velocityComponent.velocity.direction = Vector2.Reflect(direction, world.bottom.normal);
+                    }
                 }
             });
         }

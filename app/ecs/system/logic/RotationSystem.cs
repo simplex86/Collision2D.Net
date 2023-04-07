@@ -17,11 +17,11 @@ namespace SimpleX
         {
             world.Each((entity) =>
             {
-                var speed = entity.rotationComponent.speed;
-                if (!MathX.Equals(speed, 0))
+                var magnitude = entity.rotationComponent.magnitude;
+                if (!MathX.Equals(magnitude, 0))
                 {
-                    var delta = speed * dt;
-                    entity.transformComponent.transform.rotation += delta;
+                    var delta = magnitude * dt;
+                    entity.transformComponent.transform.Rotate(delta);
                 }
             });
         }

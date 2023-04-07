@@ -4,6 +4,6 @@ namespace SimpleX
 {
     class RotationComponent
     {
-        public float speed = 0.0f;
+        public float magnitude = 0.0f;
     }
 }

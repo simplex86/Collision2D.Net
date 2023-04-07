@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimpleX
+﻿namespace SimpleX
 {
     abstract class LogicSystem
     {

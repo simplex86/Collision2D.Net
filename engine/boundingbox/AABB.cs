@@ -1,5 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
+    // AABB 的几何数据，不包含位置信息
     public struct AABB
     {
         public float minx;
@@ -16,20 +17,6 @@
             this.miny = miny;
             this.maxx = maxx;
             this.maxy = maxy;
-        }
-
-        public bool Contains(Vector2 pt)
-        {
-            return minx <= pt.x && maxx >= pt.x &&
-                   miny <= pt.y && maxy >= pt.y;
-        }
-
-        public bool Overlaps(AABB other)
-        {
-            if (minx > other.maxx || maxx < other.minx) return false;
-            if (miny > other.maxy || maxy < other.miny) return false;
-
-            return true;
         }
     }
 }

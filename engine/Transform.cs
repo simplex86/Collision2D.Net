@@ -10,5 +10,15 @@ namespace SimpleX.Collision2D
         public float rotation;
         // 缩放
         public float scale;
+
+        public void Move(Vector2 delta)
+        {
+            position += delta;
+        }
+
+        public void Rotate(float delta)
+        {
+            rotation += delta;
+        }
     }
 }

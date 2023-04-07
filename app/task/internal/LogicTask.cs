@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace SimpleX
 {
-    class CollideTask
+    class LogicTask
     {
         private Thread thread = null;
         private World world = null;
         private Stats stats = null;
         private DeltaTime deltaTime = new DeltaTime();
 
-        public CollideTask(World world, Stats stats)
+        public LogicTask(World world, Stats stats)
         {
             this.world = world;
             this.stats = stats;
@@ -54,9 +54,12 @@ namespace SimpleX
             while (true)
             {
                 var dt = deltaTime.Get();
+                
                 // 刷新数据
                 world.Update(dt);
                 // 碰撞检测
+                world.FixedUpdate(dt); 
+                // 
                 world.LateUpdate(dt);
                 // 刷新统计数据
                 stats.OnCollideFrame(dt);

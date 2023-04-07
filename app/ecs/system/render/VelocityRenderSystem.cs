@@ -19,8 +19,7 @@ namespace SimpleX
             world.Each((entity) =>
             {
                 var renderer = entity.velocityRendererComponent.renderer as VelocityRenderer;
-                renderer.direction = entity.velocityComponent.direction;
-                renderer.magnitude = entity.velocityComponent.magnitude;
+                renderer.velocity = entity.velocityComponent.velocity;
 
                 var transform = entity.transformComponent.transform;
                 renderer.Render(grap, transform);

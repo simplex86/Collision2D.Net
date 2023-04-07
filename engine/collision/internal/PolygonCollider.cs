@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    class PolygonCollider : BaseCollider<Polygon>
+    class PolygonCollider : ICollider
     {
         public PolygonCollider(Polygon polygon)
             : base(polygon)

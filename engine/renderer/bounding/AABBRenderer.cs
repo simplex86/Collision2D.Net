@@ -8,9 +8,13 @@ namespace SimpleX.Collision2D
         // 
         public AABB boundingBox { get; set; }
         // 颜色
-        public Color color { get; set; } = Color.Red;
+        public Color color
+        {
+            set { pen.Color = Color.FromArgb(80, value); }
+            get { return pen.Color; }
+        }
 
-        protected Pen pen = new Pen(Color.Red);
+        protected Pen pen = new Pen(Color.FromArgb(80, Color.Red));
 
         public AABBRenderer() 
         {
@@ -21,14 +25,15 @@ namespace SimpleX.Collision2D
         // 绘制图形
         public void Render(Graphics grap, Transform transform)
         {
-            pen.Color = Color.FromArgb(80, color);
-
-            var x = boundingBox.minx;
-            var y = boundingBox.miny;
-            var w = boundingBox.maxx - boundingBox.minx;
-            var h = boundingBox.maxy - boundingBox.miny;
-
-            grap.DrawRectangle(pen, x, y, w, h);
+            grap.TranslateTransform(transform.position.x, transform.position.y);
+            {
+                var x = boundingBox.minx;
+                var y = boundingBox.miny;
+                var w = boundingBox.maxx - boundingBox.minx;
+                var h = boundingBox.maxy - boundingBox.miny;
+                grap.DrawRectangle(pen, x, y, w, h);
+            }
+            grap.ResetTransform();
         }
     }
 }

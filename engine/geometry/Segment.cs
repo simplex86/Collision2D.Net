@@ -6,6 +6,8 @@
         public float length;
         public Vector2 normal;
 
+        public GeometryType type => GeometryType.Segment;
+
         public bool Contains(Vector2 pt)
         {
             var pa = new Vector2(length *  0.5f, 0f);

@@ -29,7 +29,7 @@ namespace SimpleX.Collision2D
                     return false;
                 }
 
-                if (simplex.IsContainsOrigin(dir))
+                if (simplex.CheckOrigin(ref dir))
                 {
                     return true;
                 }
@@ -43,11 +43,11 @@ namespace SimpleX.Collision2D
                                        IGeometry geometry2, Transform transform2,  
                                        Vector2 dir)
         {
-            var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, transform1, dir);
+            var p1 = GeometryHelper.GetFarthestProjectionPoint(geometry1, transform1.rotation, dir);
             dir.Negative();
-            var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, transform2, dir);
+            var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, transform2.rotation, dir);
 
-            return p1 - p2;
+            return (p1 - p2) + (transform1.position - transform2.position);
         }
     }
 }
