@@ -24,7 +24,7 @@
 
         public Vector2 GetFarthestProjectionPoint(Vector2 dir)
         {
-            var sign = MathX.Sign(dir.y);
+            var s = MathX.Sign(dir.y);
 
             dir.y = MathX.Abs(dir.y);
             var a0 = dir.Angle() * MathX.RAD2DEG;
@@ -40,7 +40,7 @@
                 var mt = Matrix.CreateRotationMatrix(a1 * MathX.DEG2RAD);
                 pt = Matrix.Transform(Vector2.right, mt) * radius;
             }
-            pt.y *= sign;
+            pt.y *= s;
 
             return pt;
         }

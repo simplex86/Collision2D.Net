@@ -24,6 +24,9 @@ namespace SimpleX
                     var transform1 = a.transformComponent.transform;
                     var transform2 = b.transformComponent.transform;
 
+                    var velocity1 = a.velocityComponent.velocity;
+                    var velocity2 = b.velocityComponent.velocity;
+
                     var direction = Vector2.Normalize(transform1.position - transform2.position);
                     a.velocityComponent.velocity.direction =  direction;
                     b.velocityComponent.velocity.direction = -direction;

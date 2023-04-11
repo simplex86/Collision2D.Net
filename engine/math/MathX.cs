@@ -8,10 +8,19 @@
         public const float PI = (float)Math.PI;
         // 角度转弧度的参数
         public const float DEG2RAD = PI / 180.0f;
-        //
+        // 弧度转角度的参数
         public const float RAD2DEG = 180.0f / PI;
-        // 
-        public const float EPSILON = 0.00001f;
+        // 误差（数值判断精度）
+        public static readonly float EPSILON = 0.000001f;
+
+        static MathX()
+        {
+            EPSILON = 0.5f;
+            while (1f + EPSILON > 1f)
+            {
+                EPSILON *= 0.5f;
+            }
+        }
 
         // 绝对值
         public static int Abs(int v)
@@ -127,6 +136,12 @@
             return (int)(v + 0.5f);
         }
 
+        // 四舍五入
+        public static float Roundf(float v)
+        {
+            return Floor(v + 0.5f);
+        }
+
         // 开方
         public static float Sqrt(float v)
         {
@@ -142,7 +157,7 @@
         // 平方
         public static float Pow2(float v)
         {
-            return (float)Math.Pow(v, 2);
+            return Pow(v, 2);
         }
 
         // 两个整数是否相等
@@ -178,7 +193,7 @@
         // 将angle限制在[0, 360)范围内
         public static float Clamp360(float angle)
         {
-            if (angle < 0)
+            while (angle < 0)
             {
                 angle = 360 + angle;
             }
@@ -196,13 +211,13 @@
             return (value >= 0) ? 1 : -1;
         }
 
-        // 
+        // 获取不大于value的最大整数值
         public static float Floor(float value)
         {
             return (float)Math.Floor(value);
         }
 
-        // 
+        // 获取不小于value的最小整数值
         public static float Ceiling(float value)
         {
             return (float)Math.Ceiling(value);

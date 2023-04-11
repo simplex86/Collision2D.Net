@@ -137,13 +137,13 @@ namespace SimpleX
                     case GeometryType.Pie:
                         var pie = CreateRandomPie();
                         entity.collisionComponent.collider = ColliderFactory.CreateCollider(pie);
-                        entity.colorComponent.color = Color.DarkKhaki;
+                        entity.colorComponent.color = Color.Purple;
                         entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(pie);
                         break;
                     case GeometryType.Segment:
                         var segment = CreateRandomSegment();
                         entity.collisionComponent.collider = ColliderFactory.CreateCollider(segment);
-                        entity.colorComponent.color = Color.DarkSalmon;
+                        entity.colorComponent.color = Color.DarkKhaki;
                         entity.geometryRendererComponent.renderer = RendererFactory.CreateRenderer(segment);
                         break;
                     default:
@@ -164,8 +164,12 @@ namespace SimpleX
                 if (!overlap) break;
             }
 
-            var movable = IsMovable();
-            if (movable)
+            if (IsStatic())
+            {
+                // 静态(不可移动不能旋转）的渲染成灰色
+                entity.colorComponent.color = Color.DarkGray;
+            }
+            else
             {
                 var x = 0;
                 var y = 0;
@@ -187,12 +191,6 @@ namespace SimpleX
                                                                   : random.Next(-80, -20);
                     entity.rotationComponent.magnitude = magnitude;
                 }
-            }
-
-            // 不能移动(同时不能旋转）的渲染成灰色
-            if (!movable)
-            {
-                entity.colorComponent.color = Color.DarkGray;
             }
 
             return entity;
@@ -281,10 +279,10 @@ namespace SimpleX
             };
         }
 
-        // 是否可移动
-        public bool IsMovable()
+        // 是否静态（不可移动，不可旋转）
+        public bool IsStatic()
         {
-            return random.Next(0, 10) > 0;
+            return random.Next(0, 10) == 0;
         }
 
         // 是否可旋转

@@ -81,10 +81,10 @@
         public static bool IsCircleOverlapsWithCircle(Circle circle1, Transform transform1, 
                                                       Circle circle2, Transform transform2)
         {
-            var dist2 = GetDistance2(transform1.position, transform2.position);
-            var radius2 = (circle1.radius + circle2.radius) * (circle1.radius + circle2.radius);
+            var d2 = GetDistance2(transform1.position, transform2.position);
+            var r2 = (circle1.radius + circle2.radius) * (circle1.radius + circle2.radius);
 
-            return dist2 <= radius2;
+            return d2 <= r2;
         }
 
         // 圆（circle）是否和矩形（rectangle)重叠
@@ -176,7 +176,7 @@
             return true;
         }
 
-        // 获取图形（geomotry）旋转（rotation）后在方向（dir）上最大投影的点
+        // 获取图形（geomotry）旋转（rotation）后在给定方向（dir）上最大投影的点
         public static Vector2 GetFarthestProjectionPoint(IGeometry geometry, float rotation, Vector2 dir)
         {
             var m1 = Matrix.CreateRotationMatrix(-rotation * MathX.DEG2RAD);

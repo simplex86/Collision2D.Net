@@ -1,4 +1,6 @@
-﻿namespace SimpleX.Collision2D
+﻿using System.Security.Policy;
+
+namespace SimpleX.Collision2D
 {
     public struct Vector2
     {
@@ -44,6 +46,17 @@
             }
         }
 
+        // 反向向量
+        public Vector2 negatived
+        {
+            get { return new Vector2(-x, -y); }
+        }
+
+        public Vector2 perpendicular
+        {
+            get { return Perpendicular(); }
+        }
+
         // 取反
         public void Negative()
         {
@@ -59,15 +72,35 @@
             y = y / m;
         }
 
+        // 归一化
         public static Vector2 Normalize(Vector2 v)
         {
             return v.normalized;
         }
 
+        // 归一化
         public static Vector2 Normalize(float x, float y)
         {
             var v = new Vector2(x, y);
             return v.normalized;
+        }
+
+        // 垂直向量
+        public Vector2 Perpendicular()
+        {
+            return Perpendicular(this);
+        }
+
+        // 垂直向量
+        public static Vector2 Perpendicular(Vector2 v)
+        {
+            return Perpendicular(v.x, v.y);
+        }
+
+        // 垂直向量
+        public static Vector2 Perpendicular(float x, float y)
+        {
+            return new Vector2(y, -x);
         }
 
         // 两点间的距离
@@ -126,23 +159,29 @@
         // 向量三重积
         public static Vector2 Mul3(Vector2 a, Vector2 b, Vector2 c)
         {
-            var z = a.x * b.y - a.y * b.x;
-            return new Vector2(-z * c.y, z * c.x);
+            float ac = a.x * c.x + a.y * c.y; // a.dot(c)
+            float bc = b.x * c.x + b.y * c.y; // b.dot(c)
+
+            // b * a.dot(c) - a * b.dot(c)
+            var x = b.x * ac - a.x * bc;
+            var y = b.y * ac - a.y * bc;
+
+            return new Vector2(x, y);
         }
 
-        // 向量与X轴的夹角，度
+        // 向量与X轴的夹角，弧度
         public float Angle()
         {
             return Angle(right);
         }
 
-        // 向量夹角，度
+        // 向量夹角，弧度
         public float Angle(Vector2 v)
         {
             return Angle(this, v);
         }
 
-        // 向量夹角，度
+        // 向量夹角，弧度
         public static float Angle(Vector2 a, Vector2 b)
         {
             var u = a.normalized;

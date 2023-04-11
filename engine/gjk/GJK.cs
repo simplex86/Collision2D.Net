@@ -8,14 +8,16 @@ namespace SimpleX.Collision2D
         public static bool Overlaps(IGeometry geometry1, Transform transform1,
                                     IGeometry geometry2, Transform transform2)
         {
-            var simplex = new Simplex()
-            {
-                vertics = new List<Vector2>(3)
-            };
+            var simplex = new Simplex(3);
             var dir = transform1.position - transform2.position;
 
             var pt = Support(geometry1, transform1, geometry2, transform2, dir);
             simplex.Add(pt);
+
+            if (pt.Dot(dir) <= 0.0f)
+            {
+                return false;
+            }
 
             dir.Negative();
 
@@ -24,12 +26,19 @@ namespace SimpleX.Collision2D
                 pt = Support(geometry1, transform1, geometry2, transform2, dir);
                 simplex.Add(pt);
 
-                if (simplex.a.Dot(dir) <= 0.0f)
+                if (pt.Dot(dir) <= 0.0f)
                 {
                     return false;
                 }
 
-                if (simplex.CheckOrigin(ref dir))
+                //if (simplex.Check())
+                //{
+                //    return true;
+                //}
+
+                //dir = simplex.Adjust();
+
+                if (simplex.Check(ref dir))
                 {
                     return true;
                 }
@@ -47,7 +56,7 @@ namespace SimpleX.Collision2D
             dir.Negative();
             var p2 = GeometryHelper.GetFarthestProjectionPoint(geometry2, transform2.rotation, dir);
 
-            return (p1 - p2) + (transform1.position - transform2.position);
+            return (p1 + transform1.position) - (p2 + transform2.position);
         }
     }
 }
