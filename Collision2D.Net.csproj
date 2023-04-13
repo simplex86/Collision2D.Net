@@ -77,8 +77,13 @@
     <Compile Include="app\Program.cs" />
     <Compile Include="app\Settings.cs" />
     <Compile Include="engine\boundingbox\helper\BoundingBoxHelper.cs" />
+    <Compile Include="engine\collision\internal\BaseCollider.cs" />
     <Compile Include="engine\collision\internal\SegmentCollider.cs" />
     <Compile Include="engine\geometry\Segment.cs" />
+    <Compile Include="engine\gjk\EPA.cs" />
+    <Compile Include="engine\gjk\ExpandingSimplex.cs" />
+    <Compile Include="engine\gjk\Minkowski.cs" />
+    <Compile Include="engine\gjk\Penetration.cs" />
     <Compile Include="engine\renderer\bounding\AABBRenderer.cs" />
     <Compile Include="engine\renderer\geometry\GeometryRenderer.cs" />
     <Compile Include="engine\renderer\geometry\CapsuleRenderer.cs" />

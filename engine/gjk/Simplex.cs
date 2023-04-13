@@ -30,6 +30,9 @@ namespace SimpleX.Collision2D
             vertics = new List<Vector2>(count);
         }
 
+        public Vector2 this[int index] => vertics[index];
+
+
         public void Add(Vector2 point)
         {
             vertics.Add(point);

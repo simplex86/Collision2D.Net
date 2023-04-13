@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    public class Capsule : IGeometry
+    public struct Capsule : IGeometry
     {
         public float length;
         public float radius;

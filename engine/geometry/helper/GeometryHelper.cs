@@ -70,13 +70,6 @@
             return geometry.Contains(pt);
         }
 
-        // 检测图形（geometry1, transform1）与图形（geometry2, transform2）是否重叠
-        public static bool Overlaps(IGeometry geometry1, Transform transform1,
-                                    IGeometry geometry2, Transform transform2)
-        {
-            return GJK.Overlaps(geometry1, transform1, geometry2, transform2);
-        }
-
         // 圆（pa, ra)是否和圆（pb, rb）重叠
         public static bool IsCircleOverlapsWithCircle(Circle circle1, Transform transform1, 
                                                       Circle circle2, Transform transform2)
@@ -177,7 +170,7 @@
         }
 
         // 获取图形（geomotry）旋转（rotation）后在给定方向（dir）上最大投影的点
-        public static Vector2 GetFarthestProjectionPoint(IGeometry geometry, float rotation, Vector2 dir)
+        public static Vector2 GetFarthestProjectionPoint<T>(T geometry, float rotation, Vector2 dir) where T : IGeometry
         {
             var m1 = Matrix.CreateRotationMatrix(-rotation * MathX.DEG2RAD);
             dir = Matrix.Transform(dir, m1);
@@ -186,6 +179,20 @@
 
             var m2 = Matrix.CreateRotationMatrix(rotation * MathX.DEG2RAD);
             return Matrix.Transform(pt, m2);
+        }
+
+        // 获取图形（geomotry）变化（transform）后在给定方向（dir）上最大投影的点
+        public static Vector2 GetFarthestProjectionPoint<T>(T geometry, Transform transform, Vector2 dir) where T : IGeometry
+        {
+            var m1 = Matrix.CreateRotationMatrix(-transform.rotation * MathX.DEG2RAD);
+            dir = Matrix.Transform(dir, m1);
+
+            var pt = geometry.GetFarthestProjectionPoint(dir);
+
+            var m2 = Matrix.CreateRotationMatrix(transform.rotation * MathX.DEG2RAD);
+            var m3 = Matrix.CreateTranslationMatrix(transform.position);
+
+            return Matrix.Transform(pt, m2 * m3);
         }
     }
 }

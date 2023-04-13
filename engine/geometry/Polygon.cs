@@ -1,7 +1,7 @@
 ﻿namespace SimpleX.Collision2D
 {
     // 凸多边形
-    public class Polygon : IGeometry
+    public struct Polygon : IGeometry
     {
         public Vector2[] vertics;
 

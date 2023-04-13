@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class SegmentCollider : ICollider
+    internal class SegmentCollider : BaseCollider<Segment>
     {
         public SegmentCollider(Segment segment)
             : base(segment)

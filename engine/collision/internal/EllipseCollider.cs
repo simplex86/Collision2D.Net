@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class EllipseCollider : ICollider
+    internal class EllipseCollider : BaseCollider<Ellipse>
     {
         public EllipseCollider(Ellipse ellipse)
             : base(ellipse)

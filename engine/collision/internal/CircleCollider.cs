@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class CircleCollider : ICollider
+    internal class CircleCollider : BaseCollider<Circle>
     {
         public CircleCollider(Circle circle)
             : base(circle)
@@ -8,9 +8,9 @@
 
         }
 
-        protected override void OnRefreshGeometry()
+        public override void RefreshGeometry(float rotation)
         {
-            var circle = (Circle)geometry;
+            var circle = (Circle)_geometry;
 
             _boundingBox.Set(-circle.radius,
                              -circle.radius,

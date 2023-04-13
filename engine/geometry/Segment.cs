@@ -1,7 +1,7 @@
 ﻿namespace SimpleX.Collision2D
 {
     // 线段
-    public class Segment : IGeometry
+    public struct Segment : IGeometry
     {
         public float length;
         public Vector2 normal;

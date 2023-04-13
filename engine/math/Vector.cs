@@ -206,6 +206,20 @@ namespace SimpleX.Collision2D
             return R.normalized;
         }
 
+        public void CW90()
+        {
+            var t = x;
+            x = -y;
+            y = t;
+        }
+
+        public void CCW90()
+        {
+            var t = x;
+            x = t;
+            y = -t;
+        }
+
         // 反向向量
         public static Vector2 operator -(Vector2 v)
         {

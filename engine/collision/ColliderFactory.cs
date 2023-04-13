@@ -14,7 +14,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Circle circle, Transform transform)
         {
             var collider = new CircleCollider(circle);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
@@ -29,7 +29,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Rectangle rectangle, Transform transform)
         {
             var collider = new RectangleCollider(rectangle);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
@@ -44,7 +44,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Capsule capsule, Transform transform)
         {
             var collider = new CapsuleCollider(capsule);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
@@ -59,7 +59,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Polygon polygon, Transform transform)
         {
             var collider = new PolygonCollider(polygon);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
@@ -74,7 +74,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Ellipse ellipse, Transform transform)
         {
             var collider = new EllipseCollider(ellipse);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
@@ -89,7 +89,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Pie pie, Transform transform)
         {
             var collider = new PieCollider(pie);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
@@ -104,7 +104,7 @@ namespace SimpleX.Collision2D
         public static ICollider CreateCollider(Segment segment, Transform transform)
         {
             var collider = new SegmentCollider(segment);
-            collider.RefreshGeometry(transform);
+            collider.RefreshGeometry(transform.rotation);
 
             return collider;
         }
