@@ -95,7 +95,6 @@ namespace SimpleX
         {
             var entity = new Entity();
 
-            var gjk = new GJK();
             var type = GetRandomColliderType();
             while (true)
             {
@@ -153,15 +152,12 @@ namespace SimpleX
 
                 var collider = entity.collisionComponent.collider;
                 var transform = entity.transformComponent.transform;
-                collider.RefreshGeometry(transform.rotation);
+                collider.RefreshGeometry(transform);
 
                 var overlap = false;
                 world.Each((e) =>
                 {
-                    var collider2 = e.collisionComponent.collider;
-                    var transform2 = e.transformComponent.transform;
-
-                    overlap = gjk.Detect(collider, transform, collider2, transform2);
+                    overlap = e.collisionComponent.collider.Overlaps(collider);
                     return !overlap;
                 });
 

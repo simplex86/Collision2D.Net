@@ -1,7 +1,7 @@
 ﻿namespace SimpleX.Collision2D
 {
     // 椭圆方程：x²/a²﹢y²/b²=1
-    public struct Ellipse : IGeometry
+    public class Ellipse : IGeometry
     {
         public float width;
         public float height;

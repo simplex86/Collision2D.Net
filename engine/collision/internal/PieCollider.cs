@@ -1,6 +1,6 @@
 ﻿namespace SimpleX.Collision2D
 {
-    internal class PieCollider : BaseCollider<Pie>
+    internal class PieCollider : ICollider
     {
         public PieCollider(Pie pie)
             : base(pie)
